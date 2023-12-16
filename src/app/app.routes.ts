@@ -2,6 +2,8 @@ import { Routes } from "@angular/router";
 import { HomeComponent } from "./pages/home/home.component";
 import { LoginComponent } from "./pages/login/login.component";
 import { NotFoundComponent } from "./pages/not-found/not-found.component";
+import { PrivacyComponent } from "./pages/privacy/privacy.component";
+import { TermsComponent } from "./pages/terms/terms.component";
 
 export const routes: Routes = [
   { path: "", title: "Sentinel of Liberty", component: HomeComponent },
