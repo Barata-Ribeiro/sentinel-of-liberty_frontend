@@ -1,5 +1,135 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --text-50: 50 23% 95%;
+    --text-100: 46 25% 90%;
+    --text-200: 44 25% 80%;
+    --text-300: 45 25% 70%;
+    --text-400: 45 25% 60%;
+    --text-500: 45 25% 50%;
+    --text-600: 45 25% 40%;
+    --text-700: 45 25% 30%;
+    --text-800: 44 25% 20%;
+    --text-900: 46 25% 10%;
+    --text-950: 40 23% 5%;
+
+    --background-50: 40 36% 95%;
+    --background-100: 41 37% 90%;
+    --background-200: 39 37% 80%;
+    --background-300: 40 37% 70%;
+    --background-400: 40 37% 60%;
+    --background-500: 40 37% 50%;
+    --background-600: 40 37% 40%;
+    --background-700: 40 37% 30%;
+    --background-800: 39 37% 20%;
+    --background-900: 41 37% 10%;
+    --background-950: 40 36% 5%;
+
+    --primary-50: 43 54% 95%;
+    --primary-100: 42 53% 90%;
+    --primary-200: 42 53% 80%;
+    --primary-300: 42 53% 70%;
+    --primary-400: 42 53% 60%;
+    --primary-500: 42 53% 50%;
+    --primary-600: 42 53% 40%;
+    --primary-700: 42 53% 30%;
+    --primary-800: 42 53% 20%;
+    --primary-900: 42 53% 10%;
+    --primary-950: 39 54% 5%;
+
+    --secondary-50: 43 69% 95%;
+    --secondary-100: 43 69% 90%;
+    --secondary-200: 42 69% 80%;
+    --secondary-300: 42 69% 70%;
+    --secondary-400: 42 69% 60%;
+    --secondary-500: 42 69% 50%;
+    --secondary-600: 42 69% 40%;
+    --secondary-700: 42 69% 30%;
+    --secondary-800: 42 69% 20%;
+    --secondary-900: 43 69% 10%;
+    --secondary-950: 40 69% 5%;
+
+    --accent-50: 44 85% 95%;
+    --accent-100: 42 84% 90%;
+    --accent-200: 42 86% 80%;
+    --accent-300: 42 86% 70%;
+    --accent-400: 42 86% 60%;
+    --accent-500: 42 86% 50%;
+    --accent-600: 42 86% 40%;
+    --accent-700: 42 86% 30%;
+    --accent-800: 42 86% 20%;
+    --accent-900: 42 84% 10%;
+    --accent-950: 41 85% 5%;
+  }
+  .dark {
+    --text-50: 40 23% 5%;
+    --text-100: 46 25% 10%;
+    --text-200: 44 25% 20%;
+    --text-300: 45 25% 30%;
+    --text-400: 45 25% 40%;
+    --text-500: 45 25% 50%;
+    --text-600: 45 25% 60%;
+    --text-700: 45 25% 70%;
+    --text-800: 44 25% 80%;
+    --text-900: 46 25% 90%;
+    --text-950: 50 23% 95%;
+
+    --background-50: 45 31% 5%;
+    --background-100: 49 33% 10%;
+    --background-200: 48 33% 20%;
+    --background-300: 48 33% 30%;
+    --background-400: 48 33% 40%;
+    --background-500: 48 33% 50%;
+    --background-600: 48 33% 60%;
+    --background-700: 48 33% 70%;
+    --background-800: 48 33% 80%;
+    --background-900: 49 33% 90%;
+    --background-950: 53 31% 95%;
+
+    --primary-50: 39 54% 5%;
+    --primary-100: 42 53% 10%;
+    --primary-200: 42 53% 20%;
+    --primary-300: 42 53% 30%;
+    --primary-400: 42 53% 40%;
+    --primary-500: 42 53% 50%;
+    --primary-600: 42 53% 60%;
+    --primary-700: 42 53% 70%;
+    --primary-800: 42 53% 80%;
+    --primary-900: 42 53% 90%;
+    --primary-950: 43 54% 95%;
+
+    --secondary-50: 42 68% 5%;
+    --secondary-100: 41 69% 10%;
+    --secondary-200: 42 69% 20%;
+    --secondary-300: 42 69% 30%;
+    --secondary-400: 42 68% 40%;
+    --secondary-500: 42 68% 50%;
+    --secondary-600: 42 68% 60%;
+    --secondary-700: 42 69% 70%;
+    --secondary-800: 42 69% 80%;
+    --secondary-900: 41 69% 90%;
+    --secondary-950: 42 68% 95%;
+
+    --accent-50: 41 85% 5%;
+    --accent-100: 41 88% 10%;
+    --accent-200: 42 86% 20%;
+    --accent-300: 42 87% 30%;
+    --accent-400: 42 87% 40%;
+    --accent-500: 42 87% 50%;
+    --accent-600: 42 87% 60%;
+    --accent-700: 42 87% 70%;
+    --accent-800: 42 86% 80%;
+    --accent-900: 41 88% 90%;
+    --accent-950: 44 85% 95%;
+  }
+
+  body {
+    @apply bg-background-50;
+  }
+}
