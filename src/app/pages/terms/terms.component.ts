@@ -1,12 +1,10 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-terms',
+  selector: "app-terms",
   standalone: true,
   imports: [],
-  templateUrl: './terms.component.html',
-  styleUrl: './terms.component.css'
+  templateUrl: "./terms.component.html",
+  styleUrl: "./terms.component.css",
 })
-export class TermsComponent {
-
-}
+export class TermsComponent {}
