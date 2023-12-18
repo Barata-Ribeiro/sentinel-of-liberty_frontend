@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, of, tap } from "rxjs";
+import { Observable, catchError, map, of, tap } from "rxjs";
 import { CookieService } from "./cookie.service";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class AuthService {
     private http: HttpClient
   ) {}
 
-  public isAuthenticated(): Observable<boolean | string> {
+  public isAuthenticated(): Observable<boolean> {
     const token = this.cookieService.getCookieString("authToken");
     if (!token) return of(false);
 
@@ -20,7 +20,7 @@ export class AuthService {
     if (!isExpired) return of(true);
 
     return this.logoutIfExpired().pipe(
-      tap(() => false),
+      map(() => false),
       catchError(() => of(false))
     );
   }
