@@ -21,11 +21,8 @@ export class RedirectComponent {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const code = params["code"];
-      if (code) {
-        this.loginWithDiscord(code);
-      } else {
-        this.router.navigate(["/login"]);
-      }
+      if (code) this.loginWithDiscord(code);
+      else this.router.navigate(["/login"]);
     });
   }
 
@@ -51,7 +48,8 @@ export class RedirectComponent {
             true,
             "None"
           );
-          this.router.navigate(["/"]);
+
+          this.router.navigate(["/profile"]);
         },
         error: () => this.router.navigate(["/login"]),
       });
