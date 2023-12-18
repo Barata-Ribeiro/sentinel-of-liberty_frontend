@@ -18,8 +18,8 @@ export class CookieService {
     sameSite: "Lax" | "Strict" | "None"
   ): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Only execute this code on the browser
       let expires = "";
+
       if (days) {
         const date = new Date();
         date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -33,5 +33,41 @@ export class CookieService {
 
       this.document.cookie = cookieString;
     }
+  }
+
+  getCookieString(name: string): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      const nameEQ = `${name}=`;
+      const ca = this.document.cookie.split(";");
+
+      for (let i = 0; i < ca.length; i += 1) {
+        let c = ca[i];
+        while (c.charAt(0) === " ") c = c.substring(1);
+        if (c.indexOf(nameEQ) === 0) return c;
+      }
+    }
+
+    return null;
+  }
+
+  checkIfCookieExpired(name: string): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      const cookieString = this.getCookieString(name);
+
+      if (cookieString) {
+        const cookieParts = cookieString.split(";");
+        const expires = cookieParts.find(part =>
+          part.trim().startsWith("expires=")
+        );
+
+        if (expires) {
+          const expirationDate = new Date(expires.split("=")[1]);
+          const currentDate = new Date();
+          return expirationDate < currentDate;
+        }
+      }
+    }
+
+    return false;
   }
 }
