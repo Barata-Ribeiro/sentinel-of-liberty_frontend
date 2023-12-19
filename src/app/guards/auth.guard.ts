@@ -5,7 +5,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from "@angular/router";
-import { map } from "rxjs";
+import { map, of, take } from "rxjs";
 import { AuthService } from "../services/auth.service";
 
 export const authGuard: CanActivateFn = (
@@ -19,11 +19,11 @@ export const authGuard: CanActivateFn = (
   return (
     protectedRoutes.includes(state.url) &&
     authService.isAuthenticated().pipe(
+      take(1),
       map(isAuthenticated => {
-        if (!isAuthenticated) {
-          router.navigate(["/login"]);
-          return false;
-        }
+        if (!isAuthenticated)
+          router.navigate(["/login"]).finally(() => of(false));
+
         return true;
       })
     )
