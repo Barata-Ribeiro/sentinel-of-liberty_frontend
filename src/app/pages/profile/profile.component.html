@@ -1,1 +1,69 @@
-<p>profile works!</p>
+<section
+  id="profile"
+  role="grid"
+  class="grid grid-cols-1 gap-5 md:grid-cols-[33%_66%]">
+  <div>
+    <div
+      id="profile-card"
+      role="region"
+      aria-labelledby="profile-name"
+      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 p-5 sm:p-10">
+      <img
+        class="mb-3 h-28 w-28 transform rounded-full border-4 border-white shadow-md transition duration-200 hover:scale-110"
+        src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+        title="Profile Picture"
+        alt="Profile Picture" />
+      <h3 id="profile-name" class="mb-1 text-xl font-medium text-textcolor-900">
+        Bonnie Green
+      </h3>
+      <span class="text-sm text-textcolor-500 dark:text-textcolor-400"
+        >Member since 4th Jan 2021
+      </span>
+      <span
+        class="mt-2 rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium leading-none text-red-800 dark:bg-red-900 dark:text-red-300"
+        >Admin</span
+      >
+      <div class="mt-4 flex space-x-3 lg:mt-6">
+        <a
+          href="#"
+          class="inline-flex items-center rounded-lg bg-primary-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
+          >Edit Profile</a
+        >
+        <a
+          href="#"
+          class="inline-flex items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200"
+          >View Details</a
+        >
+      </div>
+      <div class="mt-5 border-t-2 border-secondary-100 pt-3">
+        <h3 class="mb-2 text-center text-xl font-medium text-textcolor-900">
+          Biography
+        </h3>
+        <p class="text-textcolor-600">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur modi
+          ipsum sint error, aut quasi alias labore? Fugit doloremque explicabo
+          ipsa fuga impedit non dolor, perferendis eos saepe corrupti ab?
+        </p>
+      </div>
+    </div>
+    <div
+      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 p-5 sm:p-10"></div>
+  </div>
+  <div>
+    <div
+      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 p-5 sm:p-10"></div>
+    <div
+      class="mb-5 flex flex-col gap-10 rounded-md border-2 border-secondary-200 p-5 sm:p-10">
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio sed et
+        sint explicabo eius distinctio omnis dolorum ipsam ratione repellendus
+        adipisci dicta exercitationem maiores consectetur suscipit, pariatur at
+        officiis nam!
+      </p>
+      <button
+        class="self-end text-red-600 hover:text-red-900 dark:hover:text-red-100">
+        Delete Account
+      </button>
+    </div>
+  </div>
+</section>
