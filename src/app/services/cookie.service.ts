@@ -70,4 +70,10 @@ export class CookieService {
 
     return false;
   }
+
+  deleteCookie(name: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.setCookie(name, "", -1, true, "None");
+    }
+  }
 }
