@@ -40,10 +40,10 @@ export class CookieService {
       const nameEQ = `${name}=`;
       const ca = this.document.cookie.split(";");
 
-      for (let i = 0; i < ca.length; i += 1) {
+      for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) === " ") c = c.substring(1);
-        if (c.indexOf(nameEQ) === 0) return c;
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
       }
     }
 
