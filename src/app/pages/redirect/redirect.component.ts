@@ -48,11 +48,13 @@ export class RedirectComponent implements OnInit, OnDestroy {
         next: response => {
           this.cookieService.setCookie(
             "authToken",
-            response.authToken + "/" + response.id,
+            response.authToken,
             1,
             true,
             "None"
           );
+
+          this.cookieService.setCookie("userId", response.id, 1, true, "None");
 
           this.cookieService.setCookie(
             "refreshToken",

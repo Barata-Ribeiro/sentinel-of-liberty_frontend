@@ -1,3 +1,4 @@
+import { CommonModule, DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
@@ -7,9 +8,10 @@ import { CookieService } from "../../services/cookie.service";
 @Component({
   selector: "app-profile",
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.css",
+  providers: [DatePipe],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   user: User | null = null;
@@ -43,28 +45,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private fetchUserFromAuthToken(): void {
-    const authToken = this.cookieService.getCookieString("authToken");
-    if (authToken) {
-      const userId = authToken.split("/")[1];
-      if (userId) {
-        this.http
-          .get<User>(`http://localhost:3000/api/v1/users/${userId}`, {
-            withCredentials: true,
-          })
-          .subscribe({
-            next: response => {
-              this.user = response;
-              this.cookieService.setCookie(
-                "userData",
-                JSON.stringify(response),
-                1,
-                true,
-                "None"
-              );
-            },
-            error: () => this.router.navigate(["/login"]),
-          });
-      }
+    const userId = this.cookieService.getCookieString("userId");
+    if (userId) {
+      this.http
+        .get<User>(`http://localhost:3000/api/v1/users/${userId}`, {
+          withCredentials: true,
+        })
+        .subscribe({
+          next: response => {
+            this.user = response;
+            this.cookieService.setCookie(
+              "userData",
+              JSON.stringify(response),
+              1,
+              true,
+              "None"
+            );
+          },
+          error: () => this.router.navigate(["/login"]),
+        });
+
+      this.cookieService.deleteCookie("userId");
     }
   }
 }
