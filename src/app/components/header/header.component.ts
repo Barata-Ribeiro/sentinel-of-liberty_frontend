@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
-import { Observable, tap } from "rxjs";
+import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 
 @Component({
@@ -15,15 +15,16 @@ export class HeaderComponent {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.authService.isAuthenticated().subscribe(isAuthenticated => {
       this.userAuthenticated = isAuthenticated;
     });
   }
 
-  logout(): Observable<string> {
-    return this.http
+  logout(): void {
+    this.http
       .get("http://localhost:3000/api/v1/auth/discord/logout", {
         withCredentials: true,
         headers: {
@@ -31,6 +32,13 @@ export class HeaderComponent {
         },
         responseType: "text",
       })
-      .pipe(tap((message: string) => message));
+      .subscribe({
+        next: (message: string) => {
+          alert(message);
+          this.userAuthenticated = false;
+          this.router.navigate(["/login"]);
+        },
+        error: error => console.error("Logout failed", error),
+      });
   }
 }
