@@ -83,9 +83,15 @@
         officiis nam!
       </p>
       <button
-        class="self-end text-red-600 hover:text-red-900 dark:hover:text-red-100">
+        class="self-end text-red-600 hover:text-red-900 dark:hover:text-red-100"
+        (click)="openModalDelete()">
         Delete Account
       </button>
+
+      <app-delete-account-modal
+        *ngIf="showModalDelete"
+        (close)="closeModalDelete()"
+        (deactivate)="handleDeactivate()"></app-delete-account-modal>
     </div>
   </div>
 </section>
