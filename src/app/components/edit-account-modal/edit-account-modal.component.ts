@@ -42,8 +42,22 @@ export class EditAccountModalComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.editForm = this.formBuilder.group({
-      displayName: ["", [Validators.required, Validators.maxLength(20)]],
-      biography: ["", [Validators.required, Validators.maxLength(150)]],
+      displayName: [
+        "",
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.minLength(3),
+        ],
+      ],
+      biography: [
+        "",
+        [
+          Validators.required,
+          Validators.maxLength(150),
+          Validators.minLength(3),
+        ],
+      ],
     });
   }
 
@@ -54,12 +68,11 @@ export class EditAccountModalComponent {
   onEditAccount() {
     const updateData: EditDataRequest = {};
 
-    if (this.editForm.get("displayName")?.value) {
+    if (this.editForm.get("displayName")?.value)
       updateData.sol_username = this.editForm.get("displayName")?.value;
-    }
-    if (this.editForm.get("biography")?.value) {
+
+    if (this.editForm.get("biography")?.value)
       updateData.sol_biography = this.editForm.get("biography")?.value;
-    }
 
     if (Object.keys(updateData).length > 0) {
       this.requestEdit.emit(updateData);
@@ -70,8 +83,8 @@ export class EditAccountModalComponent {
   get displayNameError(): string {
     const control = this.editForm.get("displayName");
 
-    if (control?.errors?.["required"]) return "Display Name is required";
-    else if (control?.errors?.["maxlength"])
+    if (control?.errors?.["minlength"]) return "Display Name is too short";
+    if (control?.errors?.["maxlength"])
       return "Display Name cannot be more than 20 characters";
 
     return "";
@@ -80,8 +93,8 @@ export class EditAccountModalComponent {
   get biographyError(): string {
     const control = this.editForm.get("biography");
 
-    if (control?.errors?.["required"]) return "Biography is required";
-    else if (control?.errors?.["maxlength"])
+    if (control?.errors?.["minlength"]) return "Biography is too short";
+    if (control?.errors?.["maxlength"])
       return "Biography cannot be more than 150 characters";
 
     return "";
