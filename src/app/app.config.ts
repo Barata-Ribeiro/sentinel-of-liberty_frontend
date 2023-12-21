@@ -6,11 +6,13 @@ import {
   provideClientHydration,
   withHttpTransferCacheOptions,
 } from "@angular/platform-browser";
+import { provideAnimations } from "@angular/platform-browser/animations";
 import { routes } from "./app.routes";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
+    provideAnimations(),
     provideHttpClient(withFetch()),
     provideClientHydration(
       withHttpTransferCacheOptions({
