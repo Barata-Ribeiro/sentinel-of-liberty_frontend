@@ -2,14 +2,19 @@ import { CommonModule, DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { User } from "../../@types/appTypes";
+import { EditDataRequest, User } from "../../@types/appTypes";
 import { DeleteAccountModalComponent } from "../../components/delete-account-modal/delete-account-modal.component";
+import { EditAccountModalComponent } from "../../components/edit-account-modal/edit-account-modal.component";
 import { CookieService } from "../../services/cookie.service";
 
 @Component({
   selector: "app-profile",
   standalone: true,
-  imports: [CommonModule, DeleteAccountModalComponent],
+  imports: [
+    CommonModule,
+    DeleteAccountModalComponent,
+    EditAccountModalComponent,
+  ],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.css",
   providers: [DatePipe],
@@ -17,6 +22,7 @@ import { CookieService } from "../../services/cookie.service";
 export class ProfileComponent implements OnInit, OnDestroy {
   user: User | null = null;
   showModalDelete = false;
+  showEditProfile = false;
 
   constructor(
     private cookieService: CookieService,
@@ -32,6 +38,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.user = null;
   }
 
+  // Delete account modal
   openModalDelete() {
     this.showModalDelete = true;
   }
@@ -60,14 +67,36 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.closeModalDelete();
   }
 
+  // Edit profile modal
+  openEditModal() {
+    this.showEditProfile = true;
+  }
+
+  closeEditModal() {
+    this.showEditProfile = false;
+  }
+
+  handleEditAccount(editData: EditDataRequest) {
+    try {
+      this.http
+        .put(`http://localhost:3000/api/v1/users/${this.user?.id}`, editData, {
+          withCredentials: true,
+        })
+        .subscribe({
+          next: () => this.fetchUserFromAuthToken(),
+          error: error => alert("Error: " + error.message),
+        });
+    } catch (error) {
+      console.error(error);
+    }
+    this.closeEditModal();
+  }
+
   private loadUser(): void {
     try {
       const userData = this.cookieService.getCookieString("userData");
-      if (userData) {
-        this.user = JSON.parse(userData);
-      } else {
-        this.fetchUserFromAuthToken();
-      }
+      if (userData) this.user = JSON.parse(userData);
+      else this.fetchUserFromAuthToken();
     } catch (e) {
       console.error("Error parsing user data from cookies", e);
       this.fetchUserFromAuthToken();

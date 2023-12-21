@@ -46,16 +46,19 @@
         }
       }
       <div class="mt-4 flex space-x-3 lg:mt-6">
-        <a
-          href="#"
-          class="inline-flex items-center rounded-lg bg-primary-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
-          >Edit Profile</a
-        >
-        <a
-          href="#"
-          class="inline-flex items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200"
-          >View Details</a
-        >
+        <button
+          (click)="openEditModal()"
+          class="inline-flex items-center rounded-lg bg-primary-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300">
+          Edit Profile
+        </button>
+        <app-edit-account-modal
+          *ngIf="showEditProfile"
+          (close)="closeEditModal()"
+          (requestEdit)="handleEditAccount($event)"></app-edit-account-modal>
+        <button
+          class="inline-flex items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200">
+          View Details
+        </button>
       </div>
       <div class="mt-5 border-t-2 border-secondary-100 pt-3">
         <h3 class="mb-2 text-center text-xl font-medium text-textcolor-900">

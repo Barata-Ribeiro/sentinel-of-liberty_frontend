@@ -20,3 +20,8 @@ export interface AuthAppResponse {
   authToken: string;
   refreshToken: string;
 }
+
+export interface EditDataRequest {
+  sol_username?: string;
+  sol_biography?: string;
+}
