@@ -130,6 +130,7 @@
   }
 
   body {
-    @apply bg-background-50;
+    @apply bg-white;
+    @apply dark:bg-background-950;
   }
 }

@@ -7,12 +7,14 @@
       id="profile-card"
       role="region"
       aria-labelledby="profile-name"
-      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 p-5 sm:p-10">
+      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10">
       <img
         class="mb-3 h-28 w-28 transform rounded-full border-4 border-white shadow-md transition duration-200 hover:scale-110"
         [src]="user?.discordAvatar"
-        title="Profile Picture"
-        alt="Profile Picture" />
+        [alt]="'Avatar of ' + (user?.sol_username || user?.discordUsername)"
+        [title]="
+          'Avatar of ' + (user?.sol_username || user?.discordUsername)
+        " />
       <h3 id="profile-name" class="mb-1 text-xl font-medium text-textcolor-900">
         {{ user?.sol_username || user?.discordUsername }}
       </h3>
@@ -57,7 +59,7 @@
           (requestEdit)="handleEditAccount($event)"></app-edit-account-modal>
         <button
           class="inline-flex items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200">
-          View Details
+          Account Details
         </button>
       </div>
       <div class="mt-5 border-t-2 border-secondary-100 pt-3">
@@ -72,13 +74,13 @@
       </div>
     </div>
     <div
-      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 p-5 sm:p-10"></div>
+      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10"></div>
   </div>
   <div>
     <div
-      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 p-5 sm:p-10"></div>
+      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10"></div>
     <div
-      class="mb-5 flex flex-col gap-10 rounded-md border-2 border-secondary-200 p-5 sm:p-10">
+      class="mb-5 flex flex-col gap-10 rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10">
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio sed et
         sint explicabo eius distinctio omnis dolorum ipsam ratione repellendus
