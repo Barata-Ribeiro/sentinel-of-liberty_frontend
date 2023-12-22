@@ -7,6 +7,7 @@
         <button
           (click)="toggleArticleDropdown()"
           aria-haspopup="true"
+          [ariaExpanded]="isArticleDropdownOpen"
           class="inline-flex w-full items-center justify-center gap-x-1.5">
           Articles
           <svg
@@ -22,11 +23,11 @@
         </button>
         <ul
           [@dropdownAnimation]="isArticleDropdownOpen ? 'open' : 'closed'"
-          class="absolute flex flex-col gap-2 overflow-hidden whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
+          style="overflow: hidden"
+          class="absolute flex flex-col gap-2 whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
           role="menu"
           aria-orientation="vertical"
-          aria-labelledby="articles-dropdown-menu"
-          *ngIf="isArticleDropdownOpen">
+          aria-labelledby="articles-dropdown-menu">
           <li role="none">
             <a
               href="/articles"
@@ -53,6 +54,7 @@
         <button
           (click)="toggleNewsDropdown()"
           aria-haspopup="true"
+          [ariaExpanded]="isNewsDropdownOpen"
           class="inline-flex w-full items-center justify-center gap-x-1.5">
           Suggested News
           <svg
@@ -68,10 +70,10 @@
         </button>
         <ul
           [@dropdownAnimation]="isNewsDropdownOpen ? 'open' : 'closed'"
-          class="absolute flex flex-col gap-2 overflow-hidden whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
+          style="overflow: hidden"
+          class="absolute flex flex-col gap-2 whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
           role="menu"
-          aria-labelledby="news-dropdown-menu"
-          *ngIf="isNewsDropdownOpen">
+          aria-labelledby="news-dropdown-menu">
           <li role="none">
             <a
               href="/suggested-news"

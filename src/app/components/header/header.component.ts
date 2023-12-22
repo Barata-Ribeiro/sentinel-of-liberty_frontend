@@ -12,6 +12,9 @@ import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { BurgerMenuComponent } from "./burger-menu.component";
 
+const DEFAULT_DURATION = 300;
+const DEFAULT_EASING = "ease-out";
+
 @Component({
   selector: "app-header",
   standalone: true,
@@ -20,23 +23,14 @@ import { BurgerMenuComponent } from "./burger-menu.component";
   styleUrl: "./header.component.css",
   animations: [
     trigger("dropdownAnimation", [
-      state(
-        "closed",
-        style({
-          height: "0",
-          opacity: 0,
-          overflow: "hidden",
-        })
-      ),
-      state(
-        "open",
-        style({
-          height: "*",
-          opacity: 1,
-        })
-      ),
-      transition("closed => open", animate("300ms ease-out")),
-      transition("open => closed", animate("200ms ease-in")),
+      state("open", style({ height: "*", opacity: 1 })),
+      state("closed", style({ height: "0", opacity: 0 })),
+      transition("open => closed", [
+        animate(`${DEFAULT_DURATION}ms ${DEFAULT_EASING}`),
+      ]),
+      transition("closed => open", [
+        animate(`${DEFAULT_DURATION}ms ${DEFAULT_EASING}`),
+      ]),
     ]),
   ],
 })
