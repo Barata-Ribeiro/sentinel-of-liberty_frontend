@@ -1,102 +1,110 @@
 <header class="body-font bg-background-50 text-textcolor-600">
   <img src="" alt="" class="w-full bg-background-800 py-36" />
   <div class="container flex items-center justify-between py-5">
-    <nav class="flex items-center gap-4">
-      <a href="/" class="hover:text-textcolor-900">Home</a>
-      <div id="articles-dropdown-menu" class="relative">
-        <button
-          (click)="toggleArticleDropdown()"
-          aria-haspopup="true"
-          [ariaExpanded]="isArticleDropdownOpen"
-          class="inline-flex w-full items-center justify-center gap-x-1.5">
-          Articles
-          <svg
-            class="-mr-1 h-5 w-5 text-textcolor-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true">
-            <path
-              fill-rule="evenodd"
-              d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-        <ul
-          [@dropdownAnimation]="isArticleDropdownOpen ? 'open' : 'closed'"
-          style="overflow: hidden"
-          class="absolute flex flex-col gap-2 whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="articles-dropdown-menu">
-          <li role="none">
-            <a
-              href="/articles"
-              class="hover:text-textcolor-900"
-              role="menuitem"
-              tabindex="-1"
-              id="articles-dropdown-menu-item-0"
-              >Articles</a
-            >
-          </li>
-          <li *ngIf="userAuthenticated" role="none">
-            <a
-              href="/articles/write"
-              class="hover:text-textcolor-900"
-              role="menuitem"
-              tabindex="-1"
-              id="articles-dropdown-menu-item-1"
-              >Write Article</a
-            >
-          </li>
-        </ul>
-      </div>
-      <div id="news-dropdown-menu" class="relative" *ngIf="userAuthenticated">
-        <button
-          (click)="toggleNewsDropdown()"
-          aria-haspopup="true"
-          [ariaExpanded]="isNewsDropdownOpen"
-          class="inline-flex w-full items-center justify-center gap-x-1.5">
-          Suggested News
-          <svg
-            class="-mr-1 h-5 w-5 text-textcolor-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true">
-            <path
-              fill-rule="evenodd"
-              d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-        <ul
-          [@dropdownAnimation]="isNewsDropdownOpen ? 'open' : 'closed'"
-          style="overflow: hidden"
-          class="absolute flex flex-col gap-2 whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
-          role="menu"
-          aria-labelledby="news-dropdown-menu">
-          <li role="none">
-            <a
-              href="/suggested-news"
-              class="hover:text-textcolor-900"
-              role="menuitem"
-              tabindex="-1"
-              id="news-dropdown-menu-item-0"
-              >Suggested News</a
-            >
-          </li>
-          <li role="none">
-            <a
-              href="/suggested-news/write"
-              class="hover:text-textcolor-900"
-              role="menuitem"
-              tabindex="-1"
-              id="news-dropdown-menu-item-0"
-              >Suggest</a
-            >
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <div class="relativ">
+      <span class="block md:hidden"
+        ><app-burger-menu
+          (isOpenChange)="handleBurgerMenuChange($event)"></app-burger-menu
+      ></span>
+      <nav
+        [class.hidden]="!isBurgerMenuOpen && isMobileView"
+        class="mt-2 flex w-max flex-col items-center gap-10 border-background-500 max-md:absolute max-md:items-start max-md:rounded-md max-md:border max-md:bg-background-100 max-md:p-5 max-md:shadow-[rgba(_140,_115,_64,_0.24)_0px_3px_8px] md:mt-0 md:flex-row md:gap-4">
+        <a href="/" class="hover:text-textcolor-900">Home</a>
+        <div id="articles-dropdown-menu" class="relative">
+          <button
+            (click)="toggleArticleDropdown()"
+            aria-haspopup="true"
+            [ariaExpanded]="isArticleDropdownOpen"
+            class="inline-flex w-full items-center justify-center gap-x-1.5">
+            Articles
+            <svg
+              class="-mr-1 h-5 w-5 text-textcolor-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true">
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+          <ul
+            [@dropdownAnimation]="isArticleDropdownOpen ? 'open' : 'closed'"
+            style="overflow: hidden"
+            class="absolute z-10 flex flex-col gap-4 whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="articles-dropdown-menu">
+            <li role="none">
+              <a
+                href="/articles"
+                class="hover:text-textcolor-900"
+                role="menuitem"
+                tabindex="-1"
+                id="articles-dropdown-menu-item-0"
+                >Articles</a
+              >
+            </li>
+            <li *ngIf="userAuthenticated" role="none">
+              <a
+                href="/articles/write"
+                class="hover:text-textcolor-900"
+                role="menuitem"
+                tabindex="-1"
+                id="articles-dropdown-menu-item-1"
+                >Write Article</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div id="news-dropdown-menu" class="relative" *ngIf="userAuthenticated">
+          <button
+            (click)="toggleNewsDropdown()"
+            aria-haspopup="true"
+            [ariaExpanded]="isNewsDropdownOpen"
+            class="inline-flex w-full items-center justify-center gap-x-1.5">
+            Suggested News
+            <svg
+              class="-mr-1 h-5 w-5 text-textcolor-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true">
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+          <ul
+            [@dropdownAnimation]="isNewsDropdownOpen ? 'open' : 'closed'"
+            style="overflow: hidden"
+            class="absolute flex flex-col gap-4 whitespace-nowrap rounded-md border border-background-500 bg-white p-2 shadow-[5px_5px_0px_0px_rgba(140,115,64)]"
+            role="menu"
+            aria-labelledby="news-dropdown-menu">
+            <li role="none">
+              <a
+                href="/suggested-news"
+                class="hover:text-textcolor-900"
+                role="menuitem"
+                tabindex="-1"
+                id="news-dropdown-menu-item-0"
+                >Suggested News</a
+              >
+            </li>
+            <li role="none">
+              <a
+                href="/suggested-news/write"
+                class="hover:text-textcolor-900"
+                role="menuitem"
+                tabindex="-1"
+                id="news-dropdown-menu-item-0"
+                >Suggest</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
 
     @if (userAuthenticated) {
       <div class="flex items-center gap-2">

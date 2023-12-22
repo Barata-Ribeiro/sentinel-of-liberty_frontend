@@ -5,9 +5,15 @@ import {
   transition,
   trigger,
 } from "@angular/animations";
-import { CommonModule } from "@angular/common";
+import { CommonModule, isPlatformBrowser } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Component } from "@angular/core";
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { BurgerMenuComponent } from "./burger-menu.component";
@@ -34,20 +40,41 @@ const DEFAULT_EASING = "ease-out";
     ]),
   ],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   userAuthenticated: boolean = false;
   isArticleDropdownOpen: boolean = false;
   isNewsDropdownOpen: boolean = false;
   isBurgerMenuOpen: boolean = false;
+  isMobileView: boolean = true;
+  isMenuVisible: boolean = true;
 
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    // This is used to check if the app is running on the browser or the server
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.authService.isAuthenticated().subscribe(isAuthenticated => {
       this.userAuthenticated = isAuthenticated;
     });
+  }
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.adjustForScreenSize();
+      window.addEventListener("resize", this.adjustForScreenSize.bind(this));
+    }
+  }
+
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener("resize", this.adjustForScreenSize.bind(this));
+    }
+  }
+
+  private adjustForScreenSize(): void {
+    this.isMobileView = window.innerWidth < 768;
   }
 
   logout(): void {
@@ -81,6 +108,9 @@ export class HeaderComponent {
 
   handleBurgerMenuChange(isOpen: boolean) {
     this.isBurgerMenuOpen = isOpen;
-    // Additional logic if needed when burger menu state changes
+
+    // Close dropdowns when burger menu is toggled
+    this.isArticleDropdownOpen = false;
+    this.isNewsDropdownOpen = false;
   }
 }
