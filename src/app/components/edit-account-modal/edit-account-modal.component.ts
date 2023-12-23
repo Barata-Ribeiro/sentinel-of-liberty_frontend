@@ -80,7 +80,8 @@ export class EditAccountModalComponent {
   // Error messages getters, adjusted to handle optional fields
   get displayNameError(): string {
     const control = this.editForm.get("displayName");
-    if (!control?.value && control?.touched) return "Display Name is required";
+    if (!control?.value && control?.touched)
+      return "Display Name is required if you want to change it.";
     if (control?.errors?.["minlength"]) return "Display Name is too short";
     if (control?.errors?.["maxlength"])
       return "Display Name cannot be more than 20 characters";
@@ -89,7 +90,8 @@ export class EditAccountModalComponent {
 
   get biographyError(): string {
     const control = this.editForm.get("biography");
-    if (!control?.value && control?.touched) return "Biography is required";
+    if (!control?.value && control?.touched)
+      return "Biography is required if you want to change it.";
     if (control?.errors?.["minlength"]) return "Biography is too short";
     if (control?.errors?.["maxlength"])
       return "Biography cannot be more than 150 characters";
