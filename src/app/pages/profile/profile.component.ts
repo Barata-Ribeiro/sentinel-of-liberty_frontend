@@ -83,13 +83,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
           withCredentials: true,
         })
         .subscribe({
-          next: () => this.fetchUserFromAuthToken(),
+          next: () => {
+            this.fetchUserFromAuthToken();
+            this.closeEditModal();
+          },
           error: error => alert("Error: " + error.message),
         });
     } catch (error) {
       console.error(error);
     }
-    this.closeEditModal();
   }
 
   private loadUser(): void {
@@ -112,7 +114,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         })
         .subscribe({
           next: response => {
-            this.user = response;
+            this.user = { ...response };
             this.cookieService.setCookie(
               "userData",
               JSON.stringify(response),

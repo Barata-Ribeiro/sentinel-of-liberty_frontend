@@ -11,64 +11,67 @@
       <div
         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
         [@modalAnimation]>
-        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-          <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-            <h3
-              class="text-lg font-semibold leading-6 text-textcolor-900"
-              id="modal-title">
-              Edit Account
-            </h3>
-            <div class="mt-2 flex flex-col">
-              <label
-                for="name"
-                class="mb-2 text-sm font-medium text-textcolor-900 dark:text-white"
-                >Display Name</label
-              >
-              <input
-                type="text"
-                name="name"
-                id="name"
-                class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-textcolor-900 focus:border-primary-600 focus:ring-primary-600 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                placeholder="Enter your display name"
-                required="" />
-              <span *ngIf="displayNameError" class="text-red-500">
-                {{ displayNameError }}
+        <form [formGroup]="editForm" (ngSubmit)="onEditAccount($event)">
+          <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3
+                class="text-lg font-semibold leading-6 text-textcolor-900"
+                id="modal-title">
+                Edit Account
+              </h3>
+              <div class="mt-2 flex flex-col">
+                <label
+                  for="displayName"
+                  class="mb-2 text-sm font-medium text-textcolor-900 dark:text-white"
+                  >Display Name</label
+                >
+                <input
+                  formControlName="displayName"
+                  type="text"
+                  name="displayName"
+                  id="displayName"
+                  class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-textcolor-900 focus:border-primary-600 focus:ring-primary-600 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                  placeholder="Enter your display name"
+                  required="" />
+                <span *ngIf="displayNameError" class="text-red-500">
+                  {{ displayNameError }}
+                </span>
+              </div>
+              <div class="mt-2 flex flex-col">
+                <label
+                  for="biography"
+                  class="mb-2 text-sm font-medium text-textcolor-900 dark:text-white"
+                  >Biography</label
+                >
+                <textarea
+                  formControlName="biography"
+                  type="text"
+                  name="biography"
+                  id="biography"
+                  class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-textcolor-900 focus:border-primary-600 focus:ring-primary-600 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                  placeholder="Write your biography here"
+                  required=""></textarea>
+              </div>
+              <span *ngIf="biographyError" class="text-red-500">
+                {{ biographyError }}
               </span>
             </div>
-            <div class="mt-2 flex flex-col">
-              <label
-                for="biography"
-                class="mb-2 text-sm font-medium text-textcolor-900 dark:text-white"
-                >Biography</label
-              >
-              <textarea
-                type="text"
-                name="biography"
-                id="biography"
-                class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-textcolor-900 focus:border-primary-600 focus:ring-primary-600 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                placeholder="Write your biography here"
-                required=""></textarea>
-            </div>
-            <span *ngIf="biographyError" class="text-red-500">
-              {{ biographyError }}
-            </span>
           </div>
-        </div>
-        <div
-          class="bg-background-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-          <button
-            type="button"
-            class="inline-flex w-full justify-center rounded-md bg-accent-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent-500 focus:ring-4 focus:ring-accent-200 sm:ml-3 sm:w-auto"
-            (click)="onEditAccount()">
-            Edit Account
-          </button>
-          <button
-            type="button"
-            class="mt-3 inline-flex w-full items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200 sm:mt-0 sm:w-auto"
-            (click)="onClose()">
-            Cancel
-          </button>
-        </div>
+          <div
+            class="bg-background-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <button
+              type="submit"
+              class="inline-flex w-full justify-center rounded-md bg-accent-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent-500 focus:ring-4 focus:ring-accent-200 sm:ml-3 sm:w-auto">
+              Edit Account
+            </button>
+            <button
+              type="button"
+              class="mt-3 inline-flex w-full items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200 sm:mt-0 sm:w-auto"
+              (click)="onClose()">
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

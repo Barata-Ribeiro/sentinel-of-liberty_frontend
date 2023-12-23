@@ -1,13 +1,18 @@
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { EditDataRequest } from "../../@types/appTypes";
 
 @Component({
   selector: "app-edit-account-modal",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: "./edit-account-modal.component.html",
   styleUrl: "./edit-account-modal.component.css",
   animations: [
@@ -42,22 +47,8 @@ export class EditAccountModalComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.editForm = this.formBuilder.group({
-      displayName: [
-        "",
-        [
-          Validators.required,
-          Validators.maxLength(20),
-          Validators.minLength(3),
-        ],
-      ],
-      biography: [
-        "",
-        [
-          Validators.required,
-          Validators.maxLength(150),
-          Validators.minLength(3),
-        ],
-      ],
+      displayName: ["", [Validators.maxLength(20), Validators.minLength(3)]],
+      biography: ["", [Validators.maxLength(150), Validators.minLength(3)]],
     });
   }
 
@@ -65,38 +56,43 @@ export class EditAccountModalComponent {
     this.close.emit();
   }
 
-  onEditAccount() {
+  onEditAccount(event: Event) {
+    event.preventDefault();
+
     const updateData: EditDataRequest = {};
 
-    if (this.editForm.get("displayName")?.value)
+    // Checking if form values exist before adding them to updateData
+    if (this.editForm.get("displayName")?.value) {
       updateData.sol_username = this.editForm.get("displayName")?.value;
+    }
 
-    if (this.editForm.get("biography")?.value)
+    if (this.editForm.get("biography")?.value) {
       updateData.sol_biography = this.editForm.get("biography")?.value;
+    }
 
+    // Emitting the update event only if there is data to update
     if (Object.keys(updateData).length > 0) {
       this.requestEdit.emit(updateData);
       this.onClose();
     }
   }
 
+  // Error messages getters, adjusted to handle optional fields
   get displayNameError(): string {
     const control = this.editForm.get("displayName");
-
+    if (!control?.value && control?.touched) return "Display Name is required";
     if (control?.errors?.["minlength"]) return "Display Name is too short";
     if (control?.errors?.["maxlength"])
       return "Display Name cannot be more than 20 characters";
-
     return "";
   }
 
   get biographyError(): string {
     const control = this.editForm.get("biography");
-
+    if (!control?.value && control?.touched) return "Biography is required";
     if (control?.errors?.["minlength"]) return "Biography is too short";
     if (control?.errors?.["maxlength"])
       return "Biography cannot be more than 150 characters";
-
     return "";
   }
 }
