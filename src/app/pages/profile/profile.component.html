@@ -15,9 +15,18 @@
         [title]="
           'Avatar of ' + (user?.sol_username || user?.discordUsername)
         " />
-      <h3 id="profile-name" class="mb-1 text-xl font-medium text-textcolor-900">
-        {{ user?.sol_username || user?.discordUsername }}
-      </h3>
+      <div class="mb-4 leading-none">
+        <h3
+          id="profile-name"
+          class="mb-1 text-xl font-medium text-textcolor-900">
+          {{ user?.sol_username || user?.discordUsername }}
+        </h3>
+        <h4
+          class="text-center text-sm"
+          *ngIf="user?.sol_username === 'John/Jane Doe'">
+          Discord Username: {{ user?.discordUsername }}
+        </h4>
+      </div>
       <span class="text-sm text-textcolor-500 dark:text-textcolor-400"
         >Member since {{ user?.createdAt | date: "d MMM y" }}
       </span>
@@ -54,10 +63,7 @@
           aria-label="Edit profile">
           Edit Profile
         </button>
-        <app-edit-account-modal
-          *ngIf="showEditProfile"
-          (close)="closeEditModal()"
-          (requestEdit)="handleEditAccount($event)"></app-edit-account-modal>
+
         <button
           class="inline-flex items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200"
           aria-label="Check account details">
@@ -95,11 +101,14 @@
         aria-label="Delete Account">
         Delete Account
       </button>
-
-      <app-delete-account-modal
-        *ngIf="showModalDelete"
-        (close)="closeModalDelete()"
-        (deactivate)="handleDeactivate()"></app-delete-account-modal>
     </div>
   </div>
 </section>
+<app-delete-account-modal
+  *ngIf="showModalDelete"
+  (close)="closeModalDelete()"
+  (deactivate)="handleDeactivate()"></app-delete-account-modal>
+<app-edit-account-modal
+  *ngIf="showEditProfile"
+  (close)="closeEditModal()"
+  (requestEdit)="handleEditAccount($event)"></app-edit-account-modal>
