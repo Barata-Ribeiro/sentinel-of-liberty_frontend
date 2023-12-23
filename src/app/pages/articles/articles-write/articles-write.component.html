@@ -1,1 +1,150 @@
-<p>articles-write works!</p>
+<section class="mx-auto my-10 max-w-3xl">
+  <div class="mx-auto mb-6 flex flex-col items-center justify-center gap-6">
+    <h1 class="text-xl font-semibold sm:text-3xl">Write your article</h1>
+    <div class="flex flex-col gap-2 self-start leading-relaxed">
+      <h2 class="text-base font-medium sm:text-xl">
+        Follow these rules to write your article:
+      </h2>
+      <p>
+        Your article must provide your point of view on a topic, especially if
+        using references. Preferably, they should offer a libertarian take on
+        the topic. Writing just news won't do.
+      </p>
+      <ul class="list-disc pl-3 sm:pl-6">
+        <li class="mb-4 sm:mb-2">
+          Your article must be between 1500 and 2500 characters.
+        </li>
+        <li class="mb-4 sm:mb-2">
+          Include a descriptive title for your article.
+        </li>
+        <li class="mb-4 sm:mb-2">
+          Provide a valid image link for your article.
+        </li>
+        <li class="mb-4 sm:mb-2">
+          Ensure your article has proper references separated by commas.
+        </li>
+        <li class="mb-4 sm:mb-2">
+          Use spell checkers to avoid spelling and concordance errors.
+        </li>
+        <li class="mb-4 sm:mb-2">
+          Do not use satirical names for politicians or public people. Avoid
+          using names of people who aren't politicians or very well-known
+          people.
+        </li>
+        <li>
+          Follow the laws of your country, as the use of slurs, profanity, and
+          the like might be considered against the laws in certain places.
+        </li>
+      </ul>
+      <p class="mt-2">
+        Follow these rules to write a high-quality article that meets the
+        guidelines.
+      </p>
+    </div>
+  </div>
+
+  <form class="flex flex-col items-start justify-center gap-4">
+    <!-- TITLE -->
+    <div class="relative w-full">
+      <label
+        for="title"
+        class="block text-sm font-medium leading-6 text-gray-900"
+        >Title</label
+      >
+      <input
+        type="text"
+        name="title"
+        id="title"
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        placeholder="Article Title"
+        aria-label="Article Title"
+        required />
+    </div>
+    <!-- IMAGE LINK -->
+    <div class="relative w-full">
+      <label
+        for="image"
+        class="block text-sm font-medium leading-6 text-gray-900"
+        >Image Link</label
+      >
+      <div class="relative rounded-md shadow-sm">
+        <div
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <span class="text-gray-500 sm:text-sm">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-link-45deg"
+              viewBox="0 0 16 16">
+              <path
+                d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"></path>
+              <path
+                d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"></path>
+            </svg>
+          </span>
+        </div>
+        <input
+          type="text"
+          name="image"
+          id="image"
+          class="block w-full rounded-md border-0 py-1.5 pl-10 pr-32 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          placeholder="Image Link"
+          aria-label="Image Link"
+          required />
+      </div>
+    </div>
+    <!-- CONTENT -->
+    <div class="relative w-full">
+      <label
+        for="content"
+        class="block text-sm font-medium leading-6 text-gray-900"
+        >Article Text -
+        <span class="text-sm text-gray-400"
+          >Your article must be between 1500 and 2500 characters.</span
+        >
+      </label>
+      <textarea
+        id="content"
+        name="content"
+        rows="15"
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        minlength="1500"
+        maxlength="2500"
+        placeholder="Article Content"
+        aria-label="Article Content"
+        required></textarea>
+    </div>
+    <!-- REFERENCES -->
+    <div class="relative w-full">
+      <label
+        for="references"
+        class="block text-sm font-medium leading-6 text-gray-900">
+        References -
+        <span class="text-sm text-gray-400">
+          Your references must be separated by comma ( , ).
+        </span>
+      </label>
+      <textarea
+        id="references"
+        name="references"
+        rows="4"
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        placeholder="References"
+        aria-label="References"
+        required></textarea>
+    </div>
+
+    <p class="max-w-sm text-left text-sm md:mx-auto md:text-center">
+      Remember that the article's summary is generated automatically, using the
+      first 150 (one hundred and fifty) characters of your text.
+    </p>
+
+    <button
+      type="submit"
+      class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-textcolor-50 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">
+      Create
+    </button>
+  </form>
+</section>
