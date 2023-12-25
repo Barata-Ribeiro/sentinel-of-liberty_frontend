@@ -25,3 +25,10 @@ export interface EditDataRequest {
   sol_username?: string;
   sol_biography?: string;
 }
+
+export interface SuggestionDataRequest {
+  source: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+}
