@@ -82,7 +82,28 @@
       </div>
     </div>
     <div
-      class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10"></div>
+      class="mb-5 flex flex-col items-start rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10">
+      <h3 class="mb-2 self-center text-xl font-medium text-textcolor-900">
+        Site Interactions
+      </h3>
+      <ul class="list-disc space-y-2 pl-5">
+        <li class="font-medium">
+          News Suggested:
+          <span class="font-normal">{{ user?.newsSuggested }}</span>
+        </li>
+        <li class="font-medium">
+          Articles Published:
+          <span class="font-normal">{{ user?.articles }}</span>
+        </li>
+        <li class="font-medium">
+          Comments Written:
+          <span class="font-normal">{{ user?.comments }}</span>
+        </li>
+        <li class="font-medium">
+          Liked comments: <span class="font-normal">{{ user?.likes }}</span>
+        </li>
+      </ul>
+    </div>
   </div>
   <div>
     <div
