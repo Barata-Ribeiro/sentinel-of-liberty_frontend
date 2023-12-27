@@ -1,7 +1,7 @@
 <section class="mx-auto my-10 max-w-3xl">
   <div class="mx-auto mb-6 flex flex-col items-center justify-center gap-6">
     <h1 class="text-xl font-semibold sm:text-3xl">Write your article</h1>
-    <div class="flex flex-col gap-2 self-start leading-relaxed">
+    <div id="form-rules" class="flex flex-col gap-2 self-start leading-relaxed">
       <h2 class="text-base font-medium sm:text-xl">
         Follow these rules to write your article:
       </h2>
@@ -43,7 +43,11 @@
     </div>
   </div>
 
-  <form class="flex flex-col items-start justify-center gap-4">
+  <form
+    [formGroup]="articleBody"
+    (ngSubmit)="onCreateArticle($event)"
+    class="flex flex-col items-start justify-center gap-4"
+    aria-describedby="form-rules">
     <!-- TITLE -->
     <div class="relative w-full">
       <label
@@ -53,12 +57,17 @@
       >
       <input
         type="text"
+        formControlName="bodyTitle"
         name="title"
         id="title"
         class="block w-full rounded-md border-0 py-1.5 text-textcolor-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent-600 sm:text-sm sm:leading-6"
         placeholder="Article Title"
         aria-label="Article Title"
+        aria-required="true"
         required />
+      <span *ngIf="getError('bodyTitle')" class="font-semibold text-red-500">
+        {{ getError("bodyTitle") }}
+      </span>
     </div>
     <!-- IMAGE LINK -->
     <div class="relative w-full">
@@ -87,6 +96,7 @@
         </div>
         <input
           type="url"
+          formControlName="imageLink"
           name="image"
           id="image"
           pattern="https://.*"
@@ -95,9 +105,21 @@
           class="block w-full rounded-md border-0 py-1.5 pl-10 pr-32 text-textcolor-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent-600 sm:text-sm sm:leading-6"
           placeholder="Image Link"
           aria-label="Image Link"
+          aria-required="true"
           required />
       </div>
+      <span *ngIf="getError('imageLink')" class="font-semibold text-red-500">
+        {{ getError("imageLink") }}
+      </span>
     </div>
+
+    <img
+      *ngIf="imagePreview"
+      [src]="imagePreview"
+      alt="Image preview"
+      title="Image preview"
+      class="rounded-md" />
+
     <!-- CONTENT -->
     <div class="relative w-full">
       <label
@@ -110,6 +132,7 @@
       </label>
       <textarea
         id="content"
+        formControlName="bodyContent"
         name="content"
         rows="15"
         class="block w-full rounded-md border-0 py-1.5 text-textcolor-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent-600 sm:text-sm sm:leading-6"
@@ -117,7 +140,11 @@
         maxlength="2500"
         placeholder="Article Content"
         aria-label="Article Content"
-        required></textarea>
+        required
+        aria-required="true"></textarea>
+      <span *ngIf="getError('bodyContent')" class="font-semibold text-red-500">
+        {{ getError("bodyContent") }}
+      </span>
     </div>
     <!-- REFERENCES -->
     <div class="relative w-full">
@@ -126,17 +153,24 @@
         class="block text-sm font-medium leading-6 text-textcolor-900">
         References -
         <span class="text-sm text-textcolor-400">
-          Your references must be separated by comma ( , ).
+          Your references must be separated by comma ( , ); without spaces;
+          starting each with "https://".
         </span>
       </label>
       <textarea
         id="references"
+        formControlName="bodyReferences"
         name="references"
         rows="4"
         class="block w-full rounded-md border-0 py-1.5 text-textcolor-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent-600 sm:text-sm sm:leading-6"
         placeholder="References"
         aria-label="References"
         required></textarea>
+      <span
+        *ngIf="getError('bodyReferences')"
+        class="font-semibold text-red-500">
+        {{ getError("bodyReferences") }}
+      </span>
     </div>
 
     <p class="max-w-sm text-left text-sm md:mx-auto md:text-center">
@@ -146,8 +180,13 @@
 
     <button
       type="submit"
-      class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-textcolor-50 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">
+      [disabled]="articleBody.invalid || isLoading"
+      class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-textcolor-50 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:bg-primary-600/50">
       Create
     </button>
+
+    <span *ngIf="serverError" class="text-red-600">
+      {{ serverError }}
+    </span>
   </form>
 </section>
