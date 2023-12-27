@@ -1,1 +1,55 @@
-<p>news-list works!</p>
+<section class="mx-auto my-10" aria-labelledby="suggested-news-title">
+  <h1
+    id="suggested-news-title"
+    class="mb-10 text-center text-xl font-semibold sm:text-3xl">
+    Suggested News
+  </h1>
+
+  <ol>
+    @for (news of newsList.data; track news.id) {
+      <li
+        [id]="news.id"
+        class="grid grid-cols-1 items-center justify-center gap-4 border-b border-background-100 py-5 md:grid-cols-[200px_auto_auto]">
+        <img
+          [src]="news.image"
+          alt="Image of the suggested news"
+          class="max-w-[12.5rem] rounded-md object-cover" />
+
+        <div class="flex flex-col justify-start gap-2">
+          <h2 class="font-medium">{{ news.createdAt }} - {{ news.title }}</h2>
+
+          <p class="text-textcolor-950/50">
+            {{ news.content }}
+            <a
+              [href]="news.source"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block w-fit font-medium hover:text-accent-600 hover:underline">
+              Read original article
+            </a>
+          </p>
+
+          <span
+            class="self-start rounded bg-yellow-100 px-2.5 py-0.5 text-sm font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+            Suggested by
+            {{ news.user.sol_username ?? news.user.discordUsername }}
+          </span>
+        </div>
+
+        <a
+          [routerLink]="['/articles/write']"
+          [queryParams]="{ basedOnSuggestion: news.id }"
+          class="self-end hover:text-accent-600 hover:underline">
+          Write Article
+        </a>
+      </li>
+    } @empty {
+      <li>
+        <span
+          >No News suggested. Suggest one at
+          <a [routerLink]="['/suggested-news/write']"></a
+        ></span>
+      </li>
+    }
+  </ol>
+</section>
