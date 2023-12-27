@@ -1,3 +1,4 @@
+
 export interface User {
   id: string;
   discordUsername: string;
@@ -31,6 +32,25 @@ export interface SuggestionDataRequest {
   title: string;
   content: string;
   imageUrl: string;
+}
+
+private interface News {
+  id: string;
+  source: string;
+  title: string;
+  content: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  user: Pick<User, "id" | "discordUsername" | "sol_username" | "discordAvatar">;
+}
+
+export interface NewsListResponse {
+  data: News[];
+  page: number;
+  perPage: number;
+  next: string;
+  prev: string;
 }
 
 export interface ArticleDataRequest {
