@@ -32,3 +32,10 @@ export interface SuggestionDataRequest {
   content: string;
   imageUrl: string;
 }
+
+export interface ArticleDataRequest {
+  title: string;
+  imageUrl: string;
+  content: string;
+  references: string;
+}
