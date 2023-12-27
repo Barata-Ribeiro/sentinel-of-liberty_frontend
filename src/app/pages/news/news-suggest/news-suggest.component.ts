@@ -108,10 +108,12 @@ export class NewsSuggestComponent {
   getError(controlName: string): string {
     const control = this.suggestionBody.get(controlName);
 
-    if (!control?.value && control?.touched) return "This field is required";
-    if (control?.errors?.["minlength"]) return "This field is too short";
-    if (control?.errors?.["maxlength"]) return "This field is too long";
-    if (control?.errors?.["pattern"]) return "This is an invalid URL.";
+    if (control?.touched) {
+      if (!control?.value) return "This field is required";
+      if (control?.errors?.["minlength"]) return "This field is too short";
+      if (control?.errors?.["maxlength"]) return "This field is too long";
+      if (control?.errors?.["pattern"]) return "This is an invalid URL.";
+    }
 
     return "";
   }
