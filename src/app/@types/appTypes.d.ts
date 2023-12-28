@@ -1,4 +1,4 @@
-
+// Define User interface
 export interface User {
   id: string;
   discordUsername: string;
@@ -16,17 +16,20 @@ export interface User {
   likes?: number;
 }
 
+// Define responses and requests related to authentication
 export interface AuthAppResponse {
   id: string;
   authToken: string;
   refreshToken: string;
 }
 
+// Define requests for editing user data
 export interface EditDataRequest {
   sol_username?: string;
   sol_biography?: string;
 }
 
+// Define requests, responses and listing for suggestions
 export interface SuggestionDataRequest {
   source: string;
   title: string;
@@ -37,8 +40,8 @@ export interface SuggestionDataRequest {
 export interface SuggestionDataResponse {
   id: string;
   user: {
-      id: string;
-      username: string;
+    id: Pick<User, "id">;
+    username: Pick<User, "discordUsername" | "sol_username">;
   };
   source: string;
   title: string;
@@ -48,7 +51,7 @@ export interface SuggestionDataResponse {
   updatedAt: Date;
 }
 
-private interface News {
+interface News {
   id: string;
   source: string;
   title: string;
@@ -67,6 +70,7 @@ export interface NewsListResponse {
   prev: string;
 }
 
+// Define requests, responses and listing for articles
 export interface ArticleDataRequest {
   title: string;
   imageUrl: string;
