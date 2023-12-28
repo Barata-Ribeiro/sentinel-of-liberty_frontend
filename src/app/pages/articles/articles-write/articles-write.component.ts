@@ -55,8 +55,8 @@ export class ArticlesWriteComponent implements OnInit {
         "",
         [
           Validators.required,
-          Validators.minLength(10),
-          Validators.maxLength(100),
+          Validators.minLength(1500),
+          Validators.maxLength(2500),
         ],
       ],
       bodyReferences: ["", [Validators.required, this.validateReferences]],
