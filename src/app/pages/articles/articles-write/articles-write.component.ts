@@ -1,14 +1,17 @@
 import { CommonModule } from "@angular/common";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { Router } from "@angular/router";
-import { ArticleDataRequest } from "../../../@types/appTypes";
+import { ActivatedRoute, Router } from "@angular/router";
+import {
+  ArticleDataRequest,
+  SuggestionDataResponse,
+} from "../../../@types/appTypes";
 
 @Component({
   selector: "app-articles-write",
@@ -17,16 +20,18 @@ import { ArticleDataRequest } from "../../../@types/appTypes";
   templateUrl: "./articles-write.component.html",
   styleUrl: "./articles-write.component.css",
 })
-export class ArticlesWriteComponent {
+export class ArticlesWriteComponent implements OnInit {
   articleBody: FormGroup;
   isLoading = false;
   serverError = "";
   imagePreview = "";
+  basedOnSuggestionId?: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.articleBody = this.formBuilder.group({
       bodyTitle: [
@@ -63,6 +68,33 @@ export class ArticlesWriteComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params["basedOnSuggestion"]) {
+        this.basedOnSuggestionId = params["basedOnSuggestion"];
+        this.fetchSuggestionInfo(this.basedOnSuggestionId ?? "");
+      }
+    });
+  }
+
+  private fetchSuggestionInfo(suggestionId: string): void {
+    this.http
+      .get<SuggestionDataResponse>(
+        `http://localhost:3000/api/v1/suggestions/${suggestionId}`
+      )
+      .subscribe({
+        next: response => {
+          this.articleBody.get("bodyTitle")?.setValue(response.title);
+          this.articleBody.get("imageLink")?.setValue(response.image);
+          this.articleBody.get("bodyContent")?.setValue(response.content);
+          this.articleBody.get("bodyReferences")?.setValue(response.source);
+        },
+        error: error => {
+          this.serverError = error.error.message;
+        },
+      });
+  }
+
   private isImage(url: string): boolean {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
   }
@@ -78,6 +110,7 @@ export class ArticlesWriteComponent {
   }
 
   onCreateArticle(event: Event): void {
+    event.preventDefault();
     this.serverError = "";
 
     const articleData: ArticleDataRequest = {
@@ -85,10 +118,11 @@ export class ArticlesWriteComponent {
       imageUrl: this.articleBody.get("imageLink")?.value,
       content: this.articleBody.get("bodyContent")?.value,
       references: this.articleBody.get("bodyReferences")?.value,
+      basedOnNewsSuggestionId: this.basedOnSuggestionId ?? null,
     };
 
     this.http
-      .post("http://localhost:3000/articles", articleData, {
+      .post("http://localhost:3000/api/v1/articles", articleData, {
         headers: new HttpHeaders({ "Content-Type": "application/json" }),
         withCredentials: true,
       })
