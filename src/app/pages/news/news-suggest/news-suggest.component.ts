@@ -44,6 +44,7 @@ export class NewsSuggestComponent {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(100),
+          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
         ],
       ],
       bodyContent: [
@@ -52,6 +53,7 @@ export class NewsSuggestComponent {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(100),
+          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
         ],
       ],
       imageLink: [
@@ -112,7 +114,8 @@ export class NewsSuggestComponent {
       if (!control?.value) return "This field is required";
       if (control?.errors?.["minlength"]) return "This field is too short";
       if (control?.errors?.["maxlength"]) return "This field is too long";
-      if (control?.errors?.["pattern"]) return "This is an invalid URL.";
+      if (control?.errors?.["pattern"])
+        return "This field contains invalid characters or is not in the correct format";
     }
 
     return "";

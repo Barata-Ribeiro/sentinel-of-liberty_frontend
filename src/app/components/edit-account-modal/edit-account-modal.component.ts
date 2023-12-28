@@ -47,8 +47,22 @@ export class EditAccountModalComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.editForm = this.formBuilder.group({
-      displayName: ["", [Validators.maxLength(20), Validators.minLength(3)]],
-      biography: ["", [Validators.maxLength(150), Validators.minLength(3)]],
+      displayName: [
+        "",
+        [
+          Validators.maxLength(20),
+          Validators.minLength(3),
+          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
+        ],
+      ],
+      biography: [
+        "",
+        [
+          Validators.maxLength(150),
+          Validators.minLength(3),
+          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
+        ],
+      ],
     });
   }
 
@@ -80,21 +94,33 @@ export class EditAccountModalComponent {
   // Error messages getters, adjusted to handle optional fields
   get displayNameError(): string {
     const control = this.editForm.get("displayName");
-    if (!control?.value && control?.touched)
-      return "Display Name is required if you want to change it.";
-    if (control?.errors?.["minlength"]) return "Display Name is too short";
-    if (control?.errors?.["maxlength"])
-      return "Display Name cannot be more than 20 characters";
+
+    if (control?.touched) {
+      if (!control?.value)
+        return "Display Name is required if you want to change it.";
+      if (control?.errors?.["minlength"]) return "Display Name is too short";
+      if (control?.errors?.["maxlength"])
+        return "Display Name cannot be more than 20 characters";
+      if (control?.errors?.["pattern"])
+        return "This field contains invalid characters or is not in the correct format";
+    }
+
     return "";
   }
 
   get biographyError(): string {
     const control = this.editForm.get("biography");
-    if (!control?.value && control?.touched)
-      return "Biography is required if you want to change it.";
-    if (control?.errors?.["minlength"]) return "Biography is too short";
-    if (control?.errors?.["maxlength"])
-      return "Biography cannot be more than 150 characters";
+
+    if (control?.touched) {
+      if (!control?.value)
+        return "Biography is required if you want to change it.";
+      if (control?.errors?.["minlength"]) return "Biography is too short";
+      if (control?.errors?.["maxlength"])
+        return "Biography cannot be more than 150 characters";
+      if (control?.errors?.["pattern"])
+        return "This field contains invalid characters or is not in the correct format";
+    }
+
     return "";
   }
 }

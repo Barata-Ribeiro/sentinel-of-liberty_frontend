@@ -40,6 +40,7 @@ export class ArticlesWriteComponent implements OnInit {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(100),
+          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
         ],
       ],
       imageLink: [
@@ -57,6 +58,7 @@ export class ArticlesWriteComponent implements OnInit {
           Validators.required,
           Validators.minLength(1500),
           Validators.maxLength(2500),
+          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,/]+"),
         ],
       ],
       bodyReferences: ["", [Validators.required, this.validateReferences]],
@@ -146,7 +148,8 @@ export class ArticlesWriteComponent implements OnInit {
       if (!control?.value) return "This field is required";
       if (control?.errors?.["minlength"]) return "This field is too short";
       if (control?.errors?.["maxlength"]) return "This field is too long";
-      if (control?.errors?.["pattern"]) return "This is an invalid URL.";
+      if (control?.errors?.["pattern"])
+        return "This field contains invalid characters or is not in the correct format";
       if (control?.errors?.["invalidReferences"])
         return 'Invalid references format. Ensure each reference starts with "https://"';
     }
