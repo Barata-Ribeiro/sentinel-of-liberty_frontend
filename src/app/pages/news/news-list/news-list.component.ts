@@ -13,15 +13,20 @@ import { NewsListResponse } from "../../../@types/appTypes";
 })
 export class NewsListComponent implements OnInit, OnDestroy {
   newsList: NewsListResponse;
+  currentPage: number;
+  perPage: number;
 
   constructor(private http: HttpClient) {
     this.newsList = {
       data: [],
-      page: 0,
-      perPage: 0,
+      page: 1,
+      perPage: 10,
       next: "",
       prev: "",
     };
+
+    this.currentPage = 1;
+    this.perPage = 10;
   }
 
   ngOnDestroy(): void {
@@ -32,9 +37,11 @@ export class NewsListComponent implements OnInit, OnDestroy {
     this.retrieveNews();
   }
 
-  private retrieveNews(): void {
+  private retrieveNews(page: number = 1): void {
     this.http
-      .get<NewsListResponse>("http://localhost:3000/api/v1/suggestions")
+      .get<NewsListResponse>(
+        `http://localhost:3000/api/v1/suggestions?perPage=${this.perPage}&page=${page}`
+      )
       .subscribe({
         next: response => {
           this.newsList = {
@@ -50,15 +57,25 @@ export class NewsListComponent implements OnInit, OnDestroy {
               },
             })),
           };
-          console.log(this.newsList);
+          this.currentPage = page;
         },
-        error: error => {
-          console.log(error);
-        },
+        error: error => console.error(error),
       });
   }
 
   private formatNewsDate(dateString: string): string {
     return formatDate(dateString, "dd MMMM yyyy", "en-US");
+  }
+
+  goToPage(page: number): void {
+    this.retrieveNews(page);
+  }
+
+  hasNextPage(): boolean {
+    return this.newsList.next !== null;
+  }
+
+  hasPreviousPage(): boolean {
+    return this.newsList.prev !== null;
   }
 }
