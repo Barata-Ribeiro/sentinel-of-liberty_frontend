@@ -34,6 +34,20 @@ export interface SuggestionDataRequest {
   imageUrl: string;
 }
 
+export interface SuggestionDataResponse {
+  id: string;
+  user: {
+      id: string;
+      username: string;
+  };
+  source: string;
+  title: string;
+  content: string;
+  image: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 private interface News {
   id: string;
   source: string;
@@ -58,4 +72,5 @@ export interface ArticleDataRequest {
   imageUrl: string;
   content: string;
   references: string;
+  basedOnNewsSuggestionId?: string | null;
 }
