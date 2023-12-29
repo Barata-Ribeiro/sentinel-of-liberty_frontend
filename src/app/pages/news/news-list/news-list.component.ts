@@ -30,7 +30,13 @@ export class NewsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // TODO
+    this.newsList = {
+      data: [],
+      page: 1,
+      perPage: 10,
+      next: "",
+      prev: "",
+    };
   }
 
   ngOnInit(): void {
