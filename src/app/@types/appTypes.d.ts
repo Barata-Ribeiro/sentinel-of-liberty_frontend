@@ -72,13 +72,14 @@ export interface NewsListResponse {
 
 // Define requests, responses and listing for articles
 interface Article {
-  articleId: string;
-  articleTitle: string;
-  articleCreatedAt: string;
-  commentCount: number;
-  contentSummary: string;
   userId: string;
   username: string;
+  articleId: string;
+  articleTitle: string;
+  contentSummary: string;
+  articleImage: string;
+  articleCreatedAt: string;
+  commentCount: number;
 }
 
 export interface ArticleDataRequest {
