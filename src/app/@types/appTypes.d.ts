@@ -71,10 +71,28 @@ export interface NewsListResponse {
 }
 
 // Define requests, responses and listing for articles
+interface Article {
+  articleId: string;
+  articleTitle: string;
+  articleCreatedAt: string;
+  commentCount: number;
+  contentSummary: string;
+  userId: string;
+  username: string;
+}
+
 export interface ArticleDataRequest {
   title: string;
   imageUrl: string;
   content: string;
   references: string;
   basedOnNewsSuggestionId?: string | null;
+}
+
+export interface ArticleListResponse {
+  data: Article[];
+  page: number;
+  perPage: number;
+  next: string;
+  prev: string;
 }
