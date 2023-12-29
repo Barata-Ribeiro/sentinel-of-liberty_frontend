@@ -72,15 +72,15 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
       case diffInSeconds < 60:
         return "Published just now";
       case diffInSeconds < 3600:
-        return `Published ${Math.floor(diffInSeconds / 60)} minutes ago`;
+        return `Published ${Math.floor(diffInSeconds / 60)} minute(s) ago`;
       case diffInSeconds < 86400:
-        return `Published ${Math.floor(diffInSeconds / 3600)} hours ago`;
+        return `Published ${Math.floor(diffInSeconds / 3600)} hour(s) ago`;
       case diffInSeconds < 2592000:
-        return `Published ${Math.floor(diffInSeconds / 86400)} days ago`;
+        return `Published ${Math.floor(diffInSeconds / 86400)} day(s) ago`;
       case diffInSeconds < 31536000:
-        return `Published ${Math.floor(diffInSeconds / 2592000)} months ago`;
+        return `Published ${Math.floor(diffInSeconds / 2592000)} month(s) ago`;
       default:
-        return `Published ${Math.floor(diffInSeconds / 31536000)} years ago`;
+        return `Published ${Math.floor(diffInSeconds / 31536000)} year(s) ago`;
     }
   }
 

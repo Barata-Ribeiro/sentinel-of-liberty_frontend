@@ -1,1 +1,90 @@
-<p>articles-list works!</p>
+<section class="mx-auto my-10" aria-labelledby="articles-title">
+  <h1
+    id="articles-title"
+    class="mb-10 text-center text-xl font-semibold sm:text-3xl">
+    Published Articles
+  </h1>
+
+  <ol class="grid-cols-1 sm:grid md:grid-cols-3">
+    @for (article of articleList.data; track article.articleId) {
+      <li
+        [id]="article.articleId"
+        class="flex flex-col rounded-lg bg-background-50 shadow-[5px_5px_0px_0px_rgba(140,115,64)] sm:shrink-0 sm:grow sm:basis-0">
+        <a [routerLink]="['/articles', article.articleId]">
+          <img
+            [src]="article.articleImage"
+            class="rounded-t-lg object-cover"
+            alt="Image of the article" />
+        </a>
+        <div class="p-6">
+          <a [routerLink]="['/articles', article.articleId]">
+            <h5
+              class="mb-2 text-xl font-medium leading-tight text-textcolor-950">
+              {{ article.articleTitle }}
+            </h5>
+          </a>
+          <p class="mb-4 text-base text-textcolor-600">
+            {{ article.contentSummary }}
+          </p>
+          <span class="text-sm font-medium text-textcolor-400"
+            >Article written by {{ article.username }}</span
+          >
+        </div>
+        <div
+          class="mt-auto flex flex-col items-center justify-between gap-0 border-t-2 border-background-100 px-6 py-3 text-center text-textcolor-700 sm:flex-row sm:gap-3">
+          <small>
+            {{ article.articleCreatedAt }}
+          </small>
+          <small
+            class="inline-flex w-fit items-center justify-center gap-x-1.5">
+            <svg
+              class="-mr-1 h-5 w-5 text-textcolor-900"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true">
+              <path
+                d="M10.968 18.769C15.495 18.107 19 14.434 19 9.938a8.49 8.49 0 0 0-.216-1.912C20.718 9.178 22 11.188 22 13.475a6.1 6.1 0 0 1-1.113 3.506c.06.949.396 1.781 1.01 2.497a.43.43 0 0 1-.36.71c-1.367-.111-2.485-.426-3.354-.945A7.434 7.434 0 0 1 15 19.95a7.36 7.36 0 0 1-4.032-1.181z"
+                fill-rule="evenodd" />
+              <path
+                d="M7.625 16.657c.6.142 1.228.218 1.875.218 4.142 0 7.5-3.106 7.5-6.938C17 6.107 13.642 3 9.5 3 5.358 3 2 6.106 2 9.938c0 1.946.866 3.705 2.262 4.965a4.406 4.406 0 0 1-1.045 2.29.46.46 0 0 0 .386.76c1.7-.138 3.041-.57 4.022-1.296z"
+                fill-rule="evenodd" />
+            </svg>
+            {{ article.commentCount }}
+            comment(s)
+          </small>
+        </div>
+      </li>
+    } @empty {
+      <li class="text-center">
+        <span>
+          No articles written. Write one at
+          <a
+            [routerLink]="['/articles/write']"
+            class="font-medium hover:text-accent-600 hover:underline">
+            this link!
+          </a>
+        </span>
+      </li>
+    }
+  </ol>
+
+  <div
+    *ngIf="hasPreviousPage() || hasNextPage()"
+    class="mt-6 flex justify-center space-x-4">
+    <button
+      *ngIf="hasPreviousPage()"
+      (click)="goToPage(currentPage - 1)"
+      class="rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-textcolor-50 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:bg-primary-600/50"
+      aria-label="Go to previous page">
+      Previous
+    </button>
+
+    <button
+      (click)="goToPage(currentPage + 1)"
+      *ngIf="hasNextPage()"
+      class="rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-textcolor-50 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:bg-primary-600/50"
+      aria-label="Go to next page">
+      Next
+    </button>
+  </div>
+</section>
