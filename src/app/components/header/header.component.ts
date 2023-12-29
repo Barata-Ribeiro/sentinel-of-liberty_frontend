@@ -54,16 +54,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     // This is used to check if the app is running on the browser or the server
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    this.authService.isAuthenticated().subscribe(isAuthenticated => {
-      this.userAuthenticated = isAuthenticated;
-    });
-  }
+  ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.adjustForScreenSize();
       window.addEventListener("resize", this.adjustForScreenSize.bind(this));
+
+      this.authService.isAuthenticated().subscribe(isAuthenticated => {
+        this.userAuthenticated = isAuthenticated;
+      });
     }
   }
 
