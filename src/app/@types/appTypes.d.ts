@@ -105,6 +105,7 @@ export interface IndividualArticleRequest {
   contentSummary: string;
   content: string;
   image: string;
+  references: string[];
   createdAt: string;
   updatedAt: string;
   user: Pick<User, "id" | "discordUsername" | "sol_username" | "discordAvatar">;

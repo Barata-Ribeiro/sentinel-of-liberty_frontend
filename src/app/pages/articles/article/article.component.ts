@@ -1,4 +1,4 @@
-import { formatDate } from "@angular/common";
+import { CommonModule, formatDate } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Title } from "@angular/platform-browser";
@@ -8,7 +8,7 @@ import { IndividualArticleRequest } from "../../../@types/appTypes";
 @Component({
   selector: "app-article",
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: "./article.component.html",
   styleUrl: "./article.component.css",
 })
@@ -26,6 +26,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
       content: "",
       contentSummary: "",
       image: "",
+      references: [],
       createdAt: "",
       updatedAt: "",
       user: {
@@ -50,6 +51,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
       content: "",
       contentSummary: "",
       image: "",
+      references: [],
       createdAt: "",
       updatedAt: "",
       user: {
@@ -60,6 +62,11 @@ export class ArticleComponent implements OnInit, OnDestroy {
       },
       comments: [],
     };
+  }
+
+  copyArticleLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
   }
 
   private retrieveArticle(id: string): void {
