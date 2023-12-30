@@ -63,9 +63,9 @@
         [alt]="articleData.title + ' - Article Image'"
         [title]="articleData.title + ' - Article Image'"
         class="rounded-lg object-cover" />
-      <div class="text-left leading-relaxed">
-        {{ articleData.content }}
-      </div>
+      <p
+        class="text-left leading-relaxed"
+        [innerHtml]="formatArticleContent(articleData.content)"></p>
     </div>
 
     <!-- REFERENCES -->

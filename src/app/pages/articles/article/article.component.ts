@@ -69,6 +69,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
     navigator.clipboard.writeText(url);
   }
 
+  formatArticleContent(content: string): string {
+    return content.replace(/\n/g, "<br/>");
+  }
+
   private retrieveArticle(id: string): void {
     this.http
       .get<IndividualArticleRequest>(
