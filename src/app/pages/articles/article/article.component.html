@@ -1,1 +1,92 @@
-<p>article works!</p>
+<section class="mx-auto my-10 max-w-5xl" aria-labelledby="article-title">
+  <article
+    class="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4">
+    <!-- TITLE -->
+    <div
+      class="flex max-w-2xl flex-col items-center justify-center gap-2 text-center">
+      <span class="font-medium">
+        Published
+        <time
+          [title]="articleData.createdAt"
+          [dateTime]="articleData.createdAt"
+          class="font-normal text-textcolor-500">
+          {{ articleData.createdAt }}
+        </time>
+      </span>
+      <h1
+        id="article-title"
+        class="text-xl font-semibold leading-snug sm:text-2xl">
+        {{ articleData.title }}
+      </h1>
+      <p class="text-textcolor-500">{{ articleData.contentSummary }}</p>
+    </div>
+
+    <!-- AUTHOR -->
+    <div class="flex w-full items-center justify-between border-y-2 px-4 py-6">
+      <p>
+        Article by
+        <span class="font-medium">
+          {{
+            articleData.user.sol_username ?? articleData.user.discordUsername
+          }}
+        </span>
+      </p>
+      <button
+        type="button"
+        (click)="copyArticleLink()"
+        aria-label="Copy article link to clipboard"
+        class="flex w-fit items-center gap-1 text-nowrap rounded-lg bg-background-50 px-5 py-2.5 text-center text-sm font-medium text-textcolor-950 hover:bg-background-100 focus:outline-none focus:ring-4 focus:ring-background-200">
+        <span class="sm:text-sm">
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-link-45deg"
+            viewBox="0 0 16 16">
+            <path
+              d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"></path>
+            <path
+              d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"></path>
+          </svg>
+        </span>
+        Copy Link
+      </button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="flex w-full flex-col items-center justify-center gap-4">
+      <img
+        [src]="articleData.image"
+        [alt]="articleData.title + ' - Article Image'"
+        [title]="articleData.title + ' - Article Image'"
+        class="rounded-lg object-cover" />
+      <div class="text-left leading-relaxed">
+        {{ articleData.content }}
+      </div>
+    </div>
+
+    <!-- REFERENCES -->
+    <div class="flex w-full flex-col items-start gap-2 border-t-2 pt-2">
+      <h2 class="text-xl font-semibold">References</h2>
+      <ul class="max-w-fit">
+        @for (reference of articleData.references; track $index) {
+          <li
+            [id]="'reference-' + ($index + 1)"
+            class="flex items-center justify-start gap-2">
+            <span class="self-start font-medium">{{ $index + 1 }}.</span>
+            <a
+              [href]="reference"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="break-all text-textcolor-500 hover:text-textcolor-950 hover:underline">
+              {{ reference }}
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </article>
+</section>
