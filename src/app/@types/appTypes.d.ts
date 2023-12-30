@@ -97,3 +97,16 @@ export interface ArticleListResponse {
   next: string;
   prev: string;
 }
+
+// Define requests, responses and listing for individual articles and comments
+export interface IndividualArticleRequest {
+  id: string;
+  title: string;
+  contentSummary: string;
+  content: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  user: Pick<User, "id" | "discordUsername" | "sol_username" | "discordAvatar">;
+  comments: any[];
+}
