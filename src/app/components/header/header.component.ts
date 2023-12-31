@@ -79,16 +79,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.http
-      .get("http://localhost:3000/api/v1/auth/discord/logout", {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        responseType: "text",
-      })
+      .get<{ message: string }>(
+        "http://localhost:3000/api/v1/auth/discord/logout",
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          responseType: "json",
+        }
+      )
       .subscribe({
-        next: (message: string) => {
-          alert(message);
+        next: response => {
+          alert(response.message);
           this.userAuthenticated = false;
           this.router.navigate(["/login"]);
         },
