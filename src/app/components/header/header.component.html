@@ -2,10 +2,10 @@
   <img src="" alt="" class="w-full bg-background-800 py-36" />
   <div class="container flex items-center justify-between py-5">
     <div class="relativ">
-      <span class="block md:hidden"
-        ><app-burger-menu
-          (isOpenChange)="handleBurgerMenuChange($event)"></app-burger-menu
-      ></span>
+      <span class="block md:hidden">
+        <app-burger-menu
+          (isOpenChange)="handleBurgerMenuChange($event)"></app-burger-menu>
+      </span>
       <nav
         [class.hidden]="!isBurgerMenuOpen && isMobileView"
         class="z-10 mt-2 flex w-max flex-col items-center gap-10 border-background-500 max-md:absolute max-md:items-start max-md:rounded-md max-md:border max-md:bg-background-100 max-md:p-5 max-md:shadow-[rgba(_140,_115,_64,_0.24)_0px_3px_8px] md:mt-0 md:flex-row md:gap-4">
@@ -41,9 +41,9 @@
                 class="hover:text-textcolor-900"
                 role="menuitem"
                 tabindex="-1"
-                id="articles-dropdown-menu-item-0"
-                >Articles</a
-              >
+                id="articles-dropdown-menu-item-0">
+                Articles
+              </a>
             </li>
             <li *ngIf="userAuthenticated" role="none">
               <a
@@ -51,9 +51,9 @@
                 class="hover:text-textcolor-900"
                 role="menuitem"
                 tabindex="-1"
-                id="articles-dropdown-menu-item-1"
-                >Write Article</a
-              >
+                id="articles-dropdown-menu-item-1">
+                Write Article
+              </a>
             </li>
           </ul>
         </div>
@@ -87,9 +87,9 @@
                 class="hover:text-textcolor-900"
                 role="menuitem"
                 tabindex="-1"
-                id="news-dropdown-menu-item-0"
-                >Suggested News</a
-              >
+                id="news-dropdown-menu-item-0">
+                Suggested News
+              </a>
             </li>
             <li role="none">
               <a
@@ -97,9 +97,9 @@
                 class="hover:text-textcolor-900"
                 role="menuitem"
                 tabindex="-1"
-                id="news-dropdown-menu-item-0"
-                >Suggest</a
-              >
+                id="news-dropdown-menu-item-0">
+                Suggest
+              </a>
             </li>
           </ul>
         </div>
@@ -110,8 +110,8 @@
       <div class="flex items-center gap-2">
         <a
           href="/profile"
-          class="inline-flex select-none items-center rounded border-0 bg-background-100 px-3 py-1 text-base hover:bg-background-200 focus:outline-none md:mt-0"
-          >Profile
+          class="inline-flex select-none items-center rounded border-0 bg-background-100 px-3 py-1 text-base hover:bg-background-200 focus:outline-none md:mt-0">
+          Profile
           <svg
             fill="none"
             stroke="currentColor"
@@ -125,8 +125,9 @@
               fill="currentColor" />
             <path
               d="M12 6.92969C9.93 6.92969 8.25 8.60969 8.25 10.6797C8.25 12.7097 9.84 14.3597 11.95 14.4197C11.98 14.4197 12.02 14.4197 12.04 14.4197C12.06 14.4197 12.09 14.4197 12.11 14.4197C12.12 14.4197 12.13 14.4197 12.13 14.4197C14.15 14.3497 15.74 12.7097 15.75 10.6797C15.75 8.60969 14.07 6.92969 12 6.92969Z"
-              fill="currentColor" /></svg
-        ></a>
+              fill="currentColor" />
+          </svg>
+        </a>
         <button
           (click)="logout()"
           class="inline-flex items-center gap-1 p-1 hover:text-textcolor-900">
