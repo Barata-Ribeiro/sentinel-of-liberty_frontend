@@ -100,6 +100,7 @@ export interface ArticleListResponse {
 
 // Define requests, responses and listing for individual articles and comments
 export interface IndividualArticleRequest {
+  basedOnNewsSuggestion?: Omit<News, "user">;
   id: string;
   title: string;
   contentSummary: string;
