@@ -1,6 +1,6 @@
-<section class="mx-auto my-10 max-w-5xl" aria-labelledby="article-title">
+<section class="mx-auto my-10" aria-labelledby="article-title">
   <article
-    class="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4">
+    class="mx-auto flex max-w-4xl flex-col items-center justify-center gap-4">
     <!-- TITLE -->
     <div
       class="flex max-w-2xl flex-col items-center justify-center gap-2 text-center">
@@ -22,7 +22,8 @@
     </div>
 
     <!-- AUTHOR -->
-    <div class="flex w-full items-center justify-between border-y-2 px-4 py-6">
+    <div
+      class="flex w-full items-center justify-between border-y-2 px-4 py-6 sm:px-16">
       <p>
         Article by
         <span class="font-medium">
@@ -58,11 +59,23 @@
 
     <!-- CONTENT -->
     <div class="flex w-full flex-col items-center justify-center gap-4">
-      <img
-        [src]="articleData.image"
-        [alt]="articleData.title + ' - Article Image'"
-        [title]="articleData.title + ' - Article Image'"
-        class="rounded-lg object-cover" />
+      <figure>
+        <img
+          [src]="articleData.image"
+          [alt]="articleData.title + ' - Article Image'"
+          [title]="articleData.title + ' - Article Image'"
+          class="rounded-lg object-cover" />
+        <figcaption *ngIf="articleData.basedOnNewsSuggestion" class="italic">
+          Photo taken from the following
+          <a
+            [href]="articleData.basedOnNewsSuggestion.source"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-textcolor-500 hover:text-textcolor-950 hover:underline">
+            source
+          </a>
+        </figcaption>
+      </figure>
       <p
         class="text-left leading-relaxed"
         [innerHtml]="formatArticleContent(articleData.content)"></p>
