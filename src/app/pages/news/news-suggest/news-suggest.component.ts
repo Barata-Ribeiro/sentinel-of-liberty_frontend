@@ -8,6 +8,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
+import { environment } from "../../../../environments/environment";
 import { SuggestionDataRequest } from "../../../@types/appTypes";
 
 @Component({
@@ -90,7 +91,7 @@ export class NewsSuggestComponent {
     };
 
     this.http
-      .post("http://localhost:3000/api/v1/suggestions", requestBody, {
+      .post(`${environment.apiUrl}/suggestions`, requestBody, {
         headers: new HttpHeaders({ "Content-Type": "application/json" }),
         withCredentials: true,
       })

@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { environment } from "../../../environments/environment";
 import { AuthAppResponse, User } from "../../@types/appTypes";
 import { CookieService } from "../../services/cookie.service";
 
@@ -41,7 +42,7 @@ export class RedirectComponent implements OnInit, OnDestroy {
   private loginWithDiscord(code: string): void {
     this.http
       .get<AuthAppResponse>(
-        `http://localhost:3000/api/v1/auth/discord/redirect?code=${code}`,
+        `${environment.apiUrl}/auth/discord/redirect?code=${code}`,
         { withCredentials: true }
       )
       .subscribe({
@@ -74,7 +75,7 @@ export class RedirectComponent implements OnInit, OnDestroy {
 
   private retrieveUserData(id: string): void {
     this.http
-      .get<User>(`http://localhost:3000/api/v1/users/${id}`, {
+      .get<User>(`${environment.apiUrl}/users/${id}`, {
         withCredentials: true,
       })
       .subscribe({

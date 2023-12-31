@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { environment } from "../../../../environments/environment";
 import { ArticleListResponse } from "../../../@types/appTypes";
 
 @Component({
@@ -46,7 +47,7 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
   private retrieveArticles(page: number = 1): void {
     this.http
       .get<ArticleListResponse>(
-        `http://localhost:3000/api/v1/articles?perPage=${this.perPage}&page=${page}`
+        `${environment.apiUrl}/articles?perPage=${this.perPage}&page=${page}`
       )
       .subscribe({
         next: response => {

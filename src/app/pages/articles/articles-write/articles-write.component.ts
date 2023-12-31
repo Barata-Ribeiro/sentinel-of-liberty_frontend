@@ -8,6 +8,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { environment } from "../../../../environments/environment";
 import {
   ArticleDataRequest,
   SuggestionDataResponse,
@@ -82,7 +83,7 @@ export class ArticlesWriteComponent implements OnInit {
   private fetchSuggestionInfo(suggestionId: string): void {
     this.http
       .get<SuggestionDataResponse>(
-        `http://localhost:3000/api/v1/suggestions/${suggestionId}`
+        `${environment.apiUrl}/suggestions/${suggestionId}`
       )
       .subscribe({
         next: response => {
@@ -124,7 +125,7 @@ export class ArticlesWriteComponent implements OnInit {
     };
 
     this.http
-      .post("http://localhost:3000/api/v1/articles", articleData, {
+      .post(`${environment.apiUrl}/articles`, articleData, {
         headers: new HttpHeaders({ "Content-Type": "application/json" }),
         withCredentials: true,
       })

@@ -2,6 +2,7 @@ import { CommonModule, DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { environment } from "../../../environments/environment";
 import { EditDataRequest, User } from "../../@types/appTypes";
 import { DeleteAccountModalComponent } from "../../components/delete-account-modal/delete-account-modal.component";
 import { EditAccountModalComponent } from "../../components/edit-account-modal/edit-account-modal.component";
@@ -50,7 +51,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   handleDeactivate() {
     try {
       this.http
-        .delete(`http://localhost:3000/api/v1/users/${this.user?.id}`, {
+        .delete(`${environment.apiUrl}/users/${this.user?.id}`, {
           withCredentials: true,
         })
         .subscribe({
@@ -79,7 +80,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   handleEditAccount(editData: EditDataRequest) {
     try {
       this.http
-        .put(`http://localhost:3000/api/v1/users/${this.user?.id}`, editData, {
+        .put(`${environment.apiUrl}/users/${this.user?.id}`, editData, {
           withCredentials: true,
         })
         .subscribe({
@@ -109,7 +110,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const userId = this.cookieService.getCookieString("userId");
     if (userId) {
       this.http
-        .get<User>(`http://localhost:3000/api/v1/users/${userId}`, {
+        .get<User>(`${environment.apiUrl}/users/${userId}`, {
           withCredentials: true,
         })
         .subscribe({

@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
+import { environment } from "../../../../environments/environment";
 import { IndividualArticleRequest } from "../../../@types/appTypes";
 
 @Component({
@@ -75,9 +76,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
   private retrieveArticle(id: string): void {
     this.http
-      .get<IndividualArticleRequest>(
-        `http://localhost:3000/api/v1/articles/${id}`
-      )
+      .get<IndividualArticleRequest>(`${environment.apiUrl}/articles/${id}`)
       .subscribe({
         next: response => {
           this.articleData = {

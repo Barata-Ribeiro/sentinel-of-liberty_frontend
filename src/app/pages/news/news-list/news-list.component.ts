@@ -2,6 +2,7 @@ import { CommonModule, formatDate } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { environment } from "../../../../environments/environment";
 import { NewsListResponse } from "../../../@types/appTypes";
 
 @Component({
@@ -46,7 +47,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
   private retrieveNews(page: number = 1): void {
     this.http
       .get<NewsListResponse>(
-        `http://localhost:3000/api/v1/suggestions?perPage=${this.perPage}&page=${page}`
+        `${environment.apiUrl}/suggestions?perPage=${this.perPage}&page=${page}`
       )
       .subscribe({
         next: response => {
