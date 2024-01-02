@@ -90,10 +90,10 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
   }
 
   hasNextPage(): boolean {
-    return this.articleList.next !== null;
+    return this.articleList.next !== null && this.articleList.data.length > 0;
   }
 
   hasPreviousPage(): boolean {
-    return this.articleList.prev !== null;
+    return this.articleList.prev !== null && this.articleList.data.length > 0;
   }
 }
