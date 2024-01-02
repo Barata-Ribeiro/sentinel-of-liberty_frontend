@@ -23,6 +23,12 @@ export interface AuthAppResponse {
   refreshToken: string;
 }
 
+// Define requests for the Home page
+export interface HomeContentResponse {
+  articles: Article[];
+  suggestions: News[];
+}
+
 // Define requests for editing user data
 export interface EditDataRequest {
   sol_username?: string;
@@ -53,13 +59,13 @@ export interface SuggestionDataResponse {
 
 interface News {
   id: string;
+  user: Pick<User, "id" | "discordUsername" | "sol_username" | "discordAvatar">;
   source: string;
   title: string;
   content: string;
   image: string;
   createdAt: string;
   updatedAt: string;
-  user: Pick<User, "id" | "discordUsername" | "sol_username" | "discordAvatar">;
 }
 
 export interface NewsListResponse {
