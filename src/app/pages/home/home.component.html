@@ -7,23 +7,27 @@
       <div
         class="relative flex w-full flex-wrap rounded-lg bg-gray-100 max-md:p-5 md:px-10 md:py-32">
         <img
-          alt="image"
-          class="absolute inset-0 block h-full w-full rounded-lg object-cover object-center opacity-25"
-          src="https://dummyimage.com/820x340"
+          [alt]="
+            'Image of article: ' + homeContentData.articles[0].articleTitle
+          "
+          [title]="
+            'Image of article: ' + homeContentData.articles[0].articleTitle
+          "
+          class="absolute inset-0 block h-full w-full rounded-lg object-cover object-center italic opacity-25"
+          [src]="homeContentData.articles[0].articleImage"
           width="820"
           height="340" />
         <div class="relative w-full text-center">
           <h2
             class="mb-2 text-center text-xl font-medium text-gray-900 lg:text-2xl">
-            Passengers saved from runway as Tokyo plane bursts into flames
+            {{ homeContentData.articles[0].articleTitle }}
           </h2>
           <p class="leading-relaxed">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam
-            veniam cumque obcaecati tempora, perspiciatis non explicabo porro?
+            {{ homeContentData.articles[0].contentSummary }}
           </p>
           <a
-            [href]=""
-            class="mt-3 inline-flex items-center font-medium text-accent-500 hover:text-accent-600">
+            [routerLink]="['/articles', homeContentData.articles[0].articleId]"
+            class="mt-3 inline-flex cursor-pointer select-none items-center font-medium text-accent-500 hover:text-accent-600">
             Read More
             <svg
               fill="none"
@@ -40,46 +44,46 @@
       </div>
       <ul
         class="grid w-full grid-cols-1 items-center justify-center gap-4 lg:grid-cols-2">
-        <li class="flex items-center gap-2 rounded-lg border-2 p-2">
-          <img src="" alt="" class="h-24 w-24 bg-black" />
-          <div>
-            <span class="text-sm text-textcolor-600">02 january 2024</span>
-            <a
-              [href]=""
-              class="font-medium hover:text-accent-600 hover:underline">
-              <h2 class="max-w-[35ch]">
-                High Court Ruling Threatens to Reopen Israel&apos;s Divides
-              </h2>
-            </a>
-          </div>
-        </li>
-        <li class="flex items-center gap-2 rounded-lg border-2 p-2">
-          <img src="" alt="" class="h-24 w-24 bg-black" />
-          <div>
-            <span>02 january 2024</span>
-            <h2 class="max-w-[35ch]">
-              High Court Ruling Threatens to Reopen Israel&apos;s Divides
-            </h2>
-          </div>
-        </li>
-        <li class="flex items-center gap-2 rounded-lg border-2 p-2">
-          <img src="" alt="" class="h-24 w-24 bg-black" />
-          <div>
-            <span>02 january 2024</span>
-            <h2 class="max-w-[35ch]">
-              High Court Ruling Threatens to Reopen Israel&apos;s Divides
-            </h2>
-          </div>
-        </li>
-        <li class="flex items-center gap-2 rounded-lg border-2 p-2">
-          <img src="" alt="" class="h-24 w-24 bg-black" />
-          <div>
-            <span>02 january 2024</span>
-            <h2 class="max-w-[35ch]">
-              High Court Ruling Threatens to Reopen Israel&apos;s Divides
-            </h2>
-          </div>
-        </li>
+        @for (
+          article of homeContentData.articles.slice(1);
+          track article.articleId
+        ) {
+          <li
+            [id]="article.articleId"
+            class="flex items-center gap-2 rounded-lg border-2 p-2">
+            <img
+              [src]="article.articleImage"
+              [alt]="'Image of article: ' + article.articleTitle"
+              [title]="'Image of article: ' + article.articleTitle"
+              class="h-24 w-24 bg-black" />
+            <div>
+              <span class="text-sm text-textcolor-600">
+                {{ article.articleCreatedAt }}
+              </span>
+              <a
+                [routerLink]="['/articles', article.articleId]"
+                class="font-medium hover:text-accent-600 hover:underline">
+                <h2 class="max-w-[35ch]">
+                  {{ article.articleTitle }}
+                </h2>
+              </a>
+            </div>
+          </li>
+        } @empty {
+          <li
+            class="col-span-2 my-20 text-center lg:my-52"
+            id="empty-article-list">
+            <span>
+              No more articles to display. Write another one
+              <a
+                [routerLink]="['/articles/write']"
+                class="font-medium hover:text-accent-600 hover:underline">
+                here
+              </a>
+              .
+            </span>
+          </li>
+        }
       </ul>
     </div>
 
