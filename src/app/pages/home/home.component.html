@@ -112,20 +112,33 @@
       </div>
       <div>
         <h2 class="font-medium">Latest News</h2>
-        <ul class="border-t-2 pt-4">
-          <li class="flex items-center gap-2 rounded-lg border-2 p-2">
-            <img src="" alt="" class="h-24 w-24 bg-black" />
-            <div>
-              <span class="text-sm text-textcolor-600">02 january 2024</span>
-              <a
-                [href]=""
-                class="font-medium hover:text-accent-600 hover:underline">
-                <h2 class="max-w-[35ch]">
-                  High Court Ruling Threatens to Reopen Israel&apos;s Divides
-                </h2>
-              </a>
-            </div>
-          </li>
+        <ul class="flex flex-col gap-4 border-t-2 pt-4">
+          @for (
+            suggestion of homeContentData.suggestions.slice(0, 6);
+            track suggestion.id
+          ) {
+            <li class="flex items-center gap-2 rounded-lg border-2 p-2">
+              <img
+                [src]="suggestion.image"
+                [alt]="'Image of original news: ' + suggestion.title"
+                [title]="'Image of original news: ' + suggestion.title"
+                class="h-24 w-24 object-cover object-center" />
+              <div>
+                <span class="text-sm text-textcolor-600">
+                  {{ suggestion.createdAt }}
+                </span>
+                <a
+                  [href]="suggestion.source"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-medium hover:text-accent-600 hover:underline">
+                  <h2 class="max-w-[35ch]">
+                    {{ suggestion.title }}
+                  </h2>
+                </a>
+              </div>
+            </li>
+          }
         </ul>
       </div>
     </div>
