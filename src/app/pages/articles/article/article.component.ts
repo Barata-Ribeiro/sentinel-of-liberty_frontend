@@ -71,7 +71,14 @@ export class ArticleComponent implements OnInit, OnDestroy {
   }
 
   formatArticleContent(content: string): string {
-    return content.replace(/\n/g, "<br/>");
+    return content
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;")
+      .replace(/\n/g, "<br/>")
+      .replace(/\t/g, "&emsp;");
   }
 
   private retrieveArticle(id: string): void {
