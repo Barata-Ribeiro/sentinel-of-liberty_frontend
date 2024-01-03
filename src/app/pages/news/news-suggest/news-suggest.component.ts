@@ -45,7 +45,7 @@ export class NewsSuggestComponent {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(100),
-          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
+          Validators.pattern("[a-zA-Z0-9-_.!?;:'\"()\\s,]+"),
         ],
       ],
       bodyContent: [
@@ -54,7 +54,7 @@ export class NewsSuggestComponent {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(100),
-          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
+          Validators.pattern("[a-zA-Z0-9-_.!?;:'\"()\\s,]+"),
         ],
       ],
       imageLink: [

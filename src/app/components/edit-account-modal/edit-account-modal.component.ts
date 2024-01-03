@@ -52,7 +52,7 @@ export class EditAccountModalComponent {
         [
           Validators.maxLength(20),
           Validators.minLength(3),
-          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
+          Validators.pattern("[a-zA-Z0-9-_.!?;:'\"()\\s,]+"),
         ],
       ],
       biography: [
@@ -60,7 +60,7 @@ export class EditAccountModalComponent {
         [
           Validators.maxLength(150),
           Validators.minLength(3),
-          Validators.pattern("[a-zA-Z][a-zA-Z0-9-_.,]+"),
+          Validators.pattern("[a-zA-Z0-9-_.!?;:'\"()\\s,]+"),
         ],
       ],
     });
