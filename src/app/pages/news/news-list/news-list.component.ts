@@ -4,6 +4,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { NewsListResponse } from "../../../@types/appTypes";
+import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
   selector: "app-news-list",
@@ -17,7 +18,10 @@ export class NewsListComponent implements OnInit, OnDestroy {
   currentPage: number;
   perPage: number;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private timezoneService: TimezoneService
+  ) {
     this.newsList = {
       data: [],
       page: 1,
@@ -71,7 +75,8 @@ export class NewsListComponent implements OnInit, OnDestroy {
   }
 
   private formatNewsDate(dateString: string): string {
-    return formatDate(dateString, "dd MMMM yyyy", "en-US");
+    const userDate = this.timezoneService.convertToUserTimezone(dateString);
+    return formatDate(userDate, "dd MMMM yyyy", "en-US");
   }
 
   goToPage(page: number): void {

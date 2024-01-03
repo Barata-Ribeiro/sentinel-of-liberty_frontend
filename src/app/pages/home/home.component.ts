@@ -4,6 +4,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { environment } from "../../../environments/environment";
 import { HomeContentResponse } from "../../@types/appTypes";
+import { TimezoneService } from "../../services/timezone.service";
 
 @Component({
   selector: "app-home",
@@ -15,7 +16,10 @@ import { HomeContentResponse } from "../../@types/appTypes";
 export class HomeComponent implements OnInit, OnDestroy {
   homeContentData: HomeContentResponse;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private timezoneService: TimezoneService
+  ) {
     this.homeContentData = {
       articles: [],
       suggestions: [],
@@ -53,6 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private formatDataDate(dateString: string): string {
-    return formatDate(dateString, "dd MMMM yyyy", "en-US");
+    const userDate = this.timezoneService.convertToUserTimezone(dateString);
+    return formatDate(userDate, "dd MMMM yyyy", "en-US");
   }
 }

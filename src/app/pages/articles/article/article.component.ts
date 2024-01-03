@@ -5,6 +5,7 @@ import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { IndividualArticleRequest } from "../../../@types/appTypes";
+import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
   selector: "app-article",
@@ -19,7 +20,8 @@ export class ArticleComponent implements OnInit, OnDestroy {
   constructor(
     private readonly titleService: Title,
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private timezoneService: TimezoneService
   ) {
     this.articleData = {
       id: "",
@@ -98,6 +100,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
   }
 
   private formatNewsDate(dateString: string): string {
-    return formatDate(dateString, "MMMM dd, yyyy, h:mm a", "en-US");
+    const userDate = this.timezoneService.convertToUserTimezone(dateString);
+    return formatDate(userDate, "MMMM dd, yyyy, h:mm a", "en-US");
   }
 }

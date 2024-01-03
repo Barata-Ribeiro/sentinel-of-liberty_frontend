@@ -4,6 +4,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { ArticleListResponse } from "../../../@types/appTypes";
+import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
   selector: "app-articles-list",
@@ -17,7 +18,10 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
   currentPage: number;
   perPage: number;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private timezoneService: TimezoneService
+  ) {
     this.articleList = {
       data: [],
       page: 1,
@@ -65,9 +69,11 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
   }
 
   private formatNewsDate(dateString: string): string {
-    const date = new Date(dateString);
+    const userDate = this.timezoneService.convertToUserTimezone(dateString);
     const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const diffInSeconds = Math.floor(
+      (now.getTime() - userDate.getTime()) / 1000
+    );
 
     switch (true) {
       case diffInSeconds < 60:
