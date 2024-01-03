@@ -23,15 +23,29 @@
 
     <!-- AUTHOR -->
     <div
-      class="flex w-full items-center justify-between border-y-2 px-4 py-6 sm:px-16">
-      <p>
-        Article by
-        <span class="font-medium">
-          {{
-            articleData.user.sol_username ?? articleData.user.discordUsername
-          }}
-        </span>
-      </p>
+      class="flex w-full flex-col items-center justify-center gap-4 border-y-2 px-4 py-6 max-md:text-center sm:px-16 md:flex-row md:justify-between">
+      <div>
+        <p class="block">
+          Article by
+          <span class="font-medium">
+            {{
+              articleData.user.sol_username ?? articleData.user.discordUsername
+            }}
+          </span>
+        </p>
+        <p
+          *ngIf="articleData.basedOnNewsSuggestion"
+          class="text-sm text-textcolor-300">
+          based on the following
+          <a
+            [href]="articleData.basedOnNewsSuggestion.source"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-medium hover:text-textcolor-600 hover:underline">
+            news suggestion
+          </a>
+        </p>
+      </div>
       <button
         type="button"
         (click)="copyArticleLink()"
