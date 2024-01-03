@@ -1,11 +1,11 @@
 <section class="mx-auto my-10" aria-labelledby="home-page-title">
   <h1 class="sr-only" id="home-page-title">Home Page</h1>
   <div
-    class="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_400px] xl:grid-cols-[1fr_600px]">
+    class="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_25rem] xl:grid-cols-[1fr_37.5rem]">
     <!-- COLUMN 1 -->
-    <div class="flex flex-wrap gap-4 max-lg:order-2">
+    <div class="flex flex-col gap-4 max-lg:order-2">
       <div
-        class="relative flex w-full flex-wrap rounded-lg bg-gray-100 max-md:p-5 md:px-10 md:py-32">
+        class="relative flex h-[30rem] w-full flex-wrap rounded-lg bg-gray-100 max-md:p-5 md:px-10 md:py-32">
         <img
           [alt]="
             'Image of article: ' + homeContentData.articles[0].articleTitle
@@ -43,7 +43,7 @@
         </div>
       </div>
       <ul
-        class="grid w-full grid-cols-1 items-center justify-center gap-4 lg:grid-cols-2">
+        class="grid w-full grid-cols-1 items-start justify-center gap-4 lg:grid-cols-2">
         @for (
           article of homeContentData.articles.slice(1);
           track article.articleId
@@ -55,7 +55,9 @@
               [src]="article.articleImage"
               [alt]="'Image of article: ' + article.articleTitle"
               [title]="'Image of article: ' + article.articleTitle"
-              class="h-24 w-24 bg-black" />
+              class="h-24 w-24 object-cover object-center"
+              height="100"
+              width="100" />
             <div>
               <span class="text-sm text-textcolor-600">
                 {{ article.articleCreatedAt }}
@@ -122,7 +124,9 @@
                 [src]="suggestion.image"
                 [alt]="'Image of original news: ' + suggestion.title"
                 [title]="'Image of original news: ' + suggestion.title"
-                class="h-24 w-24 object-cover object-center" />
+                class="h-24 w-24 object-cover object-center"
+                height="100"
+                width="100" />
               <div>
                 <span class="text-sm text-textcolor-600">
                   {{ suggestion.createdAt }}

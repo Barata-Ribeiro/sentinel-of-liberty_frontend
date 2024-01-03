@@ -5,15 +5,15 @@
     Published Articles
   </h1>
 
-  <ol class="grid-cols-1 sm:grid md:grid-cols-3">
+  <ol class="grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
     @for (article of articleList.data; track article.articleId) {
       <li
         [id]="article.articleId"
-        class="flex flex-col rounded-lg bg-background-50 shadow-[5px_5px_0px_0px_rgba(140,115,64)] sm:shrink-0 sm:grow sm:basis-0">
+        class="flex flex-col rounded-lg bg-background-50 shadow-[5px_5px_0px_0px_rgba(140,115,64)]">
         <a [routerLink]="['/articles', article.articleId]">
           <img
             [src]="article.articleImage"
-            class="rounded-t-lg object-cover"
+            class="aspect-auto h-96 w-full rounded-t-lg object-cover object-center"
             alt="Image of the article" />
         </a>
         <div class="p-6">
@@ -26,9 +26,9 @@
           <p class="mb-4 text-base text-textcolor-600">
             {{ article.contentSummary }}
           </p>
-          <span class="text-sm font-medium text-textcolor-400"
-            >Article written by {{ article.username }}</span
-          >
+          <span class="text-sm font-medium text-textcolor-400">
+            Article written by {{ article.username }}
+          </span>
         </div>
         <div
           class="mt-auto flex flex-col items-center justify-between gap-0 border-t-2 border-background-100 px-6 py-3 text-center text-textcolor-700 sm:flex-row sm:gap-3">
