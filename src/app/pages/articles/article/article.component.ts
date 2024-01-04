@@ -5,7 +5,7 @@ import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { IndividualArticleRequest } from "../../../@types/appTypes";
-import { CommentFormComponent } from "../../../components/comment/comment-form/comment-form.component";
+import { CommentFormComponent } from "../../../components/comments/comment-form/comment-form.component";
 import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
