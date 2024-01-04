@@ -123,7 +123,15 @@
         </h2>
       </div>
       <app-comment-form [articleId]="articleData.id"></app-comment-form>
-      <article></article>
+      <article id="comment-list" class="mt-6">
+        @for (comment of articleData.comments; track comment.id) {
+          <app-comment></app-comment>
+        } @empty {
+          <p class="text-textcolor-950">
+            No comments yet. Be the first to comment!
+          </p>
+        }
+      </article>
     </div>
   </article>
 </section>

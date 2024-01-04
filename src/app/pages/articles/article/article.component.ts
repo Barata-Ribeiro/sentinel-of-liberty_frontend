@@ -6,12 +6,13 @@ import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { IndividualArticleRequest } from "../../../@types/appTypes";
 import { CommentFormComponent } from "../../../components/comments/comment-form/comment-form.component";
+import { CommentComponent } from "../../../components/comments/comment/comment.component";
 import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
   selector: "app-article",
   standalone: true,
-  imports: [CommonModule, CommentFormComponent],
+  imports: [CommonModule, CommentFormComponent, CommentComponent],
   templateUrl: "./article.component.html",
   styleUrl: "./article.component.css",
 })
