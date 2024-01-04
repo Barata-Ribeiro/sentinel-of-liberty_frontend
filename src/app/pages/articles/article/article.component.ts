@@ -5,12 +5,13 @@ import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { IndividualArticleRequest } from "../../../@types/appTypes";
+import { CommentFormComponent } from "../../../components/comment/comment-form/comment-form.component";
 import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
   selector: "app-article",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CommentFormComponent],
   templateUrl: "./article.component.html",
   styleUrl: "./article.component.css",
 })

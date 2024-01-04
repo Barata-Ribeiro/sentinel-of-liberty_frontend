@@ -115,5 +115,15 @@
         }
       </ul>
     </div>
+
+    <div id="commenting-session" class="mt-12 w-full pt-6">
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-lg font-bold text-gray-900 lg:text-2xl dark:text-white">
+          Discussion ({{ articleData.comments.length }})
+        </h2>
+      </div>
+      <app-comment-form [articleId]="articleData.id"></app-comment-form>
+      <article></article>
+    </div>
   </article>
 </section>
