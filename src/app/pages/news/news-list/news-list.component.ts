@@ -63,7 +63,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
               user: {
                 id: news.user.id,
                 discordUsername: news.user.discordUsername,
-                discordAvatar: news.user.discordAvatar,
                 sol_username: news.user.sol_username,
               },
             })),

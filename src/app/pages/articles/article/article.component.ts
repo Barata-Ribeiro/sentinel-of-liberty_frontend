@@ -36,7 +36,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
         id: "",
         discordUsername: "",
         sol_username: "",
-        discordAvatar: "",
       },
       comments: [],
     };
@@ -61,7 +60,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
         id: "",
         discordUsername: "",
         sol_username: "",
-        discordAvatar: "",
       },
       comments: [],
     };
