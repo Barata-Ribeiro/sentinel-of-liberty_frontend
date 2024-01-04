@@ -1,17 +1,31 @@
-<form class="mb-6" (ngSubmit)="handleSubmit($event)">
+<form
+  class="mb-6"
+  [formGroup]="postCommentForm"
+  (ngSubmit)="handleSubmit($event)">
   <div
     class="mb-4 rounded-lg rounded-t-lg border border-gray-200 bg-white px-4 py-2 dark:border-gray-700 dark:bg-gray-800">
-    <label for="comment" class="sr-only">Your comment</label>
+    <label for="post-comment" class="sr-only">Your comment</label>
     <textarea
-      id="comment"
+      id="post-comment"
+      name="post-comment"
+      formControlName="post-comment"
       rows="6"
       class="w-full border-0 px-0 text-sm text-gray-900 focus:ring-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
       placeholder="Write a comment..."
       required></textarea>
   </div>
+  <div *ngIf="getError('post-comment') || serverError" class="mb-4">
+    <span *ngIf="getError('post-comment')" class="font-semibold text-red-500">
+      {{ getError("post-comment") }}
+    </span>
+    <span *ngIf="serverError" class="text-red-600">
+      {{ serverError }}
+    </span>
+  </div>
   <button
     type="submit"
-    class="inline-flex items-center rounded-lg bg-primary-700 px-4 py-2.5 text-center text-xs font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900">
+    [disabled]="postCommentForm.invalid || isLoading"
+    class="w-fit rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-textcolor-50 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:bg-primary-600/50">
     Post comment
   </button>
 </form>
