@@ -59,7 +59,7 @@ export interface SuggestionDataResponse {
 
 interface News {
   id: string;
-  user: Pick<User, "id" | "discordUsername" | "sol_username" | "discordAvatar">;
+  user: Pick<User, "id" | "discordUsername" | "sol_username">;
   source: string;
   title: string;
   content: string;
@@ -105,6 +105,17 @@ export interface ArticleListResponse {
 }
 
 // Define requests, responses and listing for individual articles and comments
+interface Comment {
+  id: string;
+  user: Pick<User, "id" | "discordUsername" | "sol_username">;
+  message: string;
+  parentId?: string;
+  likeCount: number;
+  wasEdited: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface IndividualArticleRequest {
   basedOnNewsSuggestion?: Omit<News, "user">;
   id: string;
@@ -115,6 +126,6 @@ export interface IndividualArticleRequest {
   references: string[];
   createdAt: string;
   updatedAt: string;
-  user: Pick<User, "id" | "discordUsername" | "sol_username" | "discordAvatar">;
-  comments: any[];
+  user: Pick<User, "id" | "discordUsername" | "sol_username">;
+  comments: Comment[];
 }
