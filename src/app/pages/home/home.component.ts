@@ -21,8 +21,34 @@ export class HomeComponent implements OnInit, OnDestroy {
     private timezoneService: TimezoneService
   ) {
     this.homeContentData = {
-      articles: [],
-      suggestions: [],
+      articles: [
+        {
+          userId: "",
+          username: "",
+          articleId: "",
+          articleTitle: "",
+          contentSummary: "",
+          articleImage: "",
+          articleCreatedAt: "",
+          commentCount: 0,
+        },
+      ],
+      suggestions: [
+        {
+          id: "",
+          user: {
+            id: "",
+            discordUsername: "",
+            sol_username: "",
+          },
+          source: "",
+          title: "",
+          content: "",
+          image: "",
+          createdAt: "",
+          updatedAt: "",
+        },
+      ],
     };
   }
 
