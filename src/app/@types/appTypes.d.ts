@@ -110,10 +110,12 @@ interface Comment {
   user: Pick<User, "id" | "discordUsername" | "sol_username">;
   message: string;
   parentId?: string;
+  likedByMe?: boolean;
   likeCount: number;
   wasEdited: boolean;
   createdAt: string;
   updatedAt: string;
+  replies?: Comment[];
 }
 
 export interface IndividualArticleRequest {
