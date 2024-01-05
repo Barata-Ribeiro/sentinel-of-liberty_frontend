@@ -1,1 +1,54 @@
-<p>comment works!</p>
+<div class="border-b border-gray-300 p-4">
+  <div class="flex justify-between">
+    <p class="text-gray-700">{{ comment.message }}</p>
+    <div class="flex gap-2">
+      <button
+        class="text-blue-500 hover:text-blue-700"
+        (click)="toggleReplyMode()">
+        Reply
+      </button>
+      <button
+        class="text-green-500 hover:text-green-700"
+        (click)="toggleEditMode()">
+        Edit
+      </button>
+      <button class="text-red-500 hover:text-red-700" (click)="deleteComment()">
+        Delete
+      </button>
+      <button
+        class="text-indigo-500 hover:text-indigo-700"
+        (click)="toggleLike()">
+        {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="replyMode" class="mt-4">
+    <textarea
+      #replyTextarea
+      class="w-full rounded border p-2 text-sm"
+      rows="3"></textarea>
+    <button
+      (click)="postReply(replyTextarea.value)"
+      class="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
+      Post Reply
+    </button>
+  </div>
+
+  <div *ngIf="editMode" class="mt-4">
+    <textarea class="w-full rounded border p-2 text-sm"></textarea>
+    <button
+      (click)="updateComment()"
+      class="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
+      Update Comment
+    </button>
+  </div>
+
+  <!-- Nested Comments -->
+  <div class="mt-4 border-l-2 border-gray-200 pl-4" *ngIf="replies.length > 0">
+    <app-comment
+      *ngFor="let reply of replies"
+      [comment]="reply"
+      [articleId]="articleId"></app-comment>
+  </div>
+</div>
