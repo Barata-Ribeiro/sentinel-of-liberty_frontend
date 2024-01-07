@@ -1,6 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -19,6 +26,7 @@ import { environment } from "../../../../environments/environment";
 export class CommentFormComponent implements OnInit, OnDestroy {
   @Input() articleId?: string;
   @Input() parentId?: string;
+  @Output() onCommentPosted = new EventEmitter<any>();
   isLoading = false;
   serverError = "";
   message: string = "";
@@ -54,32 +62,41 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   handleSubmit(event: Event): void {
     event.preventDefault();
     this.serverError = "";
+    if (!this.postCommentForm.valid) return;
 
-    this.handlePostComment(this.articleId!);
-
-    this.message = "";
-  }
-
-  private handlePostComment(articleId: string): void {
     const commentData = {
-      message: this.message,
+      message: this.postCommentForm.get("post-comment")?.value,
+      parentId: this.parentId,
     };
 
+    this.handlePostComment(this.articleId!, commentData);
+  }
+
+  private handlePostComment(
+    articleId: string,
+    commentData: { message: string; parentId?: string }
+  ): void {
+    this.isLoading = true;
     this.http
-      .post<{
-        message: string;
-      }>(`${environment.apiUrl}/articles/${articleId}/comments`, commentData, {
-        headers: new HttpHeaders({ "Content-Type": "application/json" }),
-        withCredentials: true,
-      })
+      .post(
+        `${environment.apiUrl}/articles/${articleId}/comments`,
+        commentData,
+        {
+          headers: new HttpHeaders({ "Content-Type": "application/json" }),
+          withCredentials: true,
+        }
+      )
       .subscribe({
-        next: response => {
+        next: newComment => {
           this.isLoading = false;
-          this.message = response.message;
+          this.onCommentPosted.emit(newComment);
+          this.postCommentForm.reset();
         },
         error: error => {
           this.isLoading = false;
-          this.serverError = error.error.message;
+          this.serverError =
+            error.error.message ||
+            "An error occurred while submitting the comment.";
         },
       });
   }
