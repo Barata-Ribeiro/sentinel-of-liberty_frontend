@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../environments/environment";
-import { IndividualArticleRequest } from "../../../@types/appTypes";
+import { Comment, IndividualArticleRequest } from "../../../@types/appTypes";
 import { CommentFormComponent } from "../../../components/comments/comment-form/comment-form.component";
 import { CommentComponent } from "../../../components/comments/comment/comment.component";
 import { TimezoneService } from "../../../services/timezone.service";
@@ -81,6 +81,10 @@ export class ArticleComponent implements OnInit, OnDestroy {
       .replace(/'/g, "&apos;")
       .replace(/\n/g, "<br/>")
       .replace(/\t/g, "&emsp;");
+  }
+
+  onNewComment(newComment: Comment) {
+    this.articleData.comments = [newComment, ...this.articleData.comments];
   }
 
   private retrieveArticle(id: string): void {

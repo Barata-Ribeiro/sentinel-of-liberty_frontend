@@ -122,10 +122,14 @@
           Discussion ({{ articleData.comments.length }})
         </h2>
       </div>
-      <app-comment-form [articleId]="articleData.id"></app-comment-form>
+      <app-comment-form
+        [articleId]="articleData.id"
+        (onCommentPosted)="onNewComment($event)"></app-comment-form>
       <article id="comment-list" class="mt-6">
         @for (comment of articleData.comments; track comment.id) {
-          <app-comment></app-comment>
+          <app-comment
+            [comment]="comment"
+            [articleId]="articleData.id"></app-comment>
         } @empty {
           <p class="text-textcolor-950">
             No comments yet. Be the first to comment!
