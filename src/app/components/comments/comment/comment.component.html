@@ -12,36 +12,36 @@
         (click)="toggleEditMode()">
         Edit
       </button>
-      <button class="text-red-500 hover:text-red-700" (click)="deleteComment()">
+      <button
+        class="text-red-500 hover:text-red-700"
+        (click)="handleDeleteComment(comment.id)">
         Delete
       </button>
       <button
         class="text-indigo-500 hover:text-indigo-700"
-        (click)="toggleLike()">
+        (click)="handleLikeComment(comment.id)">
         {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})
       </button>
     </div>
   </div>
 
   <div *ngIf="replyMode" class="mt-4">
-    <textarea
-      #replyTextarea
-      class="w-full rounded border p-2 text-sm"
-      rows="3"></textarea>
-    <button
-      (click)="postReply(replyTextarea.value)"
-      class="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
-      Post Reply
-    </button>
+    <app-comment-form
+      [articleId]="articleId"
+      [parentId]="comment.id"
+      mode="reply"
+      (onCommentPosted)="handleReply($event)">
+    </app-comment-form>
   </div>
 
   <div *ngIf="editMode" class="mt-4">
-    <textarea class="w-full rounded border p-2 text-sm"></textarea>
-    <button
-      (click)="updateComment()"
-      class="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
-      Update Comment
-    </button>
+    <app-comment-form
+      [articleId]="articleId"
+      [commentId]="comment.id"
+      mode="edit"
+      [initialMessage]="comment.message"
+      (onCommentPosted)="handleEdit($event)">
+    </app-comment-form>
   </div>
 
   <!-- Nested Comments -->

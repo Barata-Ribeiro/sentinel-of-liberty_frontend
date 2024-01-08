@@ -38,30 +38,34 @@ export class CommentComponent {
     this.articleId = "";
   }
 
+  // Reply to a comment
   toggleReplyMode() {
     this.replyMode = !this.replyMode;
     this.editMode = false;
   }
 
+  handleReply(newReply: Comment) {
+    this.replies = [...this.replies, newReply];
+    this.replyMode = false;
+  }
+
+  // Edit own comment
   toggleEditMode() {
     this.editMode = !this.editMode;
     this.replyMode = false;
     this.editedComment = this.comment.message;
   }
 
-  toggleLike() {
-    // TODO: Implement toggle like
+  handleEdit(updatedComment: Comment) {
+    this.comment = updatedComment;
+    this.editMode = false;
   }
 
-  deleteComment() {
-    // TODO: Implement delete comment
+  handleDeleteComment(commentId: string) {
+    // TODO: Delete comment
   }
 
-  postReply(message: string) {
-    // TODO: Implement post reply
-  }
-
-  updateComment() {
-    // TODO: Implement update comment
+  handleLikeComment(commentId: string) {
+    // TODO: Like comment
   }
 }
