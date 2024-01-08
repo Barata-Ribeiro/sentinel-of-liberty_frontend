@@ -22,12 +22,19 @@ export class CommentService {
     );
   }
 
-  postReply() {
-    // TODO: Implement post reply
-  }
-
-  editComment() {
-    // TODO: Implement edit comment
+  editComment(
+    articleId: string,
+    commentId: string,
+    commentData: { message: string }
+  ) {
+    return this.http.put(
+      `${environment.apiUrl}/articles/${articleId}/comments/${commentId}`,
+      commentData,
+      {
+        headers: new HttpHeaders({ "Content-Type": "application/json" }),
+        withCredentials: true,
+      }
+    );
   }
 
   deleteComment() {
