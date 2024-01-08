@@ -23,9 +23,14 @@ import { CommentService } from "../../../services/comment.service";
   styleUrl: "./comment-form.component.css",
 })
 export class CommentFormComponent implements OnInit, OnDestroy {
-  @Input() articleId?: string;
+  @Input() articleId: string | undefined;
+  @Input() commentId?: string | undefined;
   @Input() parentId?: string;
+  @Input() mode: "post" | "reply" | "edit" = "post";
+  @Input() initialMessage: string = "";
+
   @Output() onCommentPosted = new EventEmitter<any>();
+
   isLoading = false;
   serverError = "";
   message: string = "";
@@ -46,16 +51,19 @@ export class CommentFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.message = "";
-    this.serverError = "";
-    this.isLoading = false;
-  }
-
   ngOnInit(): void {
     this.isLoading = false;
     this.message = "";
     this.serverError = "";
+
+    if (this.mode === "edit")
+      this.postCommentForm.patchValue({ "post-comment": this.initialMessage });
+  }
+
+  ngOnDestroy(): void {
+    this.message = "";
+    this.serverError = "";
+    this.isLoading = false;
   }
 
   handleSubmit(event: Event): void {
@@ -63,12 +71,19 @@ export class CommentFormComponent implements OnInit, OnDestroy {
     this.serverError = "";
     if (!this.postCommentForm.valid) return;
 
-    const commentData = {
-      message: this.postCommentForm.get("post-comment")?.value,
-      parentId: this.parentId,
-    };
-
-    this.handlePostComment(this.articleId!, commentData);
+    if (this.mode === "post")
+      this.handlePostComment(this.articleId!, {
+        message: this.postCommentForm.get("post-comment")?.value,
+      });
+    else if (this.mode === "reply")
+      this.handlePostComment(this.articleId!, {
+        message: this.postCommentForm.get("post-comment")?.value,
+        parentId: this.parentId!,
+      });
+    else if (this.mode === "edit" && this.commentId)
+      this.handleEditComment(this.articleId!, this.commentId!, {
+        message: this.postCommentForm.get("post-comment")?.value,
+      });
   }
 
   private handlePostComment(
@@ -90,6 +105,30 @@ export class CommentFormComponent implements OnInit, OnDestroy {
           "An error occurred while submitting the comment.";
       },
     });
+  }
+
+  private handleEditComment(
+    articleId: string,
+    commentId: string,
+    commentData: { message: string }
+  ): void {
+    this.isLoading = true;
+
+    this.commentService
+      .editComment(articleId, commentId, commentData)
+      .subscribe({
+        next: editedComment => {
+          this.isLoading = false;
+          this.onCommentPosted.emit(editedComment);
+          this.postCommentForm.reset();
+        },
+        error: error => {
+          this.isLoading = false;
+          this.serverError = this.serverError =
+            error.error.message ||
+            "An error occurred while updating the comment.";
+        },
+      });
   }
 
   getError(controlName: string): string {
