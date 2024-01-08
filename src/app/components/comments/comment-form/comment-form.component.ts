@@ -1,5 +1,4 @@
 import { CommonModule } from "@angular/common";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {
   Component,
   EventEmitter,
@@ -14,7 +13,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { environment } from "../../../../environments/environment";
+import { CommentService } from "../../../services/comment.service";
 
 @Component({
   selector: "app-comment-form",
@@ -33,7 +32,7 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   postCommentForm: FormGroup;
 
   constructor(
-    private http: HttpClient,
+    private commentService: CommentService,
     private formBuilder: FormBuilder
   ) {
     this.postCommentForm = this.formBuilder.group({
@@ -77,28 +76,20 @@ export class CommentFormComponent implements OnInit, OnDestroy {
     commentData: { message: string; parentId?: string }
   ): void {
     this.isLoading = true;
-    this.http
-      .post(
-        `${environment.apiUrl}/articles/${articleId}/comments`,
-        commentData,
-        {
-          headers: new HttpHeaders({ "Content-Type": "application/json" }),
-          withCredentials: true,
-        }
-      )
-      .subscribe({
-        next: newComment => {
-          this.isLoading = false;
-          this.onCommentPosted.emit(newComment);
-          this.postCommentForm.reset();
-        },
-        error: error => {
-          this.isLoading = false;
-          this.serverError =
-            error.error.message ||
-            "An error occurred while submitting the comment.";
-        },
-      });
+
+    this.commentService.postComment(articleId, commentData).subscribe({
+      next: newComment => {
+        this.isLoading = false;
+        this.onCommentPosted.emit(newComment);
+        this.postCommentForm.reset();
+      },
+      error: error => {
+        this.isLoading = false;
+        this.serverError =
+          error.error.message ||
+          "An error occurred while submitting the comment.";
+      },
+    });
   }
 
   getError(controlName: string): string {
