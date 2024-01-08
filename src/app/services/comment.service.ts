@@ -37,11 +37,23 @@ export class CommentService {
     );
   }
 
-  deleteComment() {
-    // TODO: Implement delete comment
+  deleteComment(articleId: string, commentId: string) {
+    return this.http.delete(
+      `${environment.apiUrl}/articles/${articleId}/comments/${commentId}`,
+      {
+        headers: new HttpHeaders({ "Content-Type": "application/json" }),
+        withCredentials: true,
+      }
+    );
   }
 
-  toggleLike() {
-    // TODO: Implement toggle like
+  toggleLike(articleId: string, commentId: string) {
+    return this.http.post(
+      `${environment.apiUrl}/articles/${articleId}/comments/${commentId}/likes`,
+      {
+        headers: new HttpHeaders({ "Content-Type": "application/json" }),
+        withCredentials: true,
+      }
+    );
   }
 }
