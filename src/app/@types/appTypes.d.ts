@@ -115,7 +115,7 @@ interface Comment {
   wasEdited: boolean;
   createdAt: string;
   updatedAt: string;
-  replies?: Comment[];
+  children?: Comment[];
 }
 
 export interface IndividualArticleRequest {
