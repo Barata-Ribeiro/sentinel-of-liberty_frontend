@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { HttpClient } from "@angular/common/http";
 import { Component, Input, ViewChild } from "@angular/core";
 import { Comment } from "../../../@types/appTypes";
+import { CommentService } from "../../../services/comment.service";
 import { CommentFormComponent } from "../comment-form/comment-form.component";
 
 @Component({
@@ -20,7 +20,7 @@ export class CommentComponent {
   replies: Comment[] = [];
   @ViewChild(CommentFormComponent) commentFormComponent!: CommentFormComponent;
 
-  constructor(private http: HttpClient) {
+  constructor(private commentService: CommentService) {
     this.comment = {
       id: "",
       user: {
@@ -62,10 +62,25 @@ export class CommentComponent {
   }
 
   handleDeleteComment(commentId: string) {
-    // TODO: Delete comment
+    this.commentService.deleteComment(this.articleId, commentId).subscribe({
+      next: () => {
+        alert("Comment deleted successfully.");
+        window.location.reload();
+      },
+      error: err => {
+        console.error(err);
+        alert("An error occurred while deleting the comment.");
+      },
+    });
   }
 
   handleLikeComment(commentId: string) {
-    // TODO: Like comment
+    this.commentService.toggleLike(this.articleId, commentId).subscribe({
+      next: () => this.comment.likeCount++,
+      error: err => {
+        console.error(err);
+        alert("An error occurred while liking the comment.");
+      },
+    });
   }
 }
