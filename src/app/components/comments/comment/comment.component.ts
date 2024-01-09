@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { Comment } from "../../../@types/appTypes";
 import { CommentService } from "../../../services/comment.service";
 import { CommentFormComponent } from "../comment-form/comment-form.component";
@@ -11,7 +11,7 @@ import { CommentFormComponent } from "../comment-form/comment-form.component";
   templateUrl: "./comment.component.html",
   styleUrl: "./comment.component.css",
 })
-export class CommentComponent {
+export class CommentComponent implements OnInit {
   @Input() comment!: Comment;
   @Input() articleId: string;
   replyMode = false;
@@ -36,6 +36,13 @@ export class CommentComponent {
     };
 
     this.articleId = "";
+
+    this.replies = this.comment.children || [];
+  }
+
+  ngOnInit(): void {
+    if (this.comment && this.comment.children)
+      this.replies = this.comment.children;
   }
 
   // Reply to a comment
