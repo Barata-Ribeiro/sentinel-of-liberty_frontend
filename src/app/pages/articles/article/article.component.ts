@@ -22,6 +22,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
   private timezoneService = inject(TimezoneService);
 
   articleData: IndividualArticleRequest;
+  totalComments: number = 0;
 
   constructor(private readonly titleService: Title) {
     this.articleData = {
@@ -45,6 +46,8 @@ export class ArticleComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get("id");
     if (id) this.retrieveArticle(id);
+    if (this.articleData.comments)
+      this.totalComments = this.countComments(this.articleData.comments);
   }
 
   ngOnDestroy(): void {
@@ -96,11 +99,18 @@ export class ArticleComponent implements OnInit, OnDestroy {
             comments: response.comments.filter(comment => !comment.parentId),
             createdAt: this.formatNewsDate(response.createdAt),
           };
-          console.log(this.articleData);
           this.titleService.setTitle(`${this.articleData.title} | SoL`);
         },
         error: error => console.error(error),
       });
+  }
+
+  private countComments(comments: Comment[]): number {
+    let count = comments.length;
+    for (let comment of comments) {
+      count += this.countComments(comment.children || []);
+    }
+    return count;
   }
 
   private formatNewsDate(dateString: string): string {
