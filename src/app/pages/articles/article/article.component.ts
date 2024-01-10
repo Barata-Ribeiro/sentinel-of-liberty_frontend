@@ -20,6 +20,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private timezoneService = inject(TimezoneService);
+
   articleData: IndividualArticleRequest;
 
   constructor(private readonly titleService: Title) {
@@ -92,6 +93,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
         next: response => {
           this.articleData = {
             ...response,
+            comments: response.comments.filter(comment => !comment.parentId),
             createdAt: this.formatNewsDate(response.createdAt),
           };
           console.log(this.articleData);
