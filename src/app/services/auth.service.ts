@@ -34,4 +34,30 @@ export class AuthService {
       })
       .pipe(tap((message: string) => message));
   }
+
+  public getCurrentUserRole(): string | null {
+    const userData = this.cookieService.getCookieString("userData");
+    if (!userData) return null;
+
+    try {
+      const parsedUserData = JSON.parse(userData);
+      return parsedUserData.role as string;
+    } catch (error) {
+      console.error("Error parsing userData from cookie:", error);
+      return null;
+    }
+  }
+
+  public getCurrentUserId(): string | null {
+    const userData = this.cookieService.getCookieString("userData");
+    if (!userData) return null;
+
+    try {
+      const parsedUserData = JSON.parse(userData);
+      return parsedUserData.id as string;
+    } catch (error) {
+      console.error("Error parsing userData from cookie:", error);
+      return null;
+    }
+  }
 }
