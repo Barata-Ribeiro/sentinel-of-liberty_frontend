@@ -13,6 +13,7 @@
         Edit
       </button>
       <button
+        *ngIf="canDeleteComment(comment.user.id)"
         class="text-red-500 hover:text-red-700"
         (click)="handleDeleteComment(comment.id)">
         Delete

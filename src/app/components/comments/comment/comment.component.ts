@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
 import { Comment } from "../../../@types/appTypes";
+import { AuthService } from "../../../services/auth.service";
 import { CommentService } from "../../../services/comment.service";
 import { CommentFormComponent } from "../comment-form/comment-form.component";
 
@@ -13,6 +14,7 @@ import { CommentFormComponent } from "../comment-form/comment-form.component";
 })
 export class CommentComponent implements OnInit {
   private commentService = inject(CommentService);
+  private authService = inject(AuthService);
 
   @Input() comment!: Comment;
   @Input() articleId: string;
@@ -23,6 +25,9 @@ export class CommentComponent implements OnInit {
   editMode = false;
   editedComment = "";
   replies: Comment[] = [];
+
+  currentUserRole: string | null = null;
+  currentUserId: string | null = null;
 
   constructor() {
     this.comment = {
@@ -47,6 +52,9 @@ export class CommentComponent implements OnInit {
   ngOnInit(): void {
     if (this.comment && this.comment.children)
       this.replies = this.comment.children;
+
+    this.currentUserRole = this.authService.getCurrentUserRole();
+    this.currentUserId = this.authService.getCurrentUserId();
   }
 
   // Reply to a comment
@@ -70,6 +78,14 @@ export class CommentComponent implements OnInit {
   handleEdit(updatedComment: Comment) {
     this.comment = updatedComment;
     this.editMode = false;
+  }
+
+  canDeleteComment(commentUserId: string): boolean {
+    return (
+      this.currentUserRole === "admin" ||
+      this.currentUserRole === "moderator" ||
+      commentUserId === this.currentUserId
+    );
   }
 
   handleDeleteComment(commentId: string) {
