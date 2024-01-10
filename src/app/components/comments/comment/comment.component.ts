@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
 import { Comment } from "../../../@types/appTypes";
 import { CommentService } from "../../../services/comment.service";
 import { CommentFormComponent } from "../comment-form/comment-form.component";
@@ -12,15 +12,19 @@ import { CommentFormComponent } from "../comment-form/comment-form.component";
   styleUrl: "./comment.component.css",
 })
 export class CommentComponent implements OnInit {
+  private commentService = inject(CommentService);
+
   @Input() comment!: Comment;
   @Input() articleId: string;
+
+  @ViewChild(CommentFormComponent) commentFormComponent!: CommentFormComponent;
+
   replyMode = false;
   editMode = false;
   editedComment = "";
   replies: Comment[] = [];
-  @ViewChild(CommentFormComponent) commentFormComponent!: CommentFormComponent;
 
-  constructor(private commentService: CommentService) {
+  constructor() {
     this.comment = {
       id: "",
       user: {

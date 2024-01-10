@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "../../../environments/environment";
 import { AuthAppResponse, User } from "../../@types/appTypes";
@@ -13,16 +13,12 @@ import { CookieService } from "../../services/cookie.service";
   styleUrl: "./redirect.component.css",
 })
 export class RedirectComponent implements OnInit, OnDestroy {
-  userId: string;
+  private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private cookieService = inject(CookieService);
 
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router,
-    private cookieService: CookieService
-  ) {
-    this.userId = "";
-  }
+  userId: string = "";
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {

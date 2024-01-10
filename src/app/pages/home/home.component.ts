@@ -1,6 +1,6 @@
 import { CommonModule, formatDate } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { environment } from "../../../environments/environment";
 import { HomeContentResponse } from "../../@types/appTypes";
@@ -14,12 +14,12 @@ import { TimezoneService } from "../../services/timezone.service";
   styleUrl: "./home.component.css",
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private timezoneService = inject(TimezoneService);
+
   homeContentData: HomeContentResponse;
 
-  constructor(
-    private http: HttpClient,
-    private timezoneService: TimezoneService
-  ) {
+  constructor() {
     this.homeContentData = {
       articles: [
         {

@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -22,18 +22,18 @@ import {
   styleUrl: "./articles-write.component.css",
 })
 export class ArticlesWriteComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   articleBody: FormGroup;
   isLoading = false;
   serverError = "";
   imagePreview = "";
   basedOnSuggestionId?: string;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  constructor() {
     this.articleBody = this.formBuilder.group({
       bodyTitle: [
         "",

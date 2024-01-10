@@ -1,6 +1,6 @@
 import { CommonModule, formatDate } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { NewsListResponse } from "../../../@types/appTypes";
@@ -14,14 +14,14 @@ import { TimezoneService } from "../../../services/timezone.service";
   styleUrl: "./news-list.component.css",
 })
 export class NewsListComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private timezoneService = inject(TimezoneService);
+
   newsList: NewsListResponse;
   currentPage: number;
   perPage: number;
 
-  constructor(
-    private http: HttpClient,
-    private timezoneService: TimezoneService
-  ) {
+  constructor() {
     this.newsList = {
       data: [],
       page: 1,

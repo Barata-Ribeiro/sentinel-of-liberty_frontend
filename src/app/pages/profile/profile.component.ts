@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { environment } from "../../../environments/environment";
 import { EditDataRequest, User } from "../../@types/appTypes";
@@ -21,15 +21,13 @@ import { CookieService } from "../../services/cookie.service";
   providers: [DatePipe],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  private cookieService = inject(CookieService);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   user: User | null = null;
   showModalDelete = false;
   showEditProfile = false;
-
-  constructor(
-    private cookieService: CookieService,
-    private http: HttpClient,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     this.loadUser();

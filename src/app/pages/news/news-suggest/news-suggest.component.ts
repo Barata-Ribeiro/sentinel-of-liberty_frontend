@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -19,16 +19,16 @@ import { SuggestionDataRequest } from "../../../@types/appTypes";
   styleUrl: "./news-suggest.component.css",
 })
 export class NewsSuggestComponent {
+  private formBuilder = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   suggestionBody: FormGroup;
   isLoading = false;
   serverError = "";
   imagePreview = "";
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private http: HttpClient,
-    private router: Router
-  ) {
+  constructor() {
     this.suggestionBody = this.formBuilder.group({
       sourceLink: [
         "",

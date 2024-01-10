@@ -9,10 +9,10 @@ import { CommonModule, isPlatformBrowser } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import {
   Component,
-  Inject,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
+  inject,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
@@ -41,20 +41,17 @@ const DEFAULT_EASING = "ease-out";
   ],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
   userAuthenticated: boolean = false;
   isArticleDropdownOpen: boolean = false;
   isNewsDropdownOpen: boolean = false;
   isBurgerMenuOpen: boolean = false;
   isMobileView: boolean = true;
   isMenuVisible: boolean = true;
-
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    private router: Router,
-    // This is used to check if the app is running on the browser or the server
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {

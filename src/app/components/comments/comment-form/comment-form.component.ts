@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  inject,
 } from "@angular/core";
 import {
   FormBuilder,
@@ -23,6 +24,9 @@ import { CommentService } from "../../../services/comment.service";
   styleUrl: "./comment-form.component.css",
 })
 export class CommentFormComponent implements OnInit, OnDestroy {
+  private commentService = inject(CommentService);
+  private formBuilder = inject(FormBuilder);
+
   @Input() articleId: string | undefined;
   @Input() commentId?: string | undefined;
   @Input() parentId?: string;
@@ -36,10 +40,7 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   message: string = "";
   postCommentForm: FormGroup;
 
-  constructor(
-    private commentService: CommentService,
-    private formBuilder: FormBuilder
-  ) {
+  constructor() {
     this.postCommentForm = this.formBuilder.group({
       "post-comment": [
         "",

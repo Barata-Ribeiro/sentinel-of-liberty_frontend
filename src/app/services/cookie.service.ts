@@ -1,14 +1,12 @@
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
-import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class CookieService {
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  private document = inject(DOCUMENT);
+  private platformId = inject(PLATFORM_ID);
 
   setCookie(
     name: string,

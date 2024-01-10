@@ -1,6 +1,6 @@
 import { CommonModule, formatDate } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../environments/environment";
@@ -17,14 +17,12 @@ import { TimezoneService } from "../../../services/timezone.service";
   styleUrl: "./article.component.css",
 })
 export class ArticleComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
+  private timezoneService = inject(TimezoneService);
   articleData: IndividualArticleRequest;
 
-  constructor(
-    private readonly titleService: Title,
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    private timezoneService: TimezoneService
-  ) {
+  constructor(private readonly titleService: Title) {
     this.articleData = {
       id: "",
       title: "",

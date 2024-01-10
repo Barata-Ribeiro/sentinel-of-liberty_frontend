@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Observable, catchError, map, of, tap } from "rxjs";
 import { CookieService } from "./cookie.service";
 
@@ -7,10 +7,8 @@ import { CookieService } from "./cookie.service";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(
-    private cookieService: CookieService,
-    private http: HttpClient
-  ) {}
+  private cookieService = inject(CookieService);
+  private http = inject(HttpClient);
 
   public isAuthenticated(): Observable<boolean> {
     const token = this.cookieService.getCookieString("authToken");

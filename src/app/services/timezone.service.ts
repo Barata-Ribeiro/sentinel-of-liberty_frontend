@@ -4,8 +4,6 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class TimezoneService {
-  constructor() {}
-
   convertToUserTimezone(dateString: string): Date {
     const utcDate = new Date(dateString);
     const userTimezoneOffset = new Date().getTimezoneOffset() * 60000;

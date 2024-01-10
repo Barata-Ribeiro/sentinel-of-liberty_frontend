@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, EventEmitter, Output, inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -41,11 +41,14 @@ import { EditDataRequest } from "../../@types/appTypes";
   ],
 })
 export class EditAccountModalComponent {
+  private formBuilder = inject(FormBuilder);
+
   @Output() close = new EventEmitter<void>();
   @Output() requestEdit = new EventEmitter<EditDataRequest>();
+
   editForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor() {
     this.editForm = this.formBuilder.group({
       displayName: [
         "",
