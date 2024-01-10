@@ -24,7 +24,6 @@ export class CommentComponent implements OnInit {
   replyMode = false;
   editMode = false;
   editedComment = "";
-  replies: Comment[] = [];
 
   currentUserRole: string | null = null;
   currentUserId: string | null = null;
@@ -45,14 +44,9 @@ export class CommentComponent implements OnInit {
     };
 
     this.articleId = "";
-
-    this.replies = this.comment.children || [];
   }
 
   ngOnInit(): void {
-    if (this.comment && this.comment.children)
-      this.replies = this.comment.children;
-
     this.currentUserRole = this.authService.getCurrentUserRole();
     this.currentUserId = this.authService.getCurrentUserId();
   }
@@ -64,7 +58,8 @@ export class CommentComponent implements OnInit {
   }
 
   handleReply(newReply: Comment) {
-    this.replies = [...this.replies, newReply];
+    if (!this.comment.children) this.comment.children = [];
+    this.comment.children = [...this.comment.children, newReply];
     this.replyMode = false;
   }
 
