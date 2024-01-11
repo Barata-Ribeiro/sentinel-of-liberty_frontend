@@ -46,7 +46,9 @@
   </div>
 
   <!-- Nested Comments -->
-  <div class="mt-4 border-l-2 border-gray-200 pl-4" *ngIf="comment.children && comment.children.length > 0">
+  <div
+    class="mt-4 border-l-2 border-gray-200 pl-4"
+    *ngIf="comment.children && comment.children.length > 0">
     <app-comment
       *ngFor="let childComment of comment.children"
       [comment]="childComment"

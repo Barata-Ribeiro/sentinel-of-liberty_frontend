@@ -37,10 +37,13 @@ export class CommentComponent implements OnInit {
         sol_username: "",
       },
       message: "",
+      parentId: "",
+      likedByMe: false,
       likeCount: 0,
       wasEdited: false,
       createdAt: "",
       updatedAt: "",
+      children: [],
     };
 
     this.articleId = "";
@@ -98,7 +101,10 @@ export class CommentComponent implements OnInit {
 
   handleLikeComment(commentId: string) {
     this.commentService.toggleLike(this.articleId, commentId).subscribe({
-      next: () => this.comment.likeCount++,
+      next: () => {
+        this.comment.likedByMe = !this.comment.likedByMe;
+        this.comment.likeCount += this.comment.likedByMe ? 1 : -1;
+      },
       error: err => {
         console.error(err);
         alert("An error occurred while liking the comment.");
