@@ -3,22 +3,25 @@
     <p class="text-gray-700">{{ comment.message }}</p>
     <div class="flex gap-2">
       <button
+        *ngIf="canInteractWithComment()"
         class="text-blue-500 hover:text-blue-700"
         (click)="toggleReplyMode()">
         Reply
       </button>
       <button
+        *ngIf="canEditComment(comment.user.id) && canInteractWithComment()"
         class="text-green-500 hover:text-green-700"
         (click)="toggleEditMode()">
         Edit
       </button>
       <button
-        *ngIf="canDeleteComment(comment.user.id)"
+        *ngIf="canDeleteComment(comment.user.id) && canInteractWithComment()"
         class="text-red-500 hover:text-red-700"
         (click)="handleDeleteComment(comment.id)">
         Delete
       </button>
       <button
+        *ngIf="canInteractWithComment()"
         class="text-indigo-500 hover:text-indigo-700"
         (click)="handleLikeComment(comment.id)">
         {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})

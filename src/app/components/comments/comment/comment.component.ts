@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
+import { Observable } from "rxjs";
 import { Comment } from "../../../@types/appTypes";
 import { AuthService } from "../../../services/auth.service";
 import { CommentService } from "../../../services/comment.service";
@@ -84,6 +85,14 @@ export class CommentComponent implements OnInit {
       this.currentUserRole === "moderator" ||
       commentUserId === this.currentUserId
     );
+  }
+
+  canEditComment(commentUserId: string): boolean {
+    return commentUserId === this.currentUserId;
+  }
+
+  canInteractWithComment(): Observable<boolean> {
+    return this.authService.isAuthenticated();
   }
 
   handleDeleteComment(commentId: string) {
