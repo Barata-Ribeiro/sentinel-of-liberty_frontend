@@ -1,9 +1,17 @@
-<div class="p-4">
-  <div class="rounded-lg border-2 border-background-400 bg-background-50 p-4">
+<div class="mb-4">
+  <div
+    class="w-full rounded-lg border-2 border-background-400 bg-background-50 p-4">
     <header class="flex items-center justify-between gap-4">
-      <h3 class="text-lg font-bold">
-        {{ comment.user.username }}
-      </h3>
+      <div class="flex items-center gap-2">
+        <img
+          class="h-10 w-10 rounded-full object-cover object-center"
+          [src]="comment.user.avatar"
+          [alt]="'Avatar of ' + comment.user.username"
+          [title]="'Avatar of ' + comment.user.username" />
+        <h3 class="text-lg font-bold">
+          {{ comment.user.username }}
+        </h3>
+      </div>
       <div>
         <p class="text-sm text-textcolor-950/60">
           {{ comment.createdAt }}
@@ -14,7 +22,9 @@
       </div>
     </header>
 
-    <p class="mx-2 my-5 whitespace-pre-wrap">{{ comment.message }}</p>
+    <p class="mx-2 my-10 whitespace-pre-wrap" aria-label="Comment message">
+      {{ comment.message }}
+    </p>
 
     <footer>
       <div class="flex w-fit gap-2">
@@ -75,7 +85,7 @@
 
   <!-- Nested Comments -->
   <div
-    class="mt-4 border-l-2 border-background-400/20 pl-4"
+    class="mt-4 border-l-2 border-background-400/20 pl-8"
     *ngIf="comment.children && comment.children.length > 0">
     <app-comment
       *ngFor="let childComment of comment.children"

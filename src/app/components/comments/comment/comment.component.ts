@@ -38,6 +38,7 @@ export class CommentComponent implements OnInit {
       user: {
         id: "",
         username: "",
+        avatar: "",
       },
       message: "",
       parentId: "",
