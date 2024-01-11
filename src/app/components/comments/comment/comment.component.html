@@ -1,5 +1,5 @@
 <div class="p-4">
-  <div>
+  <div class="rounded-lg border-2 border-background-400 bg-background-50 p-4">
     <header class="flex items-center justify-between gap-4">
       <h3 class="text-lg font-bold">
         {{ comment.user.username }}
@@ -14,57 +14,59 @@
       </div>
     </header>
 
-    <p class="mx-2 my-2 whitespace-pre-wrap">{{ comment.message }}</p>
+    <p class="mx-2 my-5 whitespace-pre-wrap">{{ comment.message }}</p>
 
-    <footer class="flex gap-2">
-      <button
-        *ngIf="isAuthenticated"
-        class="text-blue-500 hover:text-blue-700"
-        (click)="toggleReplyMode()">
-        Reply
-      </button>
-      <button
-        *ngIf="canEditComment(comment.user.id) && isAuthenticated"
-        class="text-green-500 hover:text-green-700"
-        (click)="toggleEditMode()">
-        Edit
-      </button>
-      <button
-        *ngIf="canDeleteComment(comment.user.id) && isAuthenticated"
-        class="text-red-500 hover:text-red-700"
-        (click)="handleDeleteComment(comment.id)">
-        Delete
-      </button>
-      <button
-        *ngIf="isAuthenticated"
-        class="text-indigo-500 hover:text-indigo-700"
-        (click)="handleLikeComment(comment.id)">
-        {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})
-      </button>
+    <footer>
+      <div class="flex gap-2">
+        <button
+          *ngIf="isAuthenticated"
+          class="text-blue-500 hover:text-blue-700"
+          (click)="toggleReplyMode()">
+          Reply
+        </button>
+        <button
+          *ngIf="canEditComment(comment.user.id) && isAuthenticated"
+          class="text-green-500 hover:text-green-700"
+          (click)="toggleEditMode()">
+          Edit
+        </button>
+        <button
+          *ngIf="canDeleteComment(comment.user.id) && isAuthenticated"
+          class="text-red-500 hover:text-red-700"
+          (click)="handleDeleteComment(comment.id)">
+          Delete
+        </button>
+        <button
+          *ngIf="isAuthenticated"
+          class="text-indigo-500 hover:text-indigo-700"
+          (click)="handleLikeComment(comment.id)">
+          {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})
+        </button>
+      </div>
+
+      <div *ngIf="replyMode" class="mt-4">
+        <app-comment-form
+          [articleId]="articleId"
+          [parentId]="comment.id"
+          mode="reply"
+          (onCommentPosted)="handleReply($event)">
+        </app-comment-form>
+      </div>
+      <div *ngIf="editMode" class="mt-4">
+        <app-comment-form
+          [articleId]="articleId"
+          [commentId]="comment.id"
+          mode="edit"
+          [initialMessage]="comment.message"
+          (onCommentPosted)="handleEdit($event)">
+        </app-comment-form>
+      </div>
     </footer>
-  </div>
-
-  <div *ngIf="replyMode" class="mt-4">
-    <app-comment-form
-      [articleId]="articleId"
-      [parentId]="comment.id"
-      mode="reply"
-      (onCommentPosted)="handleReply($event)">
-    </app-comment-form>
-  </div>
-  <div *ngIf="editMode" class="mt-4">
-    <app-comment-form
-      [articleId]="articleId"
-      [commentId]="comment.id"
-      mode="edit"
-      [initialMessage]="comment.message"
-      (onCommentPosted)="handleEdit($event)">
-    </app-comment-form>
   </div>
 
   <!-- Nested Comments -->
   <div
-    class="mt-4 border-b-2 border-l-2 border-gray-200 pl-4"
+    class="mt-4 border-l-2 border-background-400/20 pl-4"
     *ngIf="comment.children && comment.children.length > 0">
     <app-comment
       *ngFor="let childComment of comment.children"
