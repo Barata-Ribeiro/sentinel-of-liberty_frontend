@@ -1,7 +1,22 @@
-<div class="border-b border-gray-300 p-4">
-  <div class="flex justify-between">
-    <p class="text-gray-700">{{ comment.message }}</p>
-    <div class="flex gap-2">
+<div class="p-4">
+  <div>
+    <header class="flex items-center justify-between gap-4">
+      <h3 class="text-lg font-bold">
+        {{ comment.user.username }}
+      </h3>
+      <div>
+        <p class="text-sm text-textcolor-950/60">
+          {{ comment.createdAt }}
+        </p>
+        <span *ngIf="comment.wasEdited" class="text-sm text-textcolor-950/40">
+          Edited {{ comment.updatedAt }}
+        </span>
+      </div>
+    </header>
+
+    <p class="mx-2 my-2 whitespace-pre-wrap">{{ comment.message }}</p>
+
+    <footer class="flex gap-2">
       <button
         *ngIf="canInteractWithComment()"
         class="text-blue-500 hover:text-blue-700"
@@ -26,7 +41,7 @@
         (click)="handleLikeComment(comment.id)">
         {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})
       </button>
-    </div>
+    </footer>
   </div>
 
   <div *ngIf="replyMode" class="mt-4">
@@ -37,7 +52,6 @@
       (onCommentPosted)="handleReply($event)">
     </app-comment-form>
   </div>
-
   <div *ngIf="editMode" class="mt-4">
     <app-comment-form
       [articleId]="articleId"
@@ -50,7 +64,7 @@
 
   <!-- Nested Comments -->
   <div
-    class="mt-4 border-l-2 border-gray-200 pl-4"
+    class="mt-4 border-b-2 border-l-2 border-gray-200 pl-4"
     *ngIf="comment.children && comment.children.length > 0">
     <app-comment
       *ngFor="let childComment of comment.children"

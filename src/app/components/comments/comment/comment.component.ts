@@ -34,8 +34,7 @@ export class CommentComponent implements OnInit {
       id: "",
       user: {
         id: "",
-        discordUsername: "",
-        sol_username: "",
+        username: "",
       },
       message: "",
       parentId: "",
@@ -79,6 +78,7 @@ export class CommentComponent implements OnInit {
     this.editMode = false;
   }
 
+  // Allowing authenticated users to interact with comments
   canDeleteComment(commentUserId: string): boolean {
     return (
       this.currentUserRole === "admin" ||
@@ -95,6 +95,7 @@ export class CommentComponent implements OnInit {
     return this.authService.isAuthenticated();
   }
 
+  // Deleting and liking comments
   handleDeleteComment(commentId: string) {
     this.commentService.deleteComment(this.articleId, commentId).subscribe({
       next: () => {
