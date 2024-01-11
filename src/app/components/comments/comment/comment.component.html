@@ -9,7 +9,7 @@
           {{ comment.createdAt }}
         </p>
         <span *ngIf="comment.wasEdited" class="text-sm text-textcolor-950/40">
-          Edited {{ comment.updatedAt }}
+          {{ comment.updatedAt }}
         </span>
       </div>
     </header>
@@ -18,25 +18,25 @@
 
     <footer class="flex gap-2">
       <button
-        *ngIf="canInteractWithComment()"
+        *ngIf="isAuthenticated"
         class="text-blue-500 hover:text-blue-700"
         (click)="toggleReplyMode()">
         Reply
       </button>
       <button
-        *ngIf="canEditComment(comment.user.id) && canInteractWithComment()"
+        *ngIf="canEditComment(comment.user.id) && isAuthenticated"
         class="text-green-500 hover:text-green-700"
         (click)="toggleEditMode()">
         Edit
       </button>
       <button
-        *ngIf="canDeleteComment(comment.user.id) && canInteractWithComment()"
+        *ngIf="canDeleteComment(comment.user.id) && isAuthenticated"
         class="text-red-500 hover:text-red-700"
         (click)="handleDeleteComment(comment.id)">
         Delete
       </button>
       <button
-        *ngIf="canInteractWithComment()"
+        *ngIf="isAuthenticated"
         class="text-indigo-500 hover:text-indigo-700"
         (click)="handleLikeComment(comment.id)">
         {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})

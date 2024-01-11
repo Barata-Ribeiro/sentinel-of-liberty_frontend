@@ -96,9 +96,12 @@ export class ArticleComponent implements OnInit, OnDestroy {
         next: response => {
           this.articleData = {
             ...response,
-            comments: response.comments.filter(comment => !comment.parentId),
+            comments: this.editCommentResponse(
+              response.comments.filter(comment => !comment.parentId)
+            ),
             createdAt: this.formatNewsDate(response.createdAt),
           };
+          console.log(this.articleData);
           this.titleService.setTitle(`${this.articleData.title} | SoL`);
         },
         error: error => console.error(error),
@@ -116,5 +119,51 @@ export class ArticleComponent implements OnInit, OnDestroy {
   private formatNewsDate(dateString: string): string {
     const userDate = this.timezoneService.convertToUserTimezone(dateString);
     return formatDate(userDate, "MMMM dd, yyyy, h:mm a", "en-US");
+  }
+
+  private formatCommentDate(dateString: string, editComment: boolean): string {
+    const userDate = this.timezoneService.convertToUserTimezone(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor(
+      (now.getTime() - userDate.getTime()) / 1000
+    );
+
+    switch (true) {
+      case diffInSeconds < 60:
+        return `${editComment ? "Edited" : "Posted"} just now`;
+      case diffInSeconds < 3600:
+        return `${editComment ? "Edited" : "Posted"} ${Math.floor(
+          diffInSeconds / 60
+        )} minute(s) ago`;
+      case diffInSeconds < 86400:
+        return `${editComment ? "Edited" : "Posted"} ${Math.floor(
+          diffInSeconds / 3600
+        )} hour(s) ago`;
+      case diffInSeconds < 2592000:
+        return `${editComment ? "Edited" : "Posted"} ${Math.floor(
+          diffInSeconds / 86400
+        )} day(s) ago`;
+      case diffInSeconds < 31536000:
+        return `${editComment ? "Edited" : "Posted"} ${Math.floor(
+          diffInSeconds / 2592000
+        )} month(s) ago`;
+      default:
+        return `${editComment ? "Edited" : "Posted"} ${Math.floor(
+          diffInSeconds / 31536000
+        )} year(s) ago`;
+    }
+  }
+
+  private editCommentResponse(comments: Comment[]): Comment[] {
+    return comments.map(comment => {
+      return {
+        ...comment,
+        createdAt: this.formatCommentDate(comment.createdAt, false),
+        updatedAt: this.formatCommentDate(comment.updatedAt, true),
+        children: comment.children
+          ? this.editCommentResponse(comment.children)
+          : [],
+      };
+    });
   }
 }
