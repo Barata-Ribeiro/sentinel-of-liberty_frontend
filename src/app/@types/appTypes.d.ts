@@ -107,7 +107,10 @@ export interface ArticleListResponse {
 // Define requests, responses and listing for individual articles and comments
 interface Comment {
   id: string;
-  user: Pick<User, "id" | "discordUsername" | "sol_username">;
+  user: {
+    id: string;
+    username: string;
+  };
   message: string;
   parentId?: string;
   likedByMe?: boolean;
