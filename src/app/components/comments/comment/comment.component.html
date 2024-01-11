@@ -17,30 +17,39 @@
     <p class="mx-2 my-5 whitespace-pre-wrap">{{ comment.message }}</p>
 
     <footer>
-      <div class="flex gap-2">
+      <div class="flex w-fit gap-2">
         <button
+          type="button"
           *ngIf="isAuthenticated"
-          class="text-blue-500 hover:text-blue-700"
+          class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
           (click)="toggleReplyMode()">
-          Reply
+          <mat-icon fontIcon="reply"></mat-icon>
         </button>
         <button
+          type="button"
           *ngIf="canEditComment(comment.user.id) && isAuthenticated"
-          class="text-green-500 hover:text-green-700"
+          class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
           (click)="toggleEditMode()">
-          Edit
+          <mat-icon fontIcon="edit"></mat-icon>
         </button>
         <button
+          type="button"
           *ngIf="canDeleteComment(comment.user.id) && isAuthenticated"
-          class="text-red-500 hover:text-red-700"
+          class="w-fit leading-none text-red-500 hover:text-red-700"
           (click)="handleDeleteComment(comment.id)">
-          Delete
+          <mat-icon fontIcon="delete"></mat-icon>
         </button>
         <button
+          type="button"
           *ngIf="isAuthenticated"
-          class="text-indigo-500 hover:text-indigo-700"
+          class="inline-flex w-fit items-center gap-1 leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
           (click)="handleLikeComment(comment.id)">
-          {{ comment.likedByMe ? "Unlike" : "Like" }} ({{ comment.likeCount }})
+          @if (comment.likedByMe) {
+            <mat-icon fontIcon="favorite" color="red"></mat-icon>
+          } @else {
+            <mat-icon fontIcon="favorite"></mat-icon>
+          }
+          <span>({{ comment.likeCount }})</span>
         </button>
       </div>
 

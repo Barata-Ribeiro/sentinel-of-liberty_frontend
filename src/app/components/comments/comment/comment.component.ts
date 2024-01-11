@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 import { Comment } from "../../../@types/appTypes";
 import { AuthService } from "../../../services/auth.service";
 import { CommentService } from "../../../services/comment.service";
@@ -9,7 +10,7 @@ import { CommentFormComponent } from "../comment-form/comment-form.component";
 @Component({
   selector: "app-comment",
   standalone: true,
-  imports: [CommonModule, CommentFormComponent],
+  imports: [CommonModule, CommentFormComponent, MatIconModule],
   templateUrl: "./comment.component.html",
   styleUrl: "./comment.component.css",
 })
