@@ -14,10 +14,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(withFetch()),
-    provideClientHydration(
-      withHttpTransferCacheOptions({
+    provideClientHydration(withHttpTransferCacheOptions({
         includePostRequests: true,
-      })
-    ),
-  ],
+    })),
+    provideAnimations()
+],
 };

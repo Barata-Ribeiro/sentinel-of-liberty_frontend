@@ -101,7 +101,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
             ),
             createdAt: this.formatNewsDate(response.createdAt),
           };
-          console.log(this.articleData);
           this.titleService.setTitle(`${this.articleData.title} | SoL`);
         },
         error: error => console.error(error),
