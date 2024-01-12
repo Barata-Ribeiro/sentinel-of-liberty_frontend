@@ -22,7 +22,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
   private timezoneService = inject(TimezoneService);
 
   articleData: IndividualArticleRequest;
-  totalComments: number = 0;
+  totalComments: number;
 
   constructor(private readonly titleService: Title) {
     this.articleData = {
@@ -41,13 +41,16 @@ export class ArticleComponent implements OnInit, OnDestroy {
       },
       comments: [],
     };
+
+    this.totalComments = 0;
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get("id");
+
     if (id) this.retrieveArticle(id);
-    if (this.articleData.comments)
-      this.totalComments = this.countComments(this.articleData.comments);
+
+    this.totalComments = this.countComments(this.articleData.comments);
   }
 
   ngOnDestroy(): void {
@@ -67,6 +70,8 @@ export class ArticleComponent implements OnInit, OnDestroy {
       },
       comments: [],
     };
+
+    this.totalComments = 0;
   }
 
   copyArticleLink() {
@@ -91,7 +96,9 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
   private retrieveArticle(id: string): void {
     this.http
-      .get<IndividualArticleRequest>(`${environment.apiUrl}/articles/${id}`)
+      .get<IndividualArticleRequest>(`${environment.apiUrl}/articles/${id}`, {
+        withCredentials: true,
+      })
       .subscribe({
         next: response => {
           this.articleData = {
@@ -108,7 +115,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
   }
 
   private countComments(comments: Comment[]): number {
-    let count = comments.length;
+    let count = [...comments].length;
     for (let comment of comments) {
       count += this.countComments(comment.children || []);
     }

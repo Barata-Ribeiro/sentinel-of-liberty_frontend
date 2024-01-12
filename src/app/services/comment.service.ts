@@ -42,10 +42,7 @@ export class CommentService {
   deleteComment(articleId: string, commentId: string) {
     return this.http.delete(
       `${environment.apiUrl}/articles/${articleId}/comments/${commentId}`,
-      {
-        headers: new HttpHeaders({ "Content-Type": "application/json" }),
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 
@@ -56,10 +53,7 @@ export class CommentService {
     return this.http.post<ToggleLikeResponse>(
       `${environment.apiUrl}/articles/${articleId}/comments/${commentId}/likes`,
       {},
-      {
-        headers: new HttpHeaders({ "Content-Type": "application/json" }),
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 }

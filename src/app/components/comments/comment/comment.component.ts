@@ -135,6 +135,7 @@ export class CommentComponent implements OnInit {
   handleLikeComment(commentId: string) {
     this.commentService.toggleLike(this.articleId, commentId).subscribe({
       next: response => {
+        this.comment.likedByMe = response.liked;
         this.comment.likeCount += response.liked ? 1 : -1;
       },
       error: err => {
