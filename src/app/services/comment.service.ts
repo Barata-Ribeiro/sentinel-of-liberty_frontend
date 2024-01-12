@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
+import { Observable } from "rxjs";
 import { environment } from "../../environments/environment";
+import { ToggleLikeResponse } from "../@types/appTypes";
 
 @Injectable({
   providedIn: "root",
@@ -47,9 +49,13 @@ export class CommentService {
     );
   }
 
-  toggleLike(articleId: string, commentId: string) {
-    return this.http.post(
+  toggleLike(
+    articleId: string,
+    commentId: string
+  ): Observable<ToggleLikeResponse> {
+    return this.http.post<ToggleLikeResponse>(
       `${environment.apiUrl}/articles/${articleId}/comments/${commentId}/likes`,
+      {},
       {
         headers: new HttpHeaders({ "Content-Type": "application/json" }),
         withCredentials: true,

@@ -122,6 +122,11 @@ interface Comment {
   children?: Comment[];
 }
 
+export interface ToggleLikeResponse {
+  message: string;
+  liked: boolean;
+}
+
 export interface IndividualArticleRequest {
   basedOnNewsSuggestion?: Omit<News, "user">;
   id: string;
