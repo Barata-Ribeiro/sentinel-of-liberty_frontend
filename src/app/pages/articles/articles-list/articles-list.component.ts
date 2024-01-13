@@ -1,9 +1,9 @@
 import { CommonModule } from "@angular/common";
-import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { environment } from "../../../../environments/environment";
+import { Subscription } from "rxjs";
 import { ArticleListResponse } from "../../../@types/appTypes";
+import { ArticleService } from "../../../services/article.service";
 import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
@@ -14,14 +14,21 @@ import { TimezoneService } from "../../../services/timezone.service";
   styleUrl: "./articles-list.component.css",
 })
 export class ArticlesListComponent implements OnInit, OnDestroy {
-  private http = inject(HttpClient);
   private timezoneService = inject(TimezoneService);
+  private articleService = inject(ArticleService);
+  private subscription = inject(Subscription);
 
-  articleList: ArticleListResponse;
-  currentPage: number;
-  perPage: number;
+  protected articleList: ArticleListResponse = {
+    data: [],
+    page: 1,
+    perPage: 10,
+    next: "",
+    prev: "",
+  };
+  protected currentPage: number = 1;
+  protected perPage: number = 10;
 
-  constructor() {
+  ngOnDestroy(): void {
     this.articleList = {
       data: [],
       page: 1,
@@ -32,28 +39,17 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
 
     this.currentPage = 1;
     this.perPage = 10;
-  }
 
-  ngOnDestroy(): void {
-    this.articleList = {
-      data: [],
-      page: 1,
-      perPage: 10,
-      next: "",
-      prev: "",
-    };
+    this.subscription.unsubscribe();
   }
 
   ngOnInit(): void {
     this.retrieveArticles();
   }
 
-  private retrieveArticles(page: number = 1): void {
-    this.http
-      .get<ArticleListResponse>(
-        `${environment.apiUrl}/articles?perPage=${this.perPage}&page=${page}`
-      )
-      .subscribe({
+  private retrieveArticles(page: number = 1) {
+    return this.subscription.add(
+      this.articleService.getArticleList(page, this.perPage).subscribe({
         next: response => {
           this.articleList = {
             ...response,
@@ -65,7 +61,8 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
           this.currentPage = page;
         },
         error: error => console.error(error),
-      });
+      })
+    );
   }
 
   private formatNewsDate(dateString: string): string {
