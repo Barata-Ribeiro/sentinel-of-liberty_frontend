@@ -1,12 +1,12 @@
 import { CommonModule, formatDate } from "@angular/common";
-import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
-import { environment } from "../../../../environments/environment";
+import { Subscription } from "rxjs";
 import { Comment, IndividualArticleRequest } from "../../../@types/appTypes";
 import { CommentFormComponent } from "../../../components/comments/comment-form/comment-form.component";
 import { CommentComponent } from "../../../components/comments/comment/comment.component";
+import { ArticleService } from "../../../services/article.service";
 import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
@@ -17,40 +17,33 @@ import { TimezoneService } from "../../../services/timezone.service";
   styleUrl: "./article.component.css",
 })
 export class ArticleComponent implements OnInit, OnDestroy {
-  private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
+  private articleService = inject(ArticleService);
+  private subscription = inject(Subscription);
   private timezoneService = inject(TimezoneService);
+  private readonly titleService = inject(Title);
 
-  articleData: IndividualArticleRequest;
-  totalComments: number;
-
-  constructor(private readonly titleService: Title) {
-    this.articleData = {
+  protected articleData: IndividualArticleRequest = {
+    id: "",
+    title: "",
+    content: "",
+    contentSummary: "",
+    image: "",
+    references: [],
+    createdAt: "",
+    updatedAt: "",
+    user: {
       id: "",
-      title: "",
-      content: "",
-      contentSummary: "",
-      image: "",
-      references: [],
-      createdAt: "",
-      updatedAt: "",
-      user: {
-        id: "",
-        discordUsername: "",
-        sol_username: "",
-      },
-      comments: [],
-    };
-
-    this.totalComments = 0;
-  }
+      discordUsername: "",
+      sol_username: "",
+    },
+    comments: [],
+  };
+  protected totalComments: number = 0;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get("id");
-
     if (id) this.retrieveArticle(id);
-
-    this.totalComments = this.countComments(this.articleData.comments);
   }
 
   ngOnDestroy(): void {
@@ -72,6 +65,8 @@ export class ArticleComponent implements OnInit, OnDestroy {
     };
 
     this.totalComments = 0;
+
+    this.subscription.unsubscribe();
   }
 
   copyArticleLink() {
@@ -94,12 +89,9 @@ export class ArticleComponent implements OnInit, OnDestroy {
     this.articleData.comments = [newComment, ...this.articleData.comments];
   }
 
-  private retrieveArticle(id: string): void {
-    this.http
-      .get<IndividualArticleRequest>(`${environment.apiUrl}/articles/${id}`, {
-        withCredentials: true,
-      })
-      .subscribe({
+  private retrieveArticle(id: string) {
+    return this.subscription.add(
+      this.articleService.getArticleById(id).subscribe({
         next: response => {
           this.articleData = {
             ...response,
@@ -108,10 +100,13 @@ export class ArticleComponent implements OnInit, OnDestroy {
             ),
             createdAt: this.formatNewsDate(response.createdAt),
           };
+
           this.titleService.setTitle(`${this.articleData.title} | SoL`);
+          this.totalComments = this.countComments(this.articleData.comments);
         },
         error: error => console.error(error),
-      });
+      })
+    );
   }
 
   private countComments(comments: Comment[]): number {
