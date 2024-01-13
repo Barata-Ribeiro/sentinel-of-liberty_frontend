@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Component, OnInit, inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -8,11 +8,13 @@ import {
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
 import { environment } from "../../../../environments/environment";
 import {
   ArticleDataRequest,
   SuggestionDataResponse,
 } from "../../../@types/appTypes";
+import { ArticleService } from "../../../services/article.service";
 
 @Component({
   selector: "app-articles-write",
@@ -21,17 +23,19 @@ import {
   templateUrl: "./articles-write.component.html",
   styleUrl: "./articles-write.component.css",
 })
-export class ArticlesWriteComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
+export class ArticlesWriteComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
+  private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private articleService = inject(ArticleService);
+  private subscription = inject(Subscription);
 
-  articleBody: FormGroup;
-  isLoading = false;
-  serverError = "";
-  imagePreview = "";
-  basedOnSuggestionId?: string;
+  protected articleBody: FormGroup;
+  protected isLoading = false;
+  protected serverError = "";
+  protected imagePreview = "";
+  protected basedOnSuggestionId?: string;
 
   constructor() {
     this.articleBody = this.formBuilder.group({
@@ -80,6 +84,15 @@ export class ArticlesWriteComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.articleBody.reset();
+    this.basedOnSuggestionId = undefined;
+    this.imagePreview = "";
+    this.serverError = "";
+    this.isLoading = false;
+    this.subscription.unsubscribe();
+  }
+
   private fetchSuggestionInfo(suggestionId: string): void {
     this.http
       .get<SuggestionDataResponse>(
@@ -124,21 +137,18 @@ export class ArticlesWriteComponent implements OnInit {
       basedOnNewsSuggestionId: this.basedOnSuggestionId ?? null,
     };
 
-    this.http
-      .post(`${environment.apiUrl}/articles`, articleData, {
-        headers: new HttpHeaders({ "Content-Type": "application/json" }),
-        withCredentials: true,
-      })
-      .subscribe({
+    return this.subscription.add(
+      this.articleService.postArticle(articleData).subscribe({
         next: () => {
           this.isLoading = false;
           this.router.navigate(["/articles"]);
         },
-        error: (error: any) => {
+        error: ({ error }) => {
           this.isLoading = false;
-          this.serverError = error.error.message;
+          this.serverError = error.message;
         },
-      });
+      })
+    );
   }
 
   // Error messages getters
