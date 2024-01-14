@@ -122,6 +122,11 @@ interface Comment {
   children?: Comment[];
 }
 
+export interface CommentDataRequest {
+  message: string;
+  parentId?: string;
+}
+
 export interface ToggleLikeResponse {
   message: string;
   liked: boolean;

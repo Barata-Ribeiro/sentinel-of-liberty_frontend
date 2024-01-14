@@ -2,7 +2,11 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable, catchError, of } from "rxjs";
 import { environment } from "../../environments/environment";
-import { Comment, ToggleLikeResponse } from "../@types/appTypes";
+import {
+  Comment,
+  CommentDataRequest,
+  ToggleLikeResponse,
+} from "../@types/appTypes";
 
 @Injectable({
   providedIn: "root",
@@ -13,16 +17,23 @@ export class CommentService {
 
   postComment(
     articleId: string,
-    commentData: { message: string; parentId?: string }
-  ): Observable<{ message: string; parentId?: string }> {
-    return this.http.post<{ message: string; parentId?: string }>(
-      `${environment.apiUrl}/articles/${articleId}/comments`,
-      commentData,
-      {
-        headers: this.headers.set("Content-Type", "application/json"),
-        withCredentials: true,
-      }
-    );
+    commentData: CommentDataRequest
+  ): Observable<CommentDataRequest> {
+    return this.http
+      .post<CommentDataRequest>(
+        `${environment.apiUrl}/articles/${articleId}/comments`,
+        commentData,
+        {
+          headers: this.headers.set("Content-Type", "application/json"),
+          withCredentials: true,
+        }
+      )
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return of({} as CommentDataRequest);
+        })
+      );
   }
 
   editComment(
@@ -65,15 +76,17 @@ export class CommentService {
     articleId: string,
     commentId: string
   ): Observable<ToggleLikeResponse> {
-    return this.http.post<ToggleLikeResponse>(
-      `${environment.apiUrl}/articles/${articleId}/comments/${commentId}/likes`,
-      {},
-      { withCredentials: true }
-    ).pipe(
-      catchError(error => {
-        console.error(error);
-        return of({} as ToggleLikeResponse);
-      })
-    );
+    return this.http
+      .post<ToggleLikeResponse>(
+        `${environment.apiUrl}/articles/${articleId}/comments/${commentId}/likes`,
+        {},
+        { withCredentials: true }
+      )
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return of({} as ToggleLikeResponse);
+        })
+      );
   }
 }
