@@ -13,7 +13,6 @@ import {
 })
 export class CommentService {
   private http = inject(HttpClient);
-  private headers = inject(HttpHeaders);
 
   postComment(
     articleId: string,
@@ -24,7 +23,7 @@ export class CommentService {
         `${environment.apiUrl}/articles/${articleId}/comments`,
         commentData,
         {
-          headers: this.headers.set("Content-Type", "application/json"),
+          headers: new HttpHeaders({ "Content-Type": "application/json" }),
           withCredentials: true,
         }
       )
@@ -46,7 +45,7 @@ export class CommentService {
         `${environment.apiUrl}/articles/${articleId}/comments/${commentId}`,
         commentData,
         {
-          headers: this.headers.set("Content-Type", "application/json"),
+          headers: new HttpHeaders({ "Content-Type": "application/json" }),
           withCredentials: true,
         }
       )

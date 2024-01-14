@@ -16,21 +16,25 @@ import { TimezoneService } from "../../../services/timezone.service";
 export class NewsListComponent implements OnInit, OnDestroy {
   private timezoneService = inject(TimezoneService);
   private suggestionsService = inject(SuggestionsService);
-  private subscription = inject(Subscription);
+  private subscription: Subscription;
 
   newsList = {} as NewsListResponse;
   currentPage: number = 1;
   perPage: number = 10;
+
+  constructor() {
+    this.subscription = new Subscription();
+  }
+
+  ngOnInit(): void {
+    this.retrieveNews();
+  }
 
   ngOnDestroy(): void {
     this.newsList = {} as NewsListResponse;
     this.currentPage = 1;
     this.perPage = 10;
     this.subscription.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.retrieveNews();
   }
 
   private retrieveNews(page: number = 1): void {
@@ -44,11 +48,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
               data: response.data.map(news => ({
                 ...news,
                 createdAt: this.formatNewsDate(news.createdAt),
-                user: {
-                  id: news.user.id,
-                  discordUsername: news.user.discordUsername,
-                  sol_username: news.user.sol_username,
-                },
               })),
             };
             this.currentPage = page;

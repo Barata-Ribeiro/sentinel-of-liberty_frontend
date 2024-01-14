@@ -2,7 +2,7 @@ import { CommonModule, formatDate } from "@angular/common";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription } from "rxjs";
+import { Subscription } from "rxjs/internal/Subscription";
 import { Comment, IndividualArticleRequest } from "../../../@types/appTypes";
 import { CommentFormComponent } from "../../../components/comments/comment-form/comment-form.component";
 import { CommentComponent } from "../../../components/comments/comment/comment.component";
@@ -19,27 +19,31 @@ import { TimezoneService } from "../../../services/timezone.service";
 export class ArticleComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private articleService = inject(ArticleService);
-  private subscription = inject(Subscription);
   private timezoneService = inject(TimezoneService);
   private readonly titleService = inject(Title);
+  private subscription: Subscription;
 
   protected articleData: IndividualArticleRequest = {
     id: "",
     title: "",
-    content: "",
     contentSummary: "",
+    content: "",
     image: "",
     references: [],
     createdAt: "",
     updatedAt: "",
     user: {
       id: "",
-      discordUsername: "",
-      sol_username: "",
+      username: "",
+      avatar: "",
     },
     comments: [],
   };
   protected totalComments: number = 0;
+
+  constructor() {
+    this.subscription = new Subscription();
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get("id");
@@ -47,22 +51,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.articleData = {
-      id: "",
-      title: "",
-      content: "",
-      contentSummary: "",
-      image: "",
-      references: [],
-      createdAt: "",
-      updatedAt: "",
-      user: {
-        id: "",
-        discordUsername: "",
-        sol_username: "",
-      },
-      comments: [],
-    };
+    this.articleData = {} as IndividualArticleRequest;
 
     this.totalComments = 0;
 
@@ -100,7 +89,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
             ),
             createdAt: this.formatNewsDate(response.createdAt),
           };
-
           this.titleService.setTitle(`${this.articleData.title} | SoL`);
           this.totalComments = this.countComments(this.articleData.comments);
         },

@@ -13,7 +13,6 @@ import {
 })
 export class ArticleService {
   private http = inject(HttpClient);
-  private headers = inject(HttpHeaders);
 
   getArticleById(id: string): Observable<IndividualArticleRequest> {
     return this.http
@@ -47,7 +46,7 @@ export class ArticleService {
   postArticle(articleData: ArticleDataRequest): Observable<ArticleDataRequest> {
     return this.http
       .post<ArticleDataRequest>(`${environment.apiUrl}/articles`, articleData, {
-        headers: this.headers.set("Content-Type", "application/json"),
+        headers: new HttpHeaders({ "Content-Type": "application/json" }),
         withCredentials: true,
       })
       .pipe(

@@ -14,7 +14,6 @@ import {
 })
 export class SuggestionsService {
   private http = inject(HttpClient);
-  private headers = inject(HttpHeaders);
 
   getSuggestionById(id: string): Observable<SuggestionDataResponse> {
     return this.http
@@ -49,7 +48,7 @@ export class SuggestionsService {
         `${environment.apiUrl}/suggestions`,
         newsData,
         {
-          headers: this.headers.set("Content-Type", "application/json"),
+          headers: new HttpHeaders({ "Content-Type": "application/json" }),
           withCredentials: true,
         }
       )

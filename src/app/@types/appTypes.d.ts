@@ -1,4 +1,4 @@
-// Define User interface
+// User-related interfaces
 export interface User {
   id: string;
   discordUsername: string;
@@ -8,34 +8,81 @@ export interface User {
   sol_biography?: string;
   role: string;
   isBanned: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   newsSuggested?: number;
   articles?: number;
   comments?: number;
   likes?: number;
 }
 
-// Define responses and requests related to authentication
+// News-related interfaces
+interface News {
+  id: string;
+  user: SimpleUser;
+  source: string;
+  title: string;
+  content: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface SimpleUser {
+  id: string;
+  username: string;
+}
+
+// Article-related interfaces
+interface Article {
+  userId: string;
+  username: string;
+  articleId: string;
+  articleTitle: string;
+  contentSummary: string;
+  articleImage: string;
+  articleCreatedAt: string;
+  commentCount: number;
+}
+
+// Comment-related interfaces
+interface Comment {
+  id: string;
+  user: SimpleUserWithAvatar;
+  message: string;
+  parentId?: string;
+  likedByMe?: boolean;
+  likeCount: number;
+  wasEdited: boolean;
+  createdAt: string;
+  updatedAt: string;
+  children?: Comment[];
+}
+
+interface SimpleUserWithAvatar extends SimpleUser {
+  avatar: string;
+}
+
+// Authentication-related interfaces
 export interface AuthAppResponse {
   id: string;
   authToken: string;
   refreshToken: string;
 }
 
-// Define requests for the Home page
+// Home page content interfaces
 export interface HomeContentResponse {
   articles: Article[];
   suggestions: News[];
 }
 
-// Define requests for editing user data
+// User data editing interfaces
 export interface EditDataRequest {
   sol_username?: string;
   sol_biography?: string;
 }
 
-// Define requests, responses and listing for suggestions
+// Suggestion-related interfaces
 export interface SuggestionDataRequest {
   source: string;
   title: string;
@@ -45,21 +92,7 @@ export interface SuggestionDataRequest {
 
 export interface SuggestionDataResponse {
   id: string;
-  user: {
-    id: Pick<User, "id">;
-    username: Pick<User, "discordUsername" | "sol_username">;
-  };
-  source: string;
-  title: string;
-  content: string;
-  image: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface News {
-  id: string;
-  user: Pick<User, "id" | "discordUsername" | "sol_username">;
+  user: SimpleUser;
   source: string;
   title: string;
   content: string;
@@ -76,18 +109,7 @@ export interface NewsListResponse {
   prev: string;
 }
 
-// Define requests, responses and listing for articles
-interface Article {
-  userId: string;
-  username: string;
-  articleId: string;
-  articleTitle: string;
-  contentSummary: string;
-  articleImage: string;
-  articleCreatedAt: string;
-  commentCount: number;
-}
-
+// Article-related interfaces for listing and requests
 export interface ArticleDataRequest {
   title: string;
   imageUrl: string;
@@ -104,24 +126,7 @@ export interface ArticleListResponse {
   prev: string;
 }
 
-// Define requests, responses and listing for individual articles and comments
-interface Comment {
-  id: string;
-  user: {
-    id: string;
-    username: string;
-    avatar: string;
-  };
-  message: string;
-  parentId?: string;
-  likedByMe?: boolean;
-  likeCount: number;
-  wasEdited: boolean;
-  createdAt: string;
-  updatedAt: string;
-  children?: Comment[];
-}
-
+// Interfaces for individual articles and comments
 export interface CommentDataRequest {
   message: string;
   parentId?: string;
@@ -133,7 +138,11 @@ export interface ToggleLikeResponse {
 }
 
 export interface IndividualArticleRequest {
-  basedOnNewsSuggestion?: Omit<News, "user">;
+  basedOnNewsSuggestion?: {
+    id: string;
+    title: string;
+    source: string;
+  };
   id: string;
   title: string;
   contentSummary: string;
@@ -142,6 +151,6 @@ export interface IndividualArticleRequest {
   references: string[];
   createdAt: string;
   updatedAt: string;
-  user: Pick<User, "id" | "discordUsername" | "sol_username">;
+  user: SimpleUserWithAvatar;
   comments: Comment[];
 }

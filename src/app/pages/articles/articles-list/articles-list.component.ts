@@ -16,26 +16,18 @@ import { TimezoneService } from "../../../services/timezone.service";
 export class ArticlesListComponent implements OnInit, OnDestroy {
   private timezoneService = inject(TimezoneService);
   private articleService = inject(ArticleService);
-  private subscription = inject(Subscription);
+  private subscription: Subscription;
 
-  protected articleList: ArticleListResponse = {
-    data: [],
-    page: 1,
-    perPage: 10,
-    next: "",
-    prev: "",
-  };
+  protected articleList = {} as ArticleListResponse;
   protected currentPage: number = 1;
   protected perPage: number = 10;
 
+  constructor() {
+    this.subscription = new Subscription();
+  }
+
   ngOnDestroy(): void {
-    this.articleList = {
-      data: [],
-      page: 1,
-      perPage: 10,
-      next: "",
-      prev: "",
-    };
+    this.articleList = {} as ArticleListResponse;
 
     this.currentPage = 1;
     this.perPage = 10;
@@ -93,10 +85,10 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
   }
 
   hasNextPage(): boolean {
-    return this.articleList.next !== null && this.articleList.data.length > 0;
+    return this.articleList.next !== null;
   }
 
   hasPreviousPage(): boolean {
-    return this.articleList.prev !== null && this.articleList.data.length > 0;
+    return this.articleList.prev !== null;
   }
 }

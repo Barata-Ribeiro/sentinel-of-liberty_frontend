@@ -21,8 +21,8 @@ import { SuggestionsService } from "../../../services/suggestions.service";
 export class NewsSuggestComponent implements OnDestroy {
   private formBuilder = inject(FormBuilder);
   private suggestionsService = inject(SuggestionsService);
-  private subscription = inject(Subscription);
   private router = inject(Router);
+  private subscription: Subscription;
 
   protected suggestionBody: FormGroup;
   protected isLoading = false;
@@ -30,6 +30,8 @@ export class NewsSuggestComponent implements OnDestroy {
   protected imagePreview = "";
 
   constructor() {
+    this.subscription = new Subscription();
+
     this.suggestionBody = this.formBuilder.group({
       sourceLink: [
         "",

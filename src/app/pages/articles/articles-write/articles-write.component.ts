@@ -7,7 +7,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription } from "rxjs";
+import { Subscription, take } from "rxjs";
 import { ArticleDataRequest } from "../../../@types/appTypes";
 import { ArticleService } from "../../../services/article.service";
 import { SuggestionsService } from "../../../services/suggestions.service";
@@ -25,7 +25,7 @@ export class ArticlesWriteComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private articleService = inject(ArticleService);
   private suggestionService = inject(SuggestionsService);
-  private subscription = inject(Subscription);
+  private subscription: Subscription;
 
   protected articleBody: FormGroup;
   protected isLoading = false;
@@ -34,6 +34,8 @@ export class ArticlesWriteComponent implements OnInit, OnDestroy {
   protected basedOnSuggestionId?: string;
 
   constructor() {
+    this.subscription = new Subscription();
+
     this.articleBody = this.formBuilder.group({
       bodyTitle: [
         "",
@@ -72,7 +74,7 @@ export class ArticlesWriteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(take(1)).subscribe(params => {
       if (params["basedOnSuggestion"]) {
         this.basedOnSuggestionId = params["basedOnSuggestion"];
         this.fetchSuggestionInfo(this.basedOnSuggestionId ?? "");
@@ -112,7 +114,9 @@ export class ArticlesWriteComponent implements OnInit, OnDestroy {
   private validateReferences(
     control: FormGroup
   ): { [key: string]: any } | null {
-    const references = control.value.split(",").map((s: string) => s.trim());
+    const references = control.value
+      ? control.value.split(",").map((s: string) => s.trim())
+      : [];
     const isValid = references.every((ref: string) =>
       ref.startsWith("https://")
     );
