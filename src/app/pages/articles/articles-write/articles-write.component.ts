@@ -1,5 +1,4 @@
 import { CommonModule } from "@angular/common";
-import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import {
   FormBuilder,
@@ -9,12 +8,9 @@ import {
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { environment } from "../../../../environments/environment";
-import {
-  ArticleDataRequest,
-  SuggestionDataResponse,
-} from "../../../@types/appTypes";
+import { ArticleDataRequest } from "../../../@types/appTypes";
 import { ArticleService } from "../../../services/article.service";
+import { SuggestionsService } from "../../../services/suggestions.service";
 
 @Component({
   selector: "app-articles-write",
@@ -24,11 +20,11 @@ import { ArticleService } from "../../../services/article.service";
   styleUrl: "./articles-write.component.css",
 })
 export class ArticlesWriteComponent implements OnInit, OnDestroy {
-  private http = inject(HttpClient);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private articleService = inject(ArticleService);
+  private suggestionService = inject(SuggestionsService);
   private subscription = inject(Subscription);
 
   protected articleBody: FormGroup;
@@ -94,11 +90,8 @@ export class ArticlesWriteComponent implements OnInit, OnDestroy {
   }
 
   private fetchSuggestionInfo(suggestionId: string): void {
-    this.http
-      .get<SuggestionDataResponse>(
-        `${environment.apiUrl}/suggestions/${suggestionId}`
-      )
-      .subscribe({
+    return this.subscription.add(
+      this.suggestionService.getSuggestionById(suggestionId).subscribe({
         next: response => {
           this.articleBody.get("bodyTitle")?.setValue(response.title);
           this.articleBody.get("imageLink")?.setValue(response.image);
@@ -108,7 +101,8 @@ export class ArticlesWriteComponent implements OnInit, OnDestroy {
         error: error => {
           this.serverError = error.error.message;
         },
-      });
+      })
+    );
   }
 
   private isImage(url: string): boolean {

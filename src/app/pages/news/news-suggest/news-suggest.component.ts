@@ -1,6 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Component, inject } from "@angular/core";
+import { Component, OnDestroy, inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -8,8 +7,9 @@ import {
   Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { environment } from "../../../../environments/environment";
+import { Subscription } from "rxjs";
 import { SuggestionDataRequest } from "../../../@types/appTypes";
+import { SuggestionsService } from "../../../services/suggestions.service";
 
 @Component({
   selector: "app-news-suggest",
@@ -18,15 +18,16 @@ import { SuggestionDataRequest } from "../../../@types/appTypes";
   templateUrl: "./news-suggest.component.html",
   styleUrl: "./news-suggest.component.css",
 })
-export class NewsSuggestComponent {
+export class NewsSuggestComponent implements OnDestroy {
   private formBuilder = inject(FormBuilder);
-  private http = inject(HttpClient);
+  private suggestionsService = inject(SuggestionsService);
+  private subscription = inject(Subscription);
   private router = inject(Router);
 
-  suggestionBody: FormGroup;
-  isLoading = false;
-  serverError = "";
-  imagePreview = "";
+  protected suggestionBody: FormGroup;
+  protected isLoading = false;
+  protected serverError = "";
+  protected imagePreview = "";
 
   constructor() {
     this.suggestionBody = this.formBuilder.group({
@@ -74,6 +75,14 @@ export class NewsSuggestComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    this.suggestionBody.reset();
+    this.isLoading = false;
+    this.serverError = "";
+    this.imagePreview = "";
+    this.subscription.unsubscribe();
+  }
+
   isImage(url: string): boolean {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
   }
@@ -90,12 +99,8 @@ export class NewsSuggestComponent {
       imageUrl: this.suggestionBody.get("imageLink")?.value,
     };
 
-    this.http
-      .post(`${environment.apiUrl}/suggestions`, requestBody, {
-        headers: new HttpHeaders({ "Content-Type": "application/json" }),
-        withCredentials: true,
-      })
-      .subscribe({
+    return this.subscription.add(
+      this.suggestionsService.postNewsSuggestion(requestBody).subscribe({
         next: () => {
           this.isLoading = false;
           this.router.navigate(["/suggested-news"]);
@@ -104,7 +109,8 @@ export class NewsSuggestComponent {
           this.isLoading = false;
           this.serverError = error.message || "An error occurred";
         },
-      });
+      })
+    );
   }
 
   // Error messages getters
