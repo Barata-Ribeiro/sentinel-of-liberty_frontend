@@ -6,6 +6,7 @@ import {
   ArticleListResponse,
   NewsListResponse,
   SuggestionDataRequest,
+  SuggestionDataResponse,
 } from "../@types/appTypes";
 
 @Injectable({
@@ -14,6 +15,17 @@ import {
 export class SuggestionsService {
   private http = inject(HttpClient);
   private headers = inject(HttpHeaders);
+
+  getSuggestionById(id: string): Observable<SuggestionDataResponse> {
+    return this.http
+      .get<SuggestionDataResponse>(`${environment.apiUrl}/suggestions/${id}`)
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return of({} as SuggestionDataResponse);
+        })
+      );
+  }
 
   getNewsSuggestionList(
     page: number = 1,
