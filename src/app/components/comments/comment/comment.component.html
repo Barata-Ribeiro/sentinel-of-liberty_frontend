@@ -1,7 +1,8 @@
 <div class="mb-4">
   <div
     class="w-full rounded-lg border-2 border-background-400 bg-background-50 p-4">
-    <header class="flex items-center justify-between gap-4">
+    <header
+      class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2">
         <img
           class="h-10 w-10 rounded-full object-cover object-center"
@@ -89,7 +90,7 @@
 
   <!-- Nested Comments -->
   <div
-    class="mt-4 border-l-2 border-background-400/20 pl-8"
+    class="mt-4 border-l-2 border-background-400/20 pl-2 md:pl-8"
     *ngIf="comment.children && comment.children.length > 0">
     <app-comment
       *ngFor="let childComment of comment.children"
