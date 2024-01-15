@@ -32,13 +32,14 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   @Input() parentId?: string;
   @Input() mode: "post" | "reply" | "edit" = "post";
   @Input() initialMessage: string = "";
+  @Input() isAuthenticated: boolean = false;
 
   @Output() onCommentPosted = new EventEmitter<any>();
 
-  isLoading = false;
-  serverError = "";
-  message: string = "";
-  postCommentForm: FormGroup;
+  protected isLoading = false;
+  protected serverError = "";
+  protected message: string = "";
+  protected postCommentForm: FormGroup;
 
   constructor() {
     this.postCommentForm = this.formBuilder.group({

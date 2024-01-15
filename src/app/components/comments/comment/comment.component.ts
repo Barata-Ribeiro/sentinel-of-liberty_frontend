@@ -1,6 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  inject,
+} from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
+import { Subscription } from "rxjs";
 import { Comment } from "../../../@types/appTypes";
 import { AuthService } from "../../../services/auth.service";
 import { CommentService } from "../../../services/comment.service";
@@ -14,49 +22,36 @@ import { CommentFormComponent } from "../comment-form/comment-form.component";
   templateUrl: "./comment.component.html",
   styleUrl: "./comment.component.css",
 })
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnInit, OnDestroy {
   private commentService = inject(CommentService);
   private authService = inject(AuthService);
   private timezoneService = inject(TimezoneService);
+  private subscription: Subscription;
 
   @Input() comment!: Comment;
-  @Input() articleId: string;
+  @Input() articleId!: string;
+  @Input() isAuthenticated: boolean = false;
 
   @ViewChild(CommentFormComponent) commentFormComponent!: CommentFormComponent;
 
-  replyMode = false;
-  editMode = false;
-  editedComment = "";
-  isAuthenticated: boolean = false;
+  protected replyMode = false;
+  protected editMode = false;
+  protected editedComment = "";
 
-  currentUserRole: string | null = null;
-  currentUserId: string | null = null;
+  protected currentUserRole: string | null = null;
+  protected currentUserId: string | null = null;
 
   constructor() {
-    this.comment = {
-      id: "",
-      user: {
-        id: "",
-        username: "",
-        avatar: "",
-      },
-      message: "",
-      parentId: "",
-      likedByMe: false,
-      likeCount: 0,
-      wasEdited: false,
-      createdAt: "",
-      updatedAt: "",
-      children: [],
-    };
-
-    this.articleId = "";
+    this.subscription = new Subscription();
   }
 
   ngOnInit(): void {
     this.currentUserRole = this.authService.getCurrentUserRole();
     this.currentUserId = this.authService.getCurrentUserId();
-    this.checkAuthenticationStatus();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   // Reply to a comment
@@ -112,37 +107,35 @@ export class CommentComponent implements OnInit {
     return commentUserId === this.currentUserId;
   }
 
-  private checkAuthenticationStatus() {
-    this.authService
-      .isAuthenticated()
-      .subscribe(authStatus => (this.isAuthenticated = authStatus));
-  }
-
   // Deleting and liking comments
   handleDeleteComment(commentId: string) {
-    this.commentService.deleteComment(this.articleId, commentId).subscribe({
-      next: () => {
-        alert("Comment deleted successfully.");
-        window.location.reload();
-      },
-      error: err => {
-        console.error(err);
-        alert("An error occurred while deleting the comment.");
-      },
-    });
+    return this.subscription.add(
+      this.commentService.deleteComment(this.articleId, commentId).subscribe({
+        next: () => {
+          alert("Comment deleted successfully.");
+          window.location.reload();
+        },
+        error: err => {
+          console.error(err);
+          alert("An error occurred while deleting the comment.");
+        },
+      })
+    );
   }
 
   handleLikeComment(commentId: string) {
-    this.commentService.toggleLike(this.articleId, commentId).subscribe({
-      next: response => {
-        this.comment.likedByMe = response.liked;
-        this.comment.likeCount += response.liked ? 1 : -1;
-      },
-      error: err => {
-        console.error(err);
-        alert("An error occurred while liking the comment.");
-      },
-    });
+    return this.subscription.add(
+      this.commentService.toggleLike(this.articleId, commentId).subscribe({
+        next: response => {
+          this.comment.likedByMe = response.liked;
+          this.comment.likeCount += response.liked ? 1 : -1;
+        },
+        error: err => {
+          console.error(err);
+          alert("An error occurred while liking the comment.");
+        },
+      })
+    );
   }
 
   private handleImmediateInteractionDate(

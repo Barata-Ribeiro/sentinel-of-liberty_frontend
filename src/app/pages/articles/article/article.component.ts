@@ -7,6 +7,7 @@ import { Comment, IndividualArticleRequest } from "../../../@types/appTypes";
 import { CommentFormComponent } from "../../../components/comments/comment-form/comment-form.component";
 import { CommentComponent } from "../../../components/comments/comment/comment.component";
 import { ArticleService } from "../../../services/article.service";
+import { AuthService } from "../../../services/auth.service";
 import { TimezoneService } from "../../../services/timezone.service";
 
 @Component({
@@ -18,6 +19,7 @@ import { TimezoneService } from "../../../services/timezone.service";
 })
 export class ArticleComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
   private articleService = inject(ArticleService);
   private timezoneService = inject(TimezoneService);
   private readonly titleService = inject(Title);
@@ -40,6 +42,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
     comments: [],
   };
   protected totalComments: number = 0;
+  protected checkUserAuthentication: boolean = false;
 
   constructor() {
     this.subscription = new Subscription();
@@ -48,6 +51,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get("id");
     if (id) this.retrieveArticle(id);
+    this.checkForUserAuthentication();
   }
 
   ngOnDestroy(): void {
@@ -76,6 +80,18 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
   onNewComment(newComment: Comment) {
     this.articleData.comments = [newComment, ...this.articleData.comments];
+  }
+
+  private checkForUserAuthentication() {
+    return this.subscription.add(
+      this.authService.isAuthenticated().subscribe({
+        next: authStatus => (this.checkUserAuthentication = authStatus),
+        error: error => {
+          console.error(error);
+          this.checkUserAuthentication = false;
+        },
+      })
+    );
   }
 
   private retrieveArticle(id: string) {

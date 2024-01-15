@@ -70,7 +70,8 @@
           [articleId]="articleId"
           [parentId]="comment.id"
           mode="reply"
-          (onCommentPosted)="handleReply($event)">
+          (onCommentPosted)="handleReply($event)"
+          [isAuthenticated]="isAuthenticated">
         </app-comment-form>
       </div>
       <div *ngIf="editMode" class="mt-4">
@@ -79,7 +80,8 @@
           [commentId]="comment.id"
           mode="edit"
           [initialMessage]="comment.message"
-          (onCommentPosted)="handleEdit($event)">
+          (onCommentPosted)="handleEdit($event)"
+          [isAuthenticated]="isAuthenticated">
         </app-comment-form>
       </div>
     </footer>
@@ -92,6 +94,7 @@
     <app-comment
       *ngFor="let childComment of comment.children"
       [comment]="childComment"
-      [articleId]="articleId"></app-comment>
+      [articleId]="articleId"
+      [isAuthenticated]="isAuthenticated"></app-comment>
   </div>
 </div>
