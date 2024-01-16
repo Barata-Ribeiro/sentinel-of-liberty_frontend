@@ -1,0 +1,46 @@
+<div [class]="options.toastClass" role="alert">
+  <div class="flex w-fit gap-14 p-4">
+    <div class="flex flex-col gap-2">
+      <h4 *ngIf="title" [class]="options.titleClass" [attr.aria-label]="title">
+        {{ title }}
+      </h4>
+      <p
+        *ngIf="message && options.enableHtml"
+        role="alert"
+        [class]="options.messageClass"
+        [innerHTML]="message"></p>
+      <p
+        *ngIf="message && !options.enableHtml"
+        role="alert"
+        [class]="options.messageClass"
+        [attr.aria-label]="message">
+        {{ message }}
+      </p>
+    </div>
+    <div class="ms-auto">
+      <a
+        *ngIf="options.closeButton"
+        (click)="remove()"
+        class="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg text-textcolor-800 opacity-50 hover:opacity-100 focus:opacity-100 focus:outline-none">
+        <span class="sr-only">Close</span>
+        <svg
+          class="h-6 w-6 flex-shrink-0"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+<div *ngIf="options.progressBar">
+  <div class="toast-progress" [style.width]="width + '%'"></div>
+</div>
