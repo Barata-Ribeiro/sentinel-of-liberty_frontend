@@ -15,7 +15,10 @@ import {
   inject,
 } from "@angular/core";
 import { Router } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
+import { Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
+import { CustomToastrComponent } from "../toastrs/custom-toastr/custom-toastr.component";
 import { BurgerMenuComponent } from "./burger-menu.component";
 
 const DEFAULT_DURATION = 300;
@@ -43,15 +46,21 @@ const DEFAULT_EASING = "ease-out";
 export class HeaderComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  private toastrService = inject(ToastrService);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
+  private subscription: Subscription;
 
-  userAuthenticated: boolean = false;
-  isArticleDropdownOpen: boolean = false;
-  isNewsDropdownOpen: boolean = false;
-  isBurgerMenuOpen: boolean = false;
-  isMobileView: boolean = true;
-  isMenuVisible: boolean = true;
+  protected userAuthenticated: boolean = false;
+  protected isArticleDropdownOpen: boolean = false;
+  protected isNewsDropdownOpen: boolean = false;
+  protected isBurgerMenuOpen: boolean = false;
+  protected isMobileView: boolean = true;
+  protected isMenuVisible: boolean = true;
+
+  constructor() {
+    this.subscription = new Subscription();
+  }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
@@ -68,6 +77,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       window.removeEventListener("resize", this.adjustForScreenSize.bind(this));
     }
+    this.subscription.unsubscribe();
   }
 
   private adjustForScreenSize(): void {
@@ -75,25 +85,42 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.http
-      .get<{ message: string }>(
-        "http://localhost:3000/api/v1/auth/discord/logout",
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+    return this.subscription.add(
+      this.http
+        .get<{ message: string }>(
+          "http://localhost:3000/api/v1/auth/discord/logout",
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            responseType: "json",
+          }
+        )
+        .subscribe({
+          next: response => {
+            this.toastrService.show(response.message, "Success!", {
+              toastComponent: CustomToastrComponent,
+              toastClass:
+                "shadow-[5px_5px_0px_0px_rgba(217,249,157)] max-w-sm rounded-lg border border-lime-200 bg-lime-100 dark:border-lime-900 dark:bg-lime-800/10 dark:text-lime-500",
+              titleClass: "text-lime-800 font-bold text-lg",
+              messageClass: "text-lime-800 font-medium text-normal",
+            });
+            this.userAuthenticated = false;
+            this.router.navigate(["/login"]);
           },
-          responseType: "json",
-        }
-      )
-      .subscribe({
-        next: response => {
-          alert(response.message);
-          this.userAuthenticated = false;
-          this.router.navigate(["/login"]);
-        },
-        error: error => console.error("Logout failed", error),
-      });
+          error: error => {
+            console.error("Logout failed", error);
+            this.toastrService.show(error.message, "Error!", {
+              toastComponent: CustomToastrComponent,
+              toastClass:
+                "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
+              titleClass: "text-red-800 font-bold text-lg",
+              messageClass: "text-red-800 font-medium text-normal",
+            });
+          },
+        })
+    );
   }
 
   toggleArticleDropdown(): void {

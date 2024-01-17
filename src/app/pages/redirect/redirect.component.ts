@@ -1,8 +1,9 @@
-import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { environment } from "../../../environments/environment";
-import { AuthAppResponse, User } from "../../@types/appTypes";
+import { ToastrService } from "ngx-toastr";
+import { Subscription } from "rxjs";
+import { CustomToastrComponent } from "../../components/toastrs/custom-toastr/custom-toastr.component";
+import { AuthService } from "../../services/auth.service";
 import { CookieService } from "../../services/cookie.service";
 
 @Component({
@@ -13,35 +14,34 @@ import { CookieService } from "../../services/cookie.service";
   styleUrl: "./redirect.component.css",
 })
 export class RedirectComponent implements OnInit, OnDestroy {
-  private http = inject(HttpClient);
+  private authService = inject(AuthService);
+  private cookieService = inject(CookieService);
+  private toastrService = inject(ToastrService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private cookieService = inject(CookieService);
+  private subscriptions = new Subscription();
 
-  userId: string = "";
+  protected userId: string = "";
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    const queryParamsSubscription = this.route.queryParams.subscribe(params => {
       const code = params["code"];
       if (code) {
         this.loginWithDiscord(code);
-        this.retrieveUserData(this.userId);
-        this.router.navigate(["/profile"]);
       } else this.router.navigate(["/login"]);
     });
+
+    this.subscriptions.add(queryParamsSubscription);
   }
 
   ngOnDestroy(): void {
     this.userId = "";
+    this.subscriptions.unsubscribe();
   }
 
-  private loginWithDiscord(code: string): void {
-    this.http
-      .get<AuthAppResponse>(
-        `${environment.apiUrl}/auth/discord/redirect?code=${code}`,
-        { withCredentials: true }
-      )
-      .subscribe({
+  private loginWithDiscord(code: string) {
+    return this.subscriptions.add(
+      this.authService.loginWithDiscord(code).subscribe({
         next: response => {
           this.cookieService.setCookie(
             "authToken",
@@ -63,18 +63,32 @@ export class RedirectComponent implements OnInit, OnDestroy {
 
           this.userId = response.id;
           this.retrieveUserData(this.userId);
+          this.toastrService.show(response.message, "Success!", {
+            toastComponent: CustomToastrComponent,
+            toastClass:
+              "shadow-[5px_5px_0px_0px_rgba(217,249,157)] max-w-sm rounded-lg border border-lime-200 bg-lime-100 dark:border-lime-900 dark:bg-lime-800/10 dark:text-lime-500",
+            titleClass: "text-lime-800 font-bold text-lg",
+            messageClass: "text-lime-800 font-medium text-normal",
+          });
           this.router.navigate(["/profile"]);
         },
-        error: () => this.router.navigate(["/login"]),
-      });
+        error: error => {
+          this.toastrService.show(error.message, "Error!", {
+            toastComponent: CustomToastrComponent,
+            toastClass:
+              "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
+            titleClass: "text-red-800 font-bold text-lg",
+            messageClass: "text-red-800 font-medium text-normal",
+          });
+          this.router.navigate(["/login"]);
+        },
+      })
+    );
   }
 
-  private retrieveUserData(id: string): void {
-    this.http
-      .get<User>(`${environment.apiUrl}/users/${id}`, {
-        withCredentials: true,
-      })
-      .subscribe({
+  private retrieveUserData(id: string) {
+    return this.subscriptions.add(
+      this.authService.getUserById(id).subscribe({
         next: response => {
           this.cookieService.setCookie(
             "userData",
@@ -84,7 +98,17 @@ export class RedirectComponent implements OnInit, OnDestroy {
             "None"
           );
         },
-        error: () => this.router.navigate(["/login"]),
-      });
+        error: error => {
+          this.toastrService.show(error.message, "Error!", {
+            toastComponent: CustomToastrComponent,
+            toastClass:
+              "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
+            titleClass: "text-red-800 font-bold text-lg",
+            messageClass: "text-red-800 font-medium text-normal",
+          });
+          this.router.navigate(["/login"]);
+        },
+      })
+    );
   }
 }

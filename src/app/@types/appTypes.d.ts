@@ -68,6 +68,7 @@ export interface AuthAppResponse {
   id: string;
   authToken: string;
   refreshToken: string;
+  message: string;
 }
 
 // Home page content interfaces
