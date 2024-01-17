@@ -1,6 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable, catchError, map, of, tap } from "rxjs";
+import { environment } from "../../environments/environment";
+import { AuthAppResponse, User } from "../@types/appTypes";
 import { CookieService } from "./cookie.service";
 
 @Injectable({
@@ -23,16 +25,31 @@ export class AuthService {
     );
   }
 
-  private logoutIfExpired(): Observable<string> {
+  public loginWithDiscord(code: string): Observable<AuthAppResponse> {
     return this.http
-      .get("http://localhost:3000/api/v1/auth/discord/logout", {
+      .get<AuthAppResponse>(
+        `${environment.apiUrl}/auth/discord/redirect?code=${code}`,
+        { withCredentials: true }
+      )
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return of({} as AuthAppResponse);
+        })
+      );
+  }
+
+  public getUserById(userId: string): Observable<User> {
+    return this.http
+      .get<User>(`${environment.apiUrl}/users/${userId}`, {
         withCredentials: true,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        responseType: "text",
       })
-      .pipe(tap((message: string) => message));
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return of({} as User);
+        })
+      );
   }
 
   public getCurrentUserRole(): string | null {
@@ -59,5 +76,17 @@ export class AuthService {
       console.error("Error parsing userData from cookie:", error);
       return null;
     }
+  }
+
+  private logoutIfExpired(): Observable<string> {
+    return this.http
+      .get(`${environment.apiUrl}/auth/discord/logout`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        responseType: "text",
+      })
+      .pipe(tap((message: string) => message));
   }
 }
