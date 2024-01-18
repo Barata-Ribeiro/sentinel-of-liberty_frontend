@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router } from "express";
 import { environment } from "../../../environments/environment";
 import { EditDataRequest, User } from "../../@types/appTypes";
 import { DeleteAccountModalComponent } from "../../components/delete-account-modal/delete-account-modal.component";

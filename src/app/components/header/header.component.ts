@@ -14,11 +14,11 @@ import {
   PLATFORM_ID,
   inject,
 } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router } from "express";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
-import { CustomToastrComponent } from "../toastrs/custom-toastr/custom-toastr.component";
+import { CustomToastrComponent } from "../shared/custom-toastr/custom-toastr.component";
 import { BurgerMenuComponent } from "./burger-menu.component";
 
 const DEFAULT_DURATION = 300;

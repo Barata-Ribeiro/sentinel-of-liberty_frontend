@@ -1,8 +1,9 @@
 import { Component, OnDestroy, inject } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
+import { Router } from "express";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
-import { CustomToastrComponent } from "../../components/toastrs/custom-toastr/custom-toastr.component";
+import { CustomToastrComponent } from "../../components/shared/custom-toastr/custom-toastr.component";
 import { AuthService } from "../../services/auth.service";
 import { CookieService } from "../../services/cookie.service";
 
@@ -106,7 +107,7 @@ export class RedirectComponent implements OnDestroy {
           titleClass: "text-red-800 font-bold text-lg",
           messageClass: "text-red-800 font-medium text-normal",
         });
-        
+
         this.router.navigate(["/login"]);
       },
     });
