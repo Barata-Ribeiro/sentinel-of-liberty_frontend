@@ -6,6 +6,7 @@ import { Subscription } from "rxjs";
 import { CustomToastrComponent } from "../../components/shared/custom-toastr/custom-toastr.component";
 import { AuthService } from "../../services/auth.service";
 import { CookieService } from "../../services/cookie.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: "app-redirect",
@@ -16,6 +17,7 @@ import { CookieService } from "../../services/cookie.service";
 })
 export class RedirectComponent implements OnDestroy {
   private authService = inject(AuthService);
+  private userService = inject(UserService);
   private cookieService = inject(CookieService);
   private toastrService = inject(ToastrService);
   private route = inject(ActivatedRoute);
@@ -89,7 +91,7 @@ export class RedirectComponent implements OnDestroy {
   }
 
   private retrieveUserData(id: string) {
-    return this.authService.getUserById(id).subscribe({
+    return this.userService.getUserById(id).subscribe({
       next: response => {
         this.cookieService.setCookie(
           "userData",
