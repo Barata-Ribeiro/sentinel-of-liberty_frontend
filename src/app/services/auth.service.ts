@@ -39,18 +39,7 @@ export class AuthService {
       );
   }
 
-  public getUserById(userId: string): Observable<User> {
-    return this.http
-      .get<User>(`${environment.apiUrl}/users/${userId}`, {
-        withCredentials: true,
-      })
-      .pipe(
-        catchError(error => {
-          console.error(error);
-          return of({} as User);
-        })
-      );
-  }
+
 
   public getCurrentUserRole(): string | null {
     const userData = this.cookieService.getCookieString("userData");
