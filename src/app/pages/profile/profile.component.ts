@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
-import { Router } from "express";
+import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { EditDataRequest, User } from "../../@types/appTypes";

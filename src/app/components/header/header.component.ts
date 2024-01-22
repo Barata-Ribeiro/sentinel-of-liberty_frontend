@@ -15,7 +15,7 @@ import {
   inject,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { Router } from "express";
+import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
