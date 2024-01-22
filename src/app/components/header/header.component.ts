@@ -14,6 +14,7 @@ import {
   PLATFORM_ID,
   inject,
 } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { Router } from "express";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
@@ -27,7 +28,7 @@ const DEFAULT_EASING = "ease-out";
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [CommonModule, BurgerMenuComponent],
+  imports: [CommonModule, RouterLink, BurgerMenuComponent],
   templateUrl: "./header.component.html",
   styleUrl: "./header.component.css",
   animations: [
