@@ -14,8 +14,7 @@ import {
   PLATFORM_ID,
   inject,
 } from "@angular/core";
-import { RouterLink } from "@angular/router";
-import { Router } from "@angular/router";
+import { NavigationStart, Router, RouterLink } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
@@ -50,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private toastrService = inject(ToastrService);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
-  private subscription: Subscription;
+  private subscriptions: Subscription;
 
   protected userAuthenticated: boolean = false;
   protected isArticleDropdownOpen: boolean = false;
@@ -60,7 +59,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected isMenuVisible: boolean = true;
 
   constructor() {
-    this.subscription = new Subscription();
+    this.subscriptions = new Subscription();
+
+    this.subscriptions.add(
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationStart) {
+          this.isArticleDropdownOpen = false;
+          this.isNewsDropdownOpen = false;
+        }
+      })
+    );
   }
 
   ngOnInit() {
@@ -78,7 +86,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       window.removeEventListener("resize", this.adjustForScreenSize.bind(this));
     }
-    this.subscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   private adjustForScreenSize(): void {
@@ -86,7 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    return this.subscription.add(
+    return this.subscriptions.add(
       this.http
         .get<{ message: string }>(
           "http://localhost:3000/api/v1/auth/discord/logout",
