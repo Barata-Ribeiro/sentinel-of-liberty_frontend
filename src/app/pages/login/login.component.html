@@ -28,11 +28,14 @@
     </a>
     <p class="mt-2 text-xs">
       By proceeding, you agree to our
-      <a href="/terms" class="underline hover:text-accent-600">Terms of Use</a>
+      <a [routerLink]="['/terms']" class="underline hover:text-accent-600">
+        Terms of Use
+      </a>
       and confirm you have read our
-      <a href="/privacy" class="underline hover:text-accent-600"
-        >Privacy and Cookie Statement</a
-      >.
+      <a [routerLink]="['/privacy']" class="underline hover:text-accent-600">
+        Privacy and Cookie Statement
+      </a>
+      .
     </p>
   </div>
 </section>
