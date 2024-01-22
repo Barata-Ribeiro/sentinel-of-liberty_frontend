@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs/internal/Subscription";
 import { Comment, IndividualArticleRequest } from "../../../@types/appTypes";
 import { CommentFormComponent } from "../../../components/comments/comment-form/comment-form.component";
+import { CommentLoadingComponent } from "../../../components/comments/comment-loading/comment-loading.component";
 import { CommentComponent } from "../../../components/comments/comment/comment.component";
 import { ArticleService } from "../../../services/article.service";
 import { AuthService } from "../../../services/auth.service";
@@ -13,7 +14,12 @@ import { TimezoneService } from "../../../services/timezone.service";
 @Component({
   selector: "app-article",
   standalone: true,
-  imports: [CommonModule, CommentFormComponent, CommentComponent],
+  imports: [
+    CommonModule,
+    CommentFormComponent,
+    CommentLoadingComponent,
+    CommentComponent,
+  ],
   templateUrl: "./article.component.html",
   styleUrl: "./article.component.css",
 })

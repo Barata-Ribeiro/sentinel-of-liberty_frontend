@@ -116,7 +116,7 @@
 
     <div id="commenting-session" class="mt-12 w-full pt-6">
       <div class="mb-6 flex items-center justify-between">
-        <h2 class="text-lg font-bold text-gray-900 lg:text-2xl dark:text-white">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white lg:text-2xl">
           Discussion ({{ totalComments }})
         </h2>
       </div>
@@ -124,16 +124,21 @@
         [articleId]="articleData.id"
         (onCommentPosted)="onNewComment($event)"
         [isAuthenticated]="checkUserAuthentication"></app-comment-form>
+
       <article id="comment-list" class="mt-6">
-        @for (comment of articleData.comments; track comment.id) {
-          <app-comment
-            [comment]="comment"
-            [articleId]="articleData.id"
-            [isAuthenticated]="checkUserAuthentication"></app-comment>
-        } @empty {
-          <p class="text-textcolor-950">
-            No comments yet. Be the first to comment!
-          </p>
+        @defer {
+          @for (comment of articleData.comments; track comment.id) {
+            <app-comment
+              [comment]="comment"
+              [articleId]="articleData.id"
+              [isAuthenticated]="checkUserAuthentication"></app-comment>
+          } @empty {
+            <p class="text-textcolor-950">
+              No comments yet. Be the first to comment!
+            </p>
+          }
+        } @loading (after 100ms; minimum 1s) {
+          <app-comment-loading></app-comment-loading>
         }
       </article>
     </div>
