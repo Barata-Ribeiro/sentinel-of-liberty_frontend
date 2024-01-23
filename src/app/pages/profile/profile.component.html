@@ -27,45 +27,45 @@
           Discord Username: {{ user?.discordUsername }}
         </h4>
       </div>
-      <span class="text-sm text-textcolor-500 dark:text-textcolor-400"
-        >Member since {{ user?.createdAt | date: "d MMM y" }}
+      <span class="text-sm text-textcolor-500 dark:text-textcolor-400">
+        Member since {{ user?.createdAt | date: "d MMM y" }}
       </span>
       @switch (user?.role) {
         @case ("admin") {
           <span
-            class="mt-2 rounded-full border border-red-400 bg-red-100 px-2.5 py-1 text-xs font-medium leading-none text-red-800 dark:bg-red-900 dark:text-red-300"
-            >Admin</span
-          >
+            class="mt-2 select-none rounded-full border border-red-400 bg-red-100 px-2.5 py-1 text-xs font-medium leading-none text-red-800 dark:bg-red-900 dark:text-red-300">
+            Admin
+          </span>
         }
         @case ("moderator") {
           <span
-            class="mt-2 rounded-full border border-green-400 bg-green-100 px-2.5 py-1 text-xs font-medium leading-none text-green-800 dark:bg-green-900 dark:text-green-300"
-            >Moderator</span
-          >
+            class="mt-2 select-none rounded-full border border-green-400 bg-green-100 px-2.5 py-1 text-xs font-medium leading-none text-green-800 dark:bg-green-900 dark:text-green-300">
+            Moderator
+          </span>
         }
         @case ("writer") {
           <span
-            class="mt-2 rounded-full border border-yellow-400 bg-yellow-100 px-2.5 py-1 text-xs font-medium leading-none text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-            >Writer</span
-          >
+            class="mt-2 select-none rounded-full border border-yellow-400 bg-yellow-100 px-2.5 py-1 text-xs font-medium leading-none text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+            Writer
+          </span>
         }
         @default {
           <span
-            class="mt-2 rounded-full border border-gray-500 bg-gray-100 px-2.5 py-1 text-xs font-medium leading-none text-gray-800 dark:bg-gray-700 dark:text-gray-300"
-            >Reader</span
-          >
+            class="mt-2 rounded-full border border-gray-500 bg-gray-100 px-2.5 py-1 text-xs font-medium leading-none text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+            Reader
+          </span>
         }
       }
       <div class="mt-4 flex space-x-3 lg:mt-6">
         <button
           (click)="openEditModal()"
-          class="inline-flex items-center rounded-lg bg-primary-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
+          class="inline-flex select-none items-center rounded-lg bg-primary-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
           aria-label="Edit profile">
           Edit Profile
         </button>
 
         <button
-          class="inline-flex items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200"
+          class="inline-flex select-none items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200"
           aria-label="Check account details">
           Account Details
         </button>
