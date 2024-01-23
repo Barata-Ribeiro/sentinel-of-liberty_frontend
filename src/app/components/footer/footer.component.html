@@ -18,20 +18,34 @@
       </a>
     </p>
 
-    <span
-      class="mt-4 inline-flex justify-center gap-3 sm:ml-auto sm:mt-0 sm:justify-start">
-      <a class="text-textcolor-500">
-        <span>1</span>
-      </a>
-      <a class="text-textcolor-500">
-        <span>2</span>
-      </a>
-      <a class="text-textcolor-500">
-        <span>3</span>
-      </a>
-      <a class="text-textcolor-500">
-        <span>4</span>
-      </a>
-    </span>
+    <ul
+      class="mt-4 inline-flex items-center justify-center gap-3 divide-x-2 divide-none divide-textcolor-200 text-nowrap text-center text-sm sm:ml-auto sm:mt-0 sm:justify-start md:divide-solid md:text-base">
+      <li>
+        <a
+          [routerLink]="['/privacy']"
+          class="text-textcolor-500"
+          title="Privacy Policy">
+          Privacy Policy
+        </a>
+      </li>
+      <li class="md:pl-3">
+        <a
+          [routerLink]="['/terms']"
+          class="text-textcolor-500"
+          title="Terms of use">
+          Terms of Use
+        </a>
+      </li>
+      <li class="md:pl-3">
+        <a
+          class="text-textcolor-500"
+          href="https://github.com/Barata-Ribeiro/sentinel-of-liberty_frontend"
+          title="Repository"
+          rel="noopener noreferrer"
+          target="_blank">
+          Repository
+        </a>
+      </li>
+    </ul>
   </div>
 </footer>
