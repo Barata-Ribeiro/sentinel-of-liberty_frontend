@@ -36,7 +36,8 @@ export const routes: Routes = [
       {
         path: "write",
         title: "Write an Article | SoL",
-        canActivateChild: [authGuard],
+        canActivate: [authGuard],
+
         loadComponent: () =>
           import(
             "./pages/articles/articles-write/articles-write.component"
@@ -55,10 +56,10 @@ export const routes: Routes = [
   {
     path: "suggested-news",
     title: "Suggested News | SoL",
+    canActivateChild: [authGuard],
     children: [
       {
         path: "",
-        canActivateChild: [authGuard],
         loadComponent: () =>
           import("./pages/news/news-list/news-list.component").then(
             m => m.NewsListComponent
@@ -67,7 +68,6 @@ export const routes: Routes = [
       {
         path: "write",
         title: "Write a Suggested News | SoL",
-        canActivateChild: [authGuard],
         loadComponent: () =>
           import("./pages/news/news-suggest/news-suggest.component").then(
             m => m.NewsSuggestComponent
