@@ -149,4 +149,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isArticleDropdownOpen = false;
     this.isNewsDropdownOpen = false;
   }
+
+  get headerImageUrl(): string {
+    return this.getHeaderImage();
+  }
+
+  private getHeaderImage(): string {
+    return "assets/city-of-liberty.jpg";
+  }
 }
