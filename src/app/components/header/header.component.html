@@ -1,7 +1,12 @@
 <header class="body-font bg-background-50 text-textcolor-600">
   <div
-    class="h-[15svh] bg-background-950 bg-cover bg-center bg-no-repeat md:h-[30svh]"
-    [ngStyle]="{ 'background-image': 'url(' + headerImageUrl + ')' }"></div>
+    class="flex h-[15svh] items-center justify-center bg-background-950 bg-cover bg-center bg-no-repeat md:h-[30svh]"
+    [ngStyle]="{ 'background-image': 'url(' + headerImageUrl + ')' }">
+    <img
+      [src]="getLogoUrl()"
+      alt="Sentinel of Liberty logo"
+      class="h-1/2 select-none md:h-2/4" />
+  </div>
   <div class="container flex items-center justify-between py-5">
     <div class="relativ">
       <span class="block md:hidden">

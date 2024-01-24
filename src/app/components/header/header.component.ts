@@ -157,4 +157,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private getHeaderImage(): string {
     return "assets/city-of-liberty.jpg";
   }
+
+  getLogoUrl(): string {
+    return "assets/sentinel-of-liberty-final.svg";
+  }
 }
