@@ -37,32 +37,30 @@
         {{ comment.message }}
       </p>
 
-      <footer class="mt-10">
+      <footer *ngIf="isAuthenticated" class="mt-10">
         <div class="flex w-fit gap-2">
           <button
             type="button"
-            *ngIf="isAuthenticated"
             class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
             (click)="toggleReplyMode()">
             <mat-icon fontIcon="reply"></mat-icon>
           </button>
           <button
             type="button"
-            *ngIf="canEditComment(comment.user.id) && isAuthenticated"
+            *ngIf="canEditComment(comment.user.id)"
             class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
             (click)="toggleEditMode()">
             <mat-icon fontIcon="edit"></mat-icon>
           </button>
           <button
             type="button"
-            *ngIf="canDeleteComment(comment.user.id) && isAuthenticated"
+            *ngIf="canDeleteComment(comment.user.id)"
             class="w-fit leading-none text-red-500 hover:text-red-700"
             (click)="handleDeleteComment(comment.id)">
             <mat-icon fontIcon="delete"></mat-icon>
           </button>
           <button
             type="button"
-            *ngIf="isAuthenticated"
             class="inline-flex w-fit items-center gap-1 leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
             (click)="handleLikeComment(comment.id)">
             @if (comment.likedByMe) {
@@ -85,6 +83,7 @@
             [isAuthenticated]="isAuthenticated">
           </app-comment-form>
         </div>
+
         <div *ngIf="editMode" class="mt-4">
           <app-comment-form
             [articleId]="articleId"

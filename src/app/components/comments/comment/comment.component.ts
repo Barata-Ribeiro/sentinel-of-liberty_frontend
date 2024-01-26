@@ -32,7 +32,7 @@ import { CommentFormComponent } from "../comment-form/comment-form.component";
     trigger("arrowAnimation", [
       state("up", style({ transform: "rotate(0)" })),
       state("down", style({ transform: "rotate(180deg)" })),
-      transition("up <=> down", animate("300ms ease-in-out")),
+      transition("up <=> down", animate("200ms ease-in-out")),
     ]),
   ],
 })
@@ -52,7 +52,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   protected editMode = false;
   protected editedComment = "";
   protected isCommentVisible = true;
-
   protected currentUserRole: string | null = null;
   protected currentUserId: string | null = null;
 
