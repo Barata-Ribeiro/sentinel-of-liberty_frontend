@@ -1,3 +1,10 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import {
   Component,
@@ -21,6 +28,13 @@ import { CommentFormComponent } from "../comment-form/comment-form.component";
   imports: [CommonModule, CommentFormComponent, MatIconModule],
   templateUrl: "./comment.component.html",
   styleUrl: "./comment.component.css",
+  animations: [
+    trigger("arrowAnimation", [
+      state("up", style({ transform: "rotate(0)" })),
+      state("down", style({ transform: "rotate(180deg)" })),
+      transition("up <=> down", animate("300ms ease-in-out")),
+    ]),
+  ],
 })
 export class CommentComponent implements OnInit, OnDestroy {
   private commentService = inject(CommentService);
@@ -37,6 +51,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   protected replyMode = false;
   protected editMode = false;
   protected editedComment = "";
+  protected isCommentVisible = true;
 
   protected currentUserRole: string | null = null;
   protected currentUserId: string | null = null;
@@ -52,6 +67,15 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  // Show/hide comment replies
+  toggleCommentVisibility() {
+    this.isCommentVisible = !this.isCommentVisible;
+  }
+
+  getArrowState() {
+    return this.isCommentVisible ? "up" : "down";
   }
 
   // Reply to a comment

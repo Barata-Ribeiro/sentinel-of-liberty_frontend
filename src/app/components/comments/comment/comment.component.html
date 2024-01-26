@@ -4,14 +4,23 @@
     <header
       class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2">
-        <img
-          class="h-10 w-10 rounded-full object-cover object-center"
-          [src]="comment.user.avatar"
-          [alt]="'Avatar of ' + comment.user.username"
-          [title]="'Avatar of ' + comment.user.username" />
-        <h3 class="text-lg font-bold">
-          {{ comment.user.username }}
-        </h3>
+        <button
+          (click)="toggleCommentVisibility()"
+          class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80">
+          <mat-icon
+            [@arrowAnimation]="getArrowState()"
+            fontIcon="expand_less"></mat-icon>
+        </button>
+        <div class="flex items-center gap-2">
+          <img
+            class="h-10 w-10 rounded-full object-cover object-center"
+            [src]="comment.user.avatar"
+            [alt]="'Avatar of ' + comment.user.username"
+            [title]="'Avatar of ' + comment.user.username" />
+          <h3 class="text-lg font-bold">
+            {{ comment.user.username }}
+          </h3>
+        </div>
       </div>
       <div>
         <p class="text-sm text-textcolor-950/60">
@@ -23,79 +32,83 @@
       </div>
     </header>
 
-    <p class="mx-2 my-10 whitespace-pre-wrap" aria-label="Comment message">
-      {{ comment.message }}
-    </p>
+    @if (isCommentVisible) {
+      <p class="mx-2 mt-10 whitespace-pre-wrap" aria-label="Comment message">
+        {{ comment.message }}
+      </p>
 
-    <footer>
-      <div class="flex w-fit gap-2">
-        <button
-          type="button"
-          *ngIf="isAuthenticated"
-          class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
-          (click)="toggleReplyMode()">
-          <mat-icon fontIcon="reply"></mat-icon>
-        </button>
-        <button
-          type="button"
-          *ngIf="canEditComment(comment.user.id) && isAuthenticated"
-          class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
-          (click)="toggleEditMode()">
-          <mat-icon fontIcon="edit"></mat-icon>
-        </button>
-        <button
-          type="button"
-          *ngIf="canDeleteComment(comment.user.id) && isAuthenticated"
-          class="w-fit leading-none text-red-500 hover:text-red-700"
-          (click)="handleDeleteComment(comment.id)">
-          <mat-icon fontIcon="delete"></mat-icon>
-        </button>
-        <button
-          type="button"
-          *ngIf="isAuthenticated"
-          class="inline-flex w-fit items-center gap-1 leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
-          (click)="handleLikeComment(comment.id)">
-          @if (comment.likedByMe) {
-            <mat-icon
-              fontIcon="favorite"
-              class="text-red-500 hover:text-red-700"></mat-icon>
-          } @else {
-            <mat-icon fontIcon="favorite"></mat-icon>
-          }
-          <span>({{ comment.likeCount }})</span>
-        </button>
-      </div>
+      <footer class="mt-10">
+        <div class="flex w-fit gap-2">
+          <button
+            type="button"
+            *ngIf="isAuthenticated"
+            class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
+            (click)="toggleReplyMode()">
+            <mat-icon fontIcon="reply"></mat-icon>
+          </button>
+          <button
+            type="button"
+            *ngIf="canEditComment(comment.user.id) && isAuthenticated"
+            class="w-fit leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
+            (click)="toggleEditMode()">
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+          <button
+            type="button"
+            *ngIf="canDeleteComment(comment.user.id) && isAuthenticated"
+            class="w-fit leading-none text-red-500 hover:text-red-700"
+            (click)="handleDeleteComment(comment.id)">
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+          <button
+            type="button"
+            *ngIf="isAuthenticated"
+            class="inline-flex w-fit items-center gap-1 leading-none text-textcolor-950/60 hover:text-textcolor-950/80"
+            (click)="handleLikeComment(comment.id)">
+            @if (comment.likedByMe) {
+              <mat-icon
+                fontIcon="favorite"
+                class="text-red-500 hover:text-red-700"></mat-icon>
+            } @else {
+              <mat-icon fontIcon="favorite"></mat-icon>
+            }
+            <span>({{ comment.likeCount }})</span>
+          </button>
+        </div>
 
-      <div *ngIf="replyMode" class="mt-4">
-        <app-comment-form
-          [articleId]="articleId"
-          [parentId]="comment.id"
-          mode="reply"
-          (onCommentPosted)="handleReply($event)"
-          [isAuthenticated]="isAuthenticated">
-        </app-comment-form>
-      </div>
-      <div *ngIf="editMode" class="mt-4">
-        <app-comment-form
-          [articleId]="articleId"
-          [commentId]="comment.id"
-          mode="edit"
-          [initialMessage]="comment.message"
-          (onCommentPosted)="handleEdit($event)"
-          [isAuthenticated]="isAuthenticated">
-        </app-comment-form>
-      </div>
-    </footer>
+        <div *ngIf="replyMode" class="mt-4">
+          <app-comment-form
+            [articleId]="articleId"
+            [parentId]="comment.id"
+            mode="reply"
+            (onCommentPosted)="handleReply($event)"
+            [isAuthenticated]="isAuthenticated">
+          </app-comment-form>
+        </div>
+        <div *ngIf="editMode" class="mt-4">
+          <app-comment-form
+            [articleId]="articleId"
+            [commentId]="comment.id"
+            mode="edit"
+            [initialMessage]="comment.message"
+            (onCommentPosted)="handleEdit($event)"
+            [isAuthenticated]="isAuthenticated">
+          </app-comment-form>
+        </div>
+      </footer>
+    }
   </div>
 
-  <!-- Nested Comments -->
-  <div
-    class="mt-4 border-l-2 border-background-400/20 pl-2 md:pl-8"
-    *ngIf="comment.children && comment.children.length > 0">
-    <app-comment
-      *ngFor="let childComment of comment.children"
-      [comment]="childComment"
-      [articleId]="articleId"
-      [isAuthenticated]="isAuthenticated"></app-comment>
-  </div>
+  @if (isCommentVisible) {
+    <!-- Nested Comments -->
+    <div
+      class="mt-4 border-l-2 border-background-400/20 pl-2 md:pl-8"
+      *ngIf="comment.children && comment.children.length > 0">
+      <app-comment
+        *ngFor="let childComment of comment.children"
+        [comment]="childComment"
+        [articleId]="articleId"
+        [isAuthenticated]="isAuthenticated"></app-comment>
+    </div>
+  }
 </div>
