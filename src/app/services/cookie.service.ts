@@ -1,12 +1,27 @@
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
-import { Injectable, PLATFORM_ID, inject } from "@angular/core";
+import {
+  Inject,
+  Injectable,
+  InjectionToken,
+  Optional,
+  PLATFORM_ID,
+  inject,
+} from "@angular/core";
+import { Request } from "express";
+
+export const REQUEST = new InjectionToken<Request>("REQUEST");
 
 @Injectable({
   providedIn: "root",
 })
 export class CookieService {
-  private document = inject(DOCUMENT);
-  private platformId = inject(PLATFORM_ID);
+  private document: Document = inject(DOCUMENT);
+  private platformId: any = inject(PLATFORM_ID);
+  private documentIsAccessible: boolean;
+
+  constructor(@Optional() @Inject(REQUEST) private request: Request) {
+    this.documentIsAccessible = isPlatformBrowser(this.platformId);
+  }
 
   setCookie(
     name: string,
@@ -15,7 +30,7 @@ export class CookieService {
     secure: boolean,
     sameSite: "Lax" | "Strict" | "None"
   ): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.documentIsAccessible) {
       let expires = "";
 
       if (days) {
@@ -33,8 +48,37 @@ export class CookieService {
     }
   }
 
+  getCookie(name: string): string {
+    if (!this.documentIsAccessible) {
+      const cookies = this.request?.headers.cookie;
+      const nameEQ = encodeURIComponent(name) + "=";
+      const ca = cookies ? cookies.split(";") : [];
+
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === " ") c = c.substring(1);
+        if (c.indexOf(nameEQ) === 0)
+          return decodeURIComponent(c.substring(nameEQ.length));
+      }
+
+      return "";
+    } else {
+      const nameEQ = encodeURIComponent(name) + "=";
+      const ca = this.document.cookie.split(";");
+
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === " ") c = c.substring(1);
+        if (c.indexOf(nameEQ) === 0)
+          return decodeURIComponent(c.substring(nameEQ.length));
+      }
+
+      return "";
+    }
+  }
+
   getCookieString(name: string): string | null {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.documentIsAccessible) {
       const nameEQ = `${name}=`;
       const ca = this.document.cookie.split(";");
 
@@ -49,7 +93,7 @@ export class CookieService {
   }
 
   checkIfCookieExpired(name: string): boolean {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.documentIsAccessible) {
       const cookieString = this.getCookieString(name);
 
       if (cookieString) {
@@ -70,7 +114,7 @@ export class CookieService {
   }
 
   deleteCookie(name: string): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.documentIsAccessible) {
       this.setCookie(name, "", -1, true, "None");
     }
   }
