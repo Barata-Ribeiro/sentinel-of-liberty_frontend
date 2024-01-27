@@ -1,6 +1,5 @@
 import { Component, OnDestroy, inject } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CustomToastrComponent } from "../../components/shared/custom-toastr/custom-toastr.component";

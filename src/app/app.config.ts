@@ -22,7 +22,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideClientHydration(
       withHttpTransferCacheOptions({
-        includePostRequests: true,
+        includePostRequests: false,
+        filter: request =>
+          !request.url.includes("articles") &&
+          !request.urlWithParams.includes("articles"),
       })
     ),
     provideAnimations(),

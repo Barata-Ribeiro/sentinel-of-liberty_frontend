@@ -17,11 +17,17 @@ export class ArticleService {
   private cookieService = inject(CookieService);
 
   private getHeaders(): HttpHeaders {
-    const authToken = this.cookieService.getCookieString("authToken");
+    const authToken = this.cookieService.getCookie("authToken");
     let headers = new HttpHeaders({ "Content-Type": "application/json" });
 
-    if (authToken)
-      headers = headers.append("Authorization", `Bearer ${authToken}`);
+    console.log("Setting headers...");
+
+    if (authToken) {
+      console.log("authToken", authToken);
+      headers = headers.set("Authorization", `Bearer ${authToken}`);
+    }
+
+    console.log("Headers: ", headers);
 
     return headers;
   }

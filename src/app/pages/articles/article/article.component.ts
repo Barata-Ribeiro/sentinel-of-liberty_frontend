@@ -61,10 +61,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.articleData = {} as IndividualArticleRequest;
-
-    this.totalComments = 0;
-
     this.subscription.unsubscribe();
   }
 
