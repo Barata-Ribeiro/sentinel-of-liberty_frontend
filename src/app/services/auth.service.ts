@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable, catchError, map, of, tap } from "rxjs";
 import { environment } from "../../environments/environment";
-import { AuthAppResponse, User } from "../@types/appTypes";
+import { AuthAppResponse } from "../@types/appTypes";
 import { CookieService } from "./cookie.service";
 
 @Injectable({
@@ -13,7 +13,7 @@ export class AuthService {
   private http = inject(HttpClient);
 
   public isAuthenticated(): Observable<boolean> {
-    const token = this.cookieService.getCookieString("authToken");
+    const token = this.cookieService.getCookie("authToken");
     if (!token) return of(false);
 
     const isExpired = this.cookieService.checkIfCookieExpired("authToken");
@@ -39,10 +39,8 @@ export class AuthService {
       );
   }
 
-
-
   public getCurrentUserRole(): string | null {
-    const userData = this.cookieService.getCookieString("userData");
+    const userData = this.cookieService.getCookie("userData");
     if (!userData) return null;
 
     try {
@@ -55,7 +53,7 @@ export class AuthService {
   }
 
   public getCurrentUserId(): string | null {
-    const userData = this.cookieService.getCookieString("userData");
+    const userData = this.cookieService.getCookie("userData");
     if (!userData) return null;
 
     try {

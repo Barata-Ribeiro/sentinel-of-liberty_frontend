@@ -77,24 +77,9 @@ export class CookieService {
     }
   }
 
-  getCookieString(name: string): string | null {
-    if (this.documentIsAccessible) {
-      const nameEQ = `${name}=`;
-      const ca = this.document.cookie.split(";");
-
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === " ") c = c.substring(1);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
-      }
-    }
-
-    return null;
-  }
-
   checkIfCookieExpired(name: string): boolean {
     if (this.documentIsAccessible) {
-      const cookieString = this.getCookieString(name);
+      const cookieString = this.getCookie(name);
 
       if (cookieString) {
         const cookieParts = cookieString.split(";");

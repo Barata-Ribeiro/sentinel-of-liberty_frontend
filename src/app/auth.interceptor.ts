@@ -4,7 +4,7 @@ import { CookieService } from "./services/cookie.service";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const cookieService = inject(CookieService);
-  const authToken = cookieService.getCookieString("authToken");
+  const authToken = cookieService.getCookie("authToken");
 
   if (authToken) {
     const authReq = req.clone({

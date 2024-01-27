@@ -109,7 +109,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private loadUser(): void {
     try {
-      const userData = this.cookieService.getCookieString("userData");
+      const userData = this.cookieService.getCookie("userData");
       if (userData) this.user = JSON.parse(userData);
       else this.fetchUserFromAuthToken();
     } catch (e) {
@@ -119,7 +119,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private fetchUserFromAuthToken(): void {
-    const userId = this.cookieService.getCookieString("userId");
+    const userId = this.cookieService.getCookie("userId");
     if (userId) {
       return this.subscriptions.add(
         this.userService.getUserById(userId).subscribe({
