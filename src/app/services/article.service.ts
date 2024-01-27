@@ -7,16 +7,29 @@ import {
   ArticleListResponse,
   IndividualArticleRequest,
 } from "../@types/appTypes";
+import { CookieService } from "./cookie.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ArticleService {
   private http = inject(HttpClient);
+  private cookieService = inject(CookieService);
+
+  private getHeaders(): HttpHeaders {
+    const authToken = this.cookieService.getCookieString("authToken");
+    let headers = new HttpHeaders({ "Content-Type": "application/json" });
+
+    if (authToken)
+      headers = headers.append("Authorization", `Bearer ${authToken}`);
+
+    return headers;
+  }
 
   getArticleById(id: string): Observable<IndividualArticleRequest> {
     return this.http
       .get<IndividualArticleRequest>(`${environment.apiUrl}/articles/${id}`, {
+        headers: this.getHeaders(),
         withCredentials: true,
       })
       .pipe(
