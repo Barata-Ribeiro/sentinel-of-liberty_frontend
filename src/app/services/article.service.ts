@@ -20,14 +20,8 @@ export class ArticleService {
     const authToken = this.cookieService.getCookie("authToken");
     let headers = new HttpHeaders({ "Content-Type": "application/json" });
 
-    console.log("Setting headers...");
-
-    if (authToken) {
-      console.log("authToken", authToken);
+    if (authToken)
       headers = headers.set("Authorization", `Bearer ${authToken}`);
-    }
-
-    console.log("Headers: ", headers);
 
     return headers;
   }
