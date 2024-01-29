@@ -15,11 +15,13 @@ import {
   inject,
 } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
+import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { Comment } from "../../../@types/appTypes";
 import { AuthService } from "../../../services/auth.service";
 import { CommentService } from "../../../services/comment.service";
 import { TimezoneService } from "../../../services/timezone.service";
+import { CustomToastrComponent } from "../../shared/custom-toastr/custom-toastr.component";
 import { CommentFormComponent } from "../comment-form/comment-form.component";
 
 @Component({
@@ -40,7 +42,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   private commentService = inject(CommentService);
   private authService = inject(AuthService);
   private timezoneService = inject(TimezoneService);
-  private subscription: Subscription;
+  private toastrService = inject(ToastrService);
+  private subscription: Subscription = new Subscription();
 
   @Input() comment!: Comment;
   @Input() articleId!: string;
@@ -54,10 +57,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   protected isCommentVisible = true;
   protected currentUserRole: string | null = null;
   protected currentUserId: string | null = null;
-
-  constructor() {
-    this.subscription = new Subscription();
-  }
 
   ngOnInit(): void {
     this.currentUserRole = this.authService.getCurrentUserRole();
@@ -135,12 +134,28 @@ export class CommentComponent implements OnInit, OnDestroy {
     return this.subscription.add(
       this.commentService.deleteComment(this.articleId, commentId).subscribe({
         next: () => {
-          alert("Comment deleted successfully.");
           window.location.reload();
+          this.toastrService.show("Comment deleted successfully.", "Success!", {
+            toastComponent: CustomToastrComponent,
+            toastClass:
+              "shadow-[5px_5px_0px_0px_rgba(217,249,157)] max-w-sm rounded-lg border border-lime-200 bg-lime-100 dark:border-lime-900 dark:bg-lime-800/10 dark:text-lime-500",
+            titleClass: "text-lime-800 font-bold text-lg",
+            messageClass: "text-lime-800 font-medium text-normal",
+          });
         },
         error: err => {
           console.error(err);
-          alert("An error occurred while deleting the comment.");
+          this.toastrService.show(
+            "An error occurred while deleting the comment.",
+            "Error!",
+            {
+              toastComponent: CustomToastrComponent,
+              toastClass:
+                "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
+              titleClass: "text-red-800 font-bold text-lg",
+              messageClass: "text-red-800 font-medium text-normal",
+            }
+          );
         },
       })
     );
@@ -155,7 +170,17 @@ export class CommentComponent implements OnInit, OnDestroy {
         },
         error: err => {
           console.error(err);
-          alert("An error occurred while liking the comment.");
+          this.toastrService.show(
+            "An error occurred while liking the comment.",
+            "Error!",
+            {
+              toastComponent: CustomToastrComponent,
+              toastClass:
+                "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
+              titleClass: "text-red-800 font-bold text-lg",
+              messageClass: "text-red-800 font-medium text-normal",
+            }
+          );
         },
       })
     );
