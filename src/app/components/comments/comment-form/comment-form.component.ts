@@ -14,6 +14,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { Subscription } from "rxjs";
 import { CommentService } from "../../../services/comment.service";
 
 @Component({
@@ -26,6 +27,7 @@ import { CommentService } from "../../../services/comment.service";
 export class CommentFormComponent implements OnInit, OnDestroy {
   private commentService = inject(CommentService);
   private formBuilder = inject(FormBuilder);
+  private subscription = new Subscription();
 
   @Input() articleId: string | undefined;
   @Input() commentId?: string | undefined;
@@ -38,7 +40,7 @@ export class CommentFormComponent implements OnInit, OnDestroy {
 
   protected isLoading = false;
   protected serverError = "";
-  protected message: string = "";
+  protected postMessage: string = "";
   protected postCommentForm: FormGroup;
 
   constructor() {
@@ -55,7 +57,7 @@ export class CommentFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = false;
-    this.message = "";
+    this.postMessage = "";
     this.serverError = "";
 
     if (this.mode === "edit")
@@ -63,9 +65,7 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.message = "";
-    this.serverError = "";
-    this.isLoading = false;
+    this.subscription.unsubscribe();
   }
 
   handleSubmit(event: Event): void {
@@ -94,19 +94,21 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   ): void {
     this.isLoading = true;
 
-    this.commentService.postComment(articleId, commentData).subscribe({
-      next: newComment => {
-        this.isLoading = false;
-        this.onCommentPosted.emit(newComment);
-        this.postCommentForm.reset();
-      },
-      error: error => {
-        this.isLoading = false;
-        this.serverError =
-          error.error.message ||
-          "An error occurred while submitting the comment.";
-      },
-    });
+    return this.subscription.add(
+      this.commentService.postComment(articleId, commentData).subscribe({
+        next: newComment => {
+          this.isLoading = false;
+          this.onCommentPosted.emit(newComment);
+          this.postCommentForm.reset();
+        },
+        error: error => {
+          this.isLoading = false;
+          this.serverError =
+            error.error.message ||
+            "An error occurred while submitting the comment.";
+        },
+      })
+    );
   }
 
   private handleEditComment(
@@ -116,21 +118,23 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   ): void {
     this.isLoading = true;
 
-    this.commentService
-      .editComment(articleId, commentId, commentData)
-      .subscribe({
-        next: editedComment => {
-          this.isLoading = false;
-          this.onCommentPosted.emit(editedComment);
-          this.postCommentForm.reset();
-        },
-        error: error => {
-          this.isLoading = false;
-          this.serverError = this.serverError =
-            error.error.message ||
-            "An error occurred while updating the comment.";
-        },
-      });
+    return this.subscription.add(
+      this.commentService
+        .editComment(articleId, commentId, commentData)
+        .subscribe({
+          next: editedComment => {
+            this.isLoading = false;
+            this.onCommentPosted.emit(editedComment);
+            this.postCommentForm.reset();
+          },
+          error: error => {
+            this.isLoading = false;
+            this.serverError = this.serverError =
+              error.error.message ||
+              "An error occurred while updating the comment.";
+          },
+        })
+    );
   }
 
   getError(controlName: string): string {
