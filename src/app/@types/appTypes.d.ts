@@ -49,7 +49,7 @@ interface Article {
 interface Comment {
   id: string;
   user: SimpleUserWithAvatar;
-  message: string;
+  textBody: string;
   parentId?: string;
   likedByMe?: boolean;
   likeCount: number;
@@ -129,7 +129,7 @@ export interface ArticleListResponse {
 
 // Interfaces for individual articles and comments
 export interface CommentDataRequest {
-  message: string;
+  textBody: string;
   parentId?: string;
 }
 

@@ -34,7 +34,7 @@
 
     @if (isCommentVisible) {
       <p class="mx-2 mt-10 whitespace-pre-wrap" aria-label="Comment message">
-        {{ comment.message }}
+        {{ comment.textBody }}
       </p>
 
       <footer *ngIf="isAuthenticated" class="mt-10">
@@ -89,7 +89,7 @@
             [articleId]="articleId"
             [commentId]="comment.id"
             mode="edit"
-            [initialMessage]="comment.message"
+            [initialMessage]="comment.textBody"
             (onCommentPosted)="handleEdit($event)"
             [isAuthenticated]="isAuthenticated">
           </app-comment-form>

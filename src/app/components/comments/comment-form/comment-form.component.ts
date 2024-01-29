@@ -75,22 +75,22 @@ export class CommentFormComponent implements OnInit, OnDestroy {
 
     if (this.mode === "post")
       this.handlePostComment(this.articleId!, {
-        message: this.postCommentForm.get("post-comment")?.value,
+        textBody: this.postCommentForm.get("post-comment")?.value,
       });
     else if (this.mode === "reply")
       this.handlePostComment(this.articleId!, {
-        message: this.postCommentForm.get("post-comment")?.value,
+        textBody: this.postCommentForm.get("post-comment")?.value,
         parentId: this.parentId!,
       });
     else if (this.mode === "edit" && this.commentId)
       this.handleEditComment(this.articleId!, this.commentId!, {
-        message: this.postCommentForm.get("post-comment")?.value,
+        textBody: this.postCommentForm.get("post-comment")?.value,
       });
   }
 
   private handlePostComment(
     articleId: string,
-    commentData: { message: string; parentId?: string }
+    commentData: { textBody: string; parentId?: string }
   ): void {
     this.isLoading = true;
 
@@ -114,7 +114,7 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   private handleEditComment(
     articleId: string,
     commentId: string,
-    commentData: { message: string }
+    commentData: { textBody: string }
   ): void {
     this.isLoading = true;
 

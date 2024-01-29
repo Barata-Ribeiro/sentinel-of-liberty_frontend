@@ -100,7 +100,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   toggleEditMode() {
     this.editMode = !this.editMode;
     this.replyMode = false;
-    this.editedComment = this.comment.message;
+    this.editedComment = this.comment.textBody;
   }
 
   handleEdit(updatedComment: Comment) {

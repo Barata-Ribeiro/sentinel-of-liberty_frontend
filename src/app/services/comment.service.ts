@@ -38,10 +38,10 @@ export class CommentService {
   editComment(
     articleId: string,
     commentId: string,
-    commentData: { message: string }
-  ): Observable<{ message: string }> {
+    commentData: { textBody: string }
+  ): Observable<{ textBody: string }> {
     return this.http
-      .put<{ message: string }>(
+      .put<{ textBody: string }>(
         `${environment.apiUrl}/articles/${articleId}/comments/${commentId}`,
         commentData,
         {
@@ -52,7 +52,7 @@ export class CommentService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as { message: string });
+          return of({} as { textBody: string });
         })
       );
   }
