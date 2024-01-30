@@ -39,6 +39,26 @@ export class AuthService {
       );
   }
 
+  public logoutFromDiscord(): Observable<{ message: string }> {
+    return this.http
+      .get<{ message: string }>(
+        "http://localhost:3000/api/v1/auth/discord/logout",
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          responseType: "json",
+        }
+      )
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return of({} as { message: string });
+        })
+      );
+  }
+
   public getCurrentUserId(): string | null {
     const userData = this.cookieService.getCookie("userData");
     if (!userData) return null;

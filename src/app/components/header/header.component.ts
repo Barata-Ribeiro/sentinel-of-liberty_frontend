@@ -6,7 +6,6 @@ import {
   trigger,
 } from "@angular/animations";
 import { CommonModule, isPlatformBrowser } from "@angular/common";
-import { HttpClient } from "@angular/common/http";
 import {
   Component,
   OnDestroy,
@@ -44,14 +43,14 @@ const DEFAULT_EASING = "ease-out";
   ],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  private http = inject(HttpClient);
   private authService = inject(AuthService);
   private toastrService = inject(ToastrService);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
-  private subscriptions: Subscription;
+  private subscriptions: Subscription = new Subscription();
 
   protected userAuthenticated: boolean = false;
+  protected userProfileLink: string = "";
   protected isArticleDropdownOpen: boolean = false;
   protected isNewsDropdownOpen: boolean = false;
   protected isBurgerMenuOpen: boolean = false;
@@ -59,8 +58,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected isMenuVisible: boolean = true;
 
   constructor() {
-    this.subscriptions = new Subscription();
-
     this.subscriptions.add(
       this.router.events.subscribe(event => {
         if (event instanceof NavigationStart) {
@@ -75,11 +72,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.adjustForScreenSize();
       window.addEventListener("resize", this.adjustForScreenSize.bind(this));
-
-      this.authService.isAuthenticated().subscribe(isAuthenticated => {
-        this.userAuthenticated = isAuthenticated;
-      });
     }
+
+    this.checkAuthentication();
   }
 
   ngOnDestroy() {
@@ -95,40 +90,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout(): void {
     return this.subscriptions.add(
-      this.http
-        .get<{ message: string }>(
-          "http://localhost:3000/api/v1/auth/discord/logout",
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            responseType: "json",
-          }
-        )
-        .subscribe({
-          next: response => {
-            this.toastrService.show(response.message, "Success!", {
-              toastComponent: CustomToastrComponent,
-              toastClass:
-                "shadow-[5px_5px_0px_0px_rgba(217,249,157)] max-w-sm rounded-lg border border-lime-200 bg-lime-100 dark:border-lime-900 dark:bg-lime-800/10 dark:text-lime-500",
-              titleClass: "text-lime-800 font-bold text-lg",
-              messageClass: "text-lime-800 font-medium text-normal",
-            });
-            this.userAuthenticated = false;
-            this.router.navigate(["/login"]);
-          },
-          error: error => {
-            console.error("Logout failed", error);
-            this.toastrService.show(error.message, "Error!", {
-              toastComponent: CustomToastrComponent,
-              toastClass:
-                "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
-              titleClass: "text-red-800 font-bold text-lg",
-              messageClass: "text-red-800 font-medium text-normal",
-            });
-          },
-        })
+      this.authService.logoutFromDiscord().subscribe({
+        next: response => {
+          this.toastrService.show(response.message, "Success!", {
+            toastComponent: CustomToastrComponent,
+            toastClass:
+              "shadow-[5px_5px_0px_0px_rgba(217,249,157)] max-w-sm rounded-lg border border-lime-200 bg-lime-100 dark:border-lime-900 dark:bg-lime-800/10 dark:text-lime-500",
+            titleClass: "text-lime-800 font-bold text-lg",
+            messageClass: "text-lime-800 font-medium text-normal",
+          });
+          this.userAuthenticated = false;
+          this.router.navigate(["/login"]);
+        },
+        error: error => {
+          console.error("Logout failed", error);
+          this.toastrService.show(error.message, "Error!", {
+            toastComponent: CustomToastrComponent,
+            toastClass:
+              "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
+            titleClass: "text-red-800 font-bold text-lg",
+            messageClass: "text-red-800 font-medium text-normal",
+          });
+        },
+      })
     );
   }
 
@@ -154,11 +138,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.getHeaderImage();
   }
 
-  private getHeaderImage(): string {
-    return "assets/city-of-liberty.jpg";
-  }
-
   getLogoUrl(): string {
     return "assets/sentinel-of-liberty-final.svg";
+  }
+
+  private checkAuthentication(): void {
+    this.subscriptions.add(
+      this.authService.isAuthenticated().subscribe(isAuthenticated => {
+        this.userAuthenticated = isAuthenticated;
+        if (isAuthenticated) {
+          const userId = this.authService.getCurrentUserId();
+          const username = this.authService.getCurrentUserUsername();
+          this.userProfileLink = `/profile/${userId}/${username}`;
+        }
+      })
+    );
+  }
+
+  private getHeaderImage(): string {
+    return "assets/city-of-liberty.jpg";
   }
 }
