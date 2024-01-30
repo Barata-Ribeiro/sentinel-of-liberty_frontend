@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable, catchError, of } from "rxjs";
 import { environment } from "../../environments/environment";
-import { EditDataRequest, User } from "../@types/appTypes";
+import { EditDataRequest, User, UserDataResponse } from "../@types/appTypes";
 
 @Injectable({
   providedIn: "root",
@@ -10,15 +10,15 @@ import { EditDataRequest, User } from "../@types/appTypes";
 export class UserService {
   private http = inject(HttpClient);
 
-  public getUserById(userId: string): Observable<User> {
+  public getUserById(userId: string): Observable<UserDataResponse> {
     return this.http
-      .get<User>(`${environment.apiUrl}/users/${userId}`, {
+      .get<UserDataResponse>(`${environment.apiUrl}/users/${userId}`, {
         withCredentials: true,
       })
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as User);
+          return of({} as UserDataResponse);
         })
       );
   }

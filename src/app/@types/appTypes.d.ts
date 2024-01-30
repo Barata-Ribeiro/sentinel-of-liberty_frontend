@@ -65,7 +65,10 @@ interface SimpleUserWithAvatar extends SimpleUser {
 
 // Authentication-related interfaces
 export interface AuthAppResponse {
-  id: string;
+  userInfo: {
+    id: string;
+    username: string;
+  };
   authToken: string;
   refreshToken: string;
   message: string;
@@ -77,7 +80,13 @@ export interface HomeContentResponse {
   suggestions: News[];
 }
 
-// User data editing interfaces
+// User data fetch/editing interfaces
+export interface UserDataResponse {
+  profile: User;
+  lastPublishedArticle: Article;
+  lastSuggestedNews: News;
+}
+
 export interface EditDataRequest {
   sol_username?: string;
   sol_biography?: string;
