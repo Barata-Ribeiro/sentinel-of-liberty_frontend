@@ -49,7 +49,7 @@ export class RedirectComponent implements OnDestroy {
           response.authToken,
           1,
           true,
-          "None"
+          "Lax"
         );
 
         this.cookieService.setCookie(
@@ -57,7 +57,7 @@ export class RedirectComponent implements OnDestroy {
           response.refreshToken,
           365,
           true,
-          "None"
+          "Lax"
         );
 
         this.userId = response.userInfo.id;
