@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
-import { EditDataRequest, User } from "../../@types/appTypes";
+import { EditDataRequest, User, UserDataCookie } from "../../@types/appTypes";
 import { DeleteAccountModalComponent } from "../../components/delete-account-modal/delete-account-modal.component";
 import { EditAccountModalComponent } from "../../components/edit-account-modal/edit-account-modal.component";
 import { CustomToastrComponent } from "../../components/shared/custom-toastr/custom-toastr.component";
@@ -31,13 +31,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   protected user: User | null = null;
+  protected userData: UserDataCookie = JSON.parse(
+    this.cookieService.getCookie("userData")
+  );
   protected showModalDelete = false;
   protected showEditProfile = false;
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.route.params.subscribe(params => {
-        const userId = params["id"];
+        const userId = params["userId"];
         if (userId) this.fetchUserFromAuthToken(userId);
       })
     );
@@ -127,7 +130,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
               }),
               1,
               true,
-              "None"
+              "Lax"
             );
           },
           error: error => {

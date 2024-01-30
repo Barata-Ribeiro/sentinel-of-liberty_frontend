@@ -92,6 +92,13 @@ export interface EditDataRequest {
   sol_biography?: string;
 }
 
+export interface UserDataCookie {
+  id: string;
+  username: string;
+  role: string;
+  email: string;
+}
+
 // Suggestion-related interfaces
 export interface SuggestionDataRequest {
   source: string;

@@ -30,7 +30,7 @@
       <span class="text-sm text-textcolor-500 dark:text-textcolor-400">
         Member since {{ user?.createdAt | date: "d MMM y" }}
       </span>
-      @switch (user?.role) {
+      @switch (userData.role) {
         @case ("admin") {
           <span
             class="mt-2 select-none rounded-full border border-red-400 bg-red-100 px-2.5 py-1 text-xs font-medium leading-none text-red-800 dark:bg-red-900 dark:text-red-300">
