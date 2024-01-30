@@ -1,7 +1,6 @@
 import { CommonModule, DatePipe } from "@angular/common";
-import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { EditDataRequest, User } from "../../@types/appTypes";
@@ -27,8 +26,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private cookieService = inject(CookieService);
   private userService = inject(UserService);
   private toastrService = inject(ToastrService);
-  private http = inject(HttpClient);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private subscriptions = new Subscription();
 
   protected user: User | null = null;
@@ -36,7 +35,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   protected showEditProfile = false;
 
   ngOnInit(): void {
-    this.loadUser();
+    this.subscriptions.add(
+      this.route.params.subscribe(params => {
+        const userId = params["id"];
+        if (userId) this.fetchUserFromAuthToken(userId);
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -58,8 +62,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.deleteOwnAccountById(this.user?.id as string).subscribe({
         next: () => {
           this.closeModalDelete();
-          this.cookieService.deleteCookie("userId");
-          this.cookieService.deleteCookie("userData");
           this.router.navigate(["/login"]);
         },
         error: error => {
@@ -92,7 +94,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         .editUserById(this.user?.id as string, editData)
         .subscribe({
           next: () => {
-            this.fetchUserFromAuthToken();
+            this.fetchUserFromAuthToken(this.user?.id as string);
             this.closeEditModal();
           },
           error: error =>
@@ -107,27 +109,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  private loadUser(): void {
-    try {
-      const userData = this.cookieService.getCookie("userData");
-      if (userData) this.user = JSON.parse(userData);
-      else this.fetchUserFromAuthToken();
-    } catch (e) {
-      console.error("Error parsing user data from cookies", e);
-      this.fetchUserFromAuthToken();
-    }
-  }
-
-  private fetchUserFromAuthToken(): void {
-    const userId = this.cookieService.getCookie("userId");
+  private fetchUserFromAuthToken(userId: string): void {
     if (userId) {
       return this.subscriptions.add(
         this.userService.getUserById(userId).subscribe({
           next: response => {
-            this.user = { ...response };
+            this.user = response.profile;
             this.cookieService.setCookie(
               "userData",
-              JSON.stringify(response),
+              JSON.stringify({
+                id: response.profile.id,
+                username:
+                  response.profile.sol_username ??
+                  response.profile.discordUsername,
+                role: response.profile.role,
+                email: response.profile.discordEmail,
+              }),
               1,
               true,
               "None"

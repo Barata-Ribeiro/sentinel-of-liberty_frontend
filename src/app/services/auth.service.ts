@@ -39,6 +39,32 @@ export class AuthService {
       );
   }
 
+  public getCurrentUserId(): string | null {
+    const userData = this.cookieService.getCookie("userData");
+    if (!userData) return null;
+
+    try {
+      const parsedUserData = JSON.parse(userData);
+      return parsedUserData.id as string;
+    } catch (error) {
+      console.error("Error parsing userData from cookie:", error);
+      return null;
+    }
+  }
+
+  public getCurrentUserUsername(): string | null {
+    const userData = this.cookieService.getCookie("userData");
+    if (!userData) return null;
+
+    try {
+      const parsedUserData = JSON.parse(userData);
+      return parsedUserData.username as string;
+    } catch (error) {
+      console.error("Error parsing userData from cookie:", error);
+      return null;
+    }
+  }
+
   public getCurrentUserRole(): string | null {
     const userData = this.cookieService.getCookie("userData");
     if (!userData) return null;
@@ -52,13 +78,13 @@ export class AuthService {
     }
   }
 
-  public getCurrentUserId(): string | null {
+  public getCurrentUserEmail(): string | null {
     const userData = this.cookieService.getCookie("userData");
     if (!userData) return null;
 
     try {
       const parsedUserData = JSON.parse(userData);
-      return parsedUserData.id as string;
+      return parsedUserData.email as string;
     } catch (error) {
       console.error("Error parsing userData from cookie:", error);
       return null;

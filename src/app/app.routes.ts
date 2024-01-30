@@ -16,7 +16,7 @@ export const routes: Routes = [
     component: RedirectComponent,
   },
   {
-    path: "profile",
+    path: "profile/:userId/:username",
     title: "Profile | SoL",
     loadComponent: () =>
       import("./pages/profile/profile.component").then(m => m.ProfileComponent),
