@@ -63,6 +63,7 @@
         </button>
 
         <button
+          (click)="openAccountDetailsModal()"
           class="inline-flex select-none items-center rounded-lg border border-secondary-300 bg-white px-4 py-2 text-center text-sm font-medium text-secondary-900 hover:bg-secondary-100 focus:ring-4 focus:ring-primary-200"
           aria-label="Check account details">
           Account Details
@@ -123,11 +124,15 @@
     </div>
   </div>
 </section>
-<app-delete-account-modal
-  *ngIf="showModalDelete"
-  (close)="closeModalDelete()"
-  (deactivate)="handleDeactivate()"></app-delete-account-modal>
 <app-edit-account-modal
   *ngIf="showEditProfile"
   (close)="closeEditModal()"
   (requestEdit)="handleEditAccount($event)"></app-edit-account-modal>
+<app-account-details-modal
+  *ngIf="showAccountDetailsModal"
+  [userData]="user"
+  (close)="closeAccountDetailsModal()"></app-account-details-modal>
+<app-delete-account-modal
+  *ngIf="showModalDelete"
+  (close)="closeModalDelete()"
+  (deactivate)="handleDeactivate()"></app-delete-account-modal>

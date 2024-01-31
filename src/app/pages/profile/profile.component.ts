@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { EditDataRequest, User, UserDataCookie } from "../../@types/appTypes";
+import { AccountDetailsModalComponent } from "../../components/account-details-modal/account-details-modal.component";
 import { DeleteAccountModalComponent } from "../../components/delete-account-modal/delete-account-modal.component";
 import { EditAccountModalComponent } from "../../components/edit-account-modal/edit-account-modal.component";
 import { CustomToastrComponent } from "../../components/shared/custom-toastr/custom-toastr.component";
@@ -15,8 +16,9 @@ import { UserService } from "../../services/user.service";
   standalone: true,
   imports: [
     CommonModule,
-    DeleteAccountModalComponent,
     EditAccountModalComponent,
+    AccountDetailsModalComponent,
+    DeleteAccountModalComponent,
   ],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.css",
@@ -34,8 +36,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   protected userData: UserDataCookie = JSON.parse(
     this.cookieService.getCookie("userData")
   );
-  protected showModalDelete = false;
   protected showEditProfile = false;
+  protected showAccountDetailsModal = false;
+  protected showModalDelete = false;
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -49,6 +52,49 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.user = null;
     this.subscriptions.unsubscribe();
+  }
+
+  // Edit profile modal
+  openEditModal() {
+    this.showEditProfile = true;
+  }
+
+  closeEditModal() {
+    this.showEditProfile = false;
+  }
+
+  handleEditAccount(editData: EditDataRequest) {
+    return this.subscriptions.add(
+      this.userService
+        .editUserById(this.user?.id as string, editData)
+        .subscribe({
+          next: () => {
+            this.fetchUserFromAuthToken(this.user?.id as string);
+            this.closeEditModal();
+          },
+          error: error =>
+            this.toastrService.show(error.message, "Error!", {
+              toastComponent: CustomToastrComponent,
+              toastClass:
+                "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
+              titleClass: "text-red-800 font-bold text-lg",
+              messageClass: "text-red-800 font-medium text-normal",
+            }),
+        })
+    );
+  }
+
+  // Show Account Details modal
+  openAccountDetailsModal() {
+    this.showAccountDetailsModal = true;
+  }
+
+  closeAccountDetailsModal() {
+    this.showAccountDetailsModal = false;
+  }
+
+  handleAccountDetailsModal() {
+    if (!this.user) this.fetchUserFromAuthToken(this.userData.id);
   }
 
   // Delete account modal
@@ -79,36 +125,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.router.navigate(["/login"]);
         },
       })
-    );
-  }
-
-  // Edit profile modal
-  openEditModal() {
-    this.showEditProfile = true;
-  }
-
-  closeEditModal() {
-    this.showEditProfile = false;
-  }
-
-  handleEditAccount(editData: EditDataRequest) {
-    return this.subscriptions.add(
-      this.userService
-        .editUserById(this.user?.id as string, editData)
-        .subscribe({
-          next: () => {
-            this.fetchUserFromAuthToken(this.user?.id as string);
-            this.closeEditModal();
-          },
-          error: error =>
-            this.toastrService.show(error.message, "Error!", {
-              toastComponent: CustomToastrComponent,
-              toastClass:
-                "max-w-xs rounded-lg border border-red-200 bg-red-100 text-sm text-red-800 shadow-[5px_5px_0px_0px_rgba(254,202,202)] dark:border-red-900 dark:bg-red-800/10 dark:text-red-500",
-              titleClass: "text-red-800 font-bold text-lg",
-              messageClass: "text-red-800 font-medium text-normal",
-            }),
-        })
     );
   }
 
