@@ -95,6 +95,7 @@ export interface EditDataRequest {
 export interface UserDataCookie {
   id: string;
   username: string;
+  avatar: string;
   role: string;
   email: string;
 }

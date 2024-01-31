@@ -125,6 +125,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 username:
                   response.profile.sol_username ??
                   response.profile.discordUsername,
+                avatar: response.profile.discordAvatar,
                 role: response.profile.role,
                 email: response.profile.discordEmail,
               }),
