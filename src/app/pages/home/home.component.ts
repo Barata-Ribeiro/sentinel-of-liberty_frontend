@@ -2,7 +2,7 @@ import { CommonModule, formatDate } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { Subscription, catchError, of } from "rxjs";
+import { Subscription, asyncScheduler, catchError, scheduled } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { HomeContentResponse } from "../../@types/appTypes";
 import { TimezoneService } from "../../services/timezone.service";
@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(
           catchError(error => {
             console.error(error);
-            return of({} as HomeContentResponse);
+            return scheduled([{} as HomeContentResponse], asyncScheduler);
           })
         )
         .subscribe({

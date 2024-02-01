@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Observable, catchError, of } from "rxjs";
+import { Observable, asyncScheduler, catchError, scheduled } from "rxjs";
 import { environment } from "../../environments/environment";
 import {
   Comment,
@@ -30,7 +30,7 @@ export class CommentService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as CommentDataRequest);
+          return scheduled([{} as CommentDataRequest], asyncScheduler);
         })
       );
   }
@@ -52,7 +52,7 @@ export class CommentService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as { textBody: string });
+          return scheduled([{} as { textBody: string }], asyncScheduler);
         })
       );
   }
@@ -66,7 +66,7 @@ export class CommentService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as Comment);
+          return scheduled([{} as Comment], asyncScheduler);
         })
       );
   }
@@ -84,7 +84,7 @@ export class CommentService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as ToggleLikeResponse);
+          return scheduled([{} as ToggleLikeResponse], asyncScheduler);
         })
       );
   }

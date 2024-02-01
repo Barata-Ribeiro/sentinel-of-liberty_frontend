@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Observable, catchError, of } from "rxjs";
+import { Observable, asyncScheduler, catchError, scheduled } from "rxjs";
 import { environment } from "../../environments/environment";
 import { EditDataRequest, User, UserDataResponse } from "../@types/appTypes";
 
@@ -18,7 +18,7 @@ export class UserService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as UserDataResponse);
+          return scheduled([{} as UserDataResponse], asyncScheduler);
         })
       );
   }
@@ -34,7 +34,7 @@ export class UserService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as EditDataRequest);
+          return scheduled([{} as EditDataRequest], asyncScheduler);
         })
       );
   }
@@ -47,7 +47,7 @@ export class UserService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as User);
+          return scheduled([{} as User], asyncScheduler);
         })
       );
   }

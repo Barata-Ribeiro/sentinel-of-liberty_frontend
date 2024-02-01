@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Observable, catchError, of } from "rxjs";
+import { Observable, asyncScheduler, catchError, scheduled } from "rxjs";
 import { environment } from "../../environments/environment";
 import {
   ArticleListResponse,
@@ -21,7 +21,7 @@ export class SuggestionsService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as SuggestionDataResponse);
+          return scheduled([{} as SuggestionDataResponse], asyncScheduler);
         })
       );
   }
@@ -37,7 +37,7 @@ export class SuggestionsService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as NewsListResponse);
+          return scheduled([{} as NewsListResponse], asyncScheduler);
         })
       );
   }
@@ -55,7 +55,7 @@ export class SuggestionsService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as ArticleListResponse);
+          return scheduled([{} as ArticleListResponse], asyncScheduler);
         })
       );
   }

@@ -1,6 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Observable, catchError, map, of, tap } from "rxjs";
+import {
+  Observable,
+  asyncScheduler,
+  catchError,
+  map,
+  scheduled,
+  tap,
+} from "rxjs";
 import { environment } from "../../environments/environment";
 import { AuthAppResponse } from "../@types/appTypes";
 import { CookieService } from "./cookie.service";
@@ -14,14 +21,14 @@ export class AuthService {
 
   public isAuthenticated(): Observable<boolean> {
     const token = this.cookieService.getCookie("authToken");
-    if (!token) return of(false);
+    if (!token) return scheduled([false], asyncScheduler);
 
     const isExpired = this.cookieService.checkIfCookieExpired("authToken");
-    if (!isExpired) return of(true);
+    if (!isExpired) return scheduled([true], asyncScheduler);
 
     return this.logoutIfExpired().pipe(
       map(() => false),
-      catchError(() => of(false))
+      catchError(() => scheduled([false], asyncScheduler))
     );
   }
 
@@ -34,7 +41,7 @@ export class AuthService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as AuthAppResponse);
+          return scheduled([{} as AuthAppResponse], asyncScheduler);
         })
       );
   }
@@ -54,7 +61,7 @@ export class AuthService {
       .pipe(
         catchError(error => {
           console.error(error);
-          return of({} as { message: string });
+          return scheduled([{} as { message: string }], asyncScheduler);
         })
       );
   }
