@@ -37,7 +37,7 @@
         </div>
 
         <a
-          [routerLink]="['/articles/write']"
+          routerLink="/articles/write"
           [queryParams]="{ basedOnSuggestion: news.id }"
           class="self-end hover:text-accent-600 hover:underline">
           Write Article
@@ -48,7 +48,7 @@
         <span>
           No News suggested. Suggest one at
           <a
-            [routerLink]="['/suggested-news/write']"
+            routerLink="/suggested-news/write"
             class="font-medium hover:text-accent-600 hover:underline">
             this link!
           </a>
