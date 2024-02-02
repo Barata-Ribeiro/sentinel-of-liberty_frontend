@@ -1,9 +1,15 @@
 import { CommonModule, DatePipe } from "@angular/common";
 import { Component, OnDestroy, OnInit, inject } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
-import { EditDataRequest, User, UserDataCookie } from "../../@types/appTypes";
+import {
+  Article,
+  EditDataRequest,
+  News,
+  User,
+  UserDataCookie,
+} from "../../@types/appTypes";
 import { AccountDetailsModalComponent } from "../../components/account-details-modal/account-details-modal.component";
 import { DeleteAccountModalComponent } from "../../components/delete-account-modal/delete-account-modal.component";
 import { EditAccountModalComponent } from "../../components/edit-account-modal/edit-account-modal.component";
@@ -16,6 +22,7 @@ import { UserService } from "../../services/user.service";
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     EditAccountModalComponent,
     AccountDetailsModalComponent,
     DeleteAccountModalComponent,
@@ -33,6 +40,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   protected user: User | null = null;
+  protected userLatestArticle: Article | null = null;
+  protected userLatestSuggestedNews: News | null = null;
   protected userData: UserDataCookie = JSON.parse(
     this.cookieService.getCookie("userData")
   );
@@ -51,6 +60,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.user = null;
+    this.userLatestArticle = null;
+    this.userLatestSuggestedNews = null;
     this.subscriptions.unsubscribe();
   }
 
@@ -134,6 +145,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.userService.getUserById(userId).subscribe({
           next: response => {
             this.user = response.profile;
+            this.userLatestArticle = response.lastPublishedArticle;
+            this.userLatestSuggestedNews = response.lastSuggestedNews;
             this.cookieService.setCookie(
               "userData",
               JSON.stringify({
