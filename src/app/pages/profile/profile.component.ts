@@ -4,9 +4,9 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import {
-  Article,
   EditDataRequest,
   News,
+  ProfileArticle,
   User,
   UserDataCookie,
 } from "../../@types/appTypes";
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   protected user: User | null = null;
-  protected userLatestArticle: Article | null = null;
+  protected userLatestArticle: ProfileArticle | null = null;
   protected userLatestSuggestedNews: News | null = null;
   protected userData: UserDataCookie | null = null;
   protected showEditProfile = false;

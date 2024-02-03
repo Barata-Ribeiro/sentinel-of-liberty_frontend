@@ -45,6 +45,17 @@ interface Article {
   commentCount: number;
 }
 
+export interface ProfileArticle {
+  id: string;
+  title: string;
+  content: string;
+  image: string;
+  contentSummary: string;
+  references: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Comment-related interfaces
 interface Comment {
   id: string;
@@ -83,7 +94,7 @@ export interface HomeContentResponse {
 // User data fetch/editing interfaces
 export interface UserDataResponse {
   profile: User;
-  lastPublishedArticle: Article;
+  lastPublishedArticle: ProfileArticle;
   lastSuggestedNews: News;
 }
 
