@@ -106,22 +106,23 @@
   </aside>
   <article>
     <div
-      class="mb-5 grid grid-cols-1 items-center justify-between divide-y-2 divide-none divide-textcolor-200 rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10 md:grid-cols-2 md:divide-solid">
-      <div>
-        <h3 class="mb-2 self-center text-xl font-medium text-textcolor-900">
+      class="mb-5 grid grid-cols-1 items-start justify-between divide-x-2 divide-none divide-textcolor-200 rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10 md:grid-cols-2 md:divide-solid">
+      <div class="h-full pr-4">
+        <h3
+          class="underline-offset-3 mb-4 self-center text-xl font-medium text-textcolor-900 underline">
           Your latest Article
         </h3>
         @if (userLatestArticle) {
-          <div class="flex flex-col gap-5">
+          <div class="flex flex-col gap-4">
             <h4 class="text-lg font-medium text-textcolor-900">
-              {{ userLatestArticle.articleTitle }}
+              {{ userLatestArticle.title }}
             </h4>
-            <p class="text-textcolor-600">
+            <p class="leading-relaxed text-textcolor-600">
               {{ userLatestArticle.contentSummary }}
             </p>
             <a
-              [routerLink]="['/article', userLatestArticle.articleId]"
-              class="self-end text-primary-700 hover:text-primary-900"
+              [routerLink]="['/articles', userLatestArticle.id]"
+              class="self-end justify-self-end font-medium text-primary-700 hover:text-primary-900"
               aria-label="Read Article">
               Read Article
             </a>
@@ -138,21 +139,24 @@
           </p>
         }
       </div>
-      <div>
-        <h3 class="mb-2 self-center text-xl font-medium text-textcolor-900">
+      <div class="h-full pl-4">
+        <h3
+          class="underline-offset-3 mb-4 self-center text-xl font-medium text-textcolor-900 underline">
           Your latest Suggestion
         </h3>
         @if (userLatestSuggestedNews) {
-          <div class="flex flex-col gap-5">
+          <div class="flex flex-col gap-4">
             <h4 class="text-lg font-medium text-textcolor-900">
               {{ userLatestSuggestedNews.title }}
             </h4>
-            <p class="text-textcolor-600">
+            <p class="leading-relaxed text-textcolor-600">
               {{ userLatestSuggestedNews.content }}
             </p>
             <a
               [href]="userLatestSuggestedNews.source"
-              class="self-end text-primary-700 hover:text-primary-900"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="self-end justify-self-end font-medium text-primary-700 hover:text-primary-900"
               aria-label="Read Source">
               Read Source
             </a>
