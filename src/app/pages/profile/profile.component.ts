@@ -42,9 +42,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   protected user: User | null = null;
   protected userLatestArticle: Article | null = null;
   protected userLatestSuggestedNews: News | null = null;
-  protected userData: UserDataCookie = JSON.parse(
-    this.cookieService.getCookie("userData")
-  );
+  protected userData: UserDataCookie | null = null;
   protected showEditProfile = false;
   protected showAccountDetailsModal = false;
   protected showModalDelete = false;
@@ -105,7 +103,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   handleAccountDetailsModal() {
-    if (!this.user) this.fetchUserFromAuthToken(this.userData.id);
+    if (!this.user && this.userData)
+      this.fetchUserFromAuthToken(this.userData.id);
   }
 
   // Delete account modal
@@ -161,6 +160,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
               1,
               true,
               "Lax"
+            );
+            this.userData = JSON.parse(
+              this.cookieService.getCookie("userData")
             );
           },
           error: error => {

@@ -10,14 +10,14 @@
       class="mb-5 flex flex-col items-center rounded-md border-2 border-secondary-200 bg-background-50 p-5 sm:p-10">
       <img
         class="mb-3 h-28 w-28 transform rounded-full border-4 border-white shadow-md transition duration-200 hover:scale-110"
-        [src]="userData.avatar"
-        [alt]="'Avatar of ' + userData.username"
-        [title]="'Avatar of ' + userData.username" />
+        [src]="userData?.avatar"
+        [alt]="'Avatar of ' + userData?.username"
+        [title]="'Avatar of ' + userData?.username" />
       <div class="mb-4 leading-none">
         <h3
           id="profile-name"
           class="mb-1 text-xl font-medium text-textcolor-900">
-          {{ userData.username }}
+          {{ userData?.username }}
         </h3>
         <h4
           class="text-center text-sm"
@@ -28,7 +28,7 @@
       <span class="text-sm text-textcolor-500 dark:text-textcolor-400">
         Member since {{ user?.createdAt | date: "d MMM y" }}
       </span>
-      @switch (userData.role) {
+      @switch (userData?.role) {
         @case ("admin") {
           <span
             class="mt-2 select-none rounded-full border border-red-400 bg-red-100 px-2.5 py-1 text-xs font-medium leading-none text-red-800 dark:bg-red-900 dark:text-red-300">
