@@ -28,7 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideClientHydration(
       withHttpTransferCacheOptions({
-        includePostRequests: false,
+        includePostRequests: true,
         filter: request =>
           !request.url.includes("articles") &&
           !request.urlWithParams.includes("articles"),
